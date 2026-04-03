@@ -1,163 +1,124 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, Moon, Sun, User, Globe } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useTheme } from "next-themes";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { AdDisplay } from "./AdDisplay";
-import { useI18n } from "@/lib/i18n";
+import { useI18n } from "../hooks/useI18n";
+import {
+  Sword, Shield, BookOpen, Package, Home, Menu, X, Settings, Globe
+} from "lucide-react";
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
+const navItems = [
+  { path: "/", icon: Home, label: "Главная", labelEn: "Home" },
+  { path: "/quests", icon: BookOpen, label: "Задания", labelEn: "Quests" },
+  { path: "/classes", icon: Shield, label: "Классы", labelEn: "Classes" },
+  { path: "/skills", icon: Sword, label: "Умения", labelEn: "Skills" },
+  { path: "/items", icon: Package, label: "Предметы", labelEn: "Items" },
+];
 
-export function Layout({ children }: LayoutProps) {
-  const { theme, setTheme } = useTheme();
+export default function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
-  const { t, lang, setLang } = useI18n();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const navLinks = [
-    { href: "/", label: t("home") },
-    { href: "/quests", label: t("quests") },
-    { href: "/classes", label: t("classes") },
-    { href: "/skills", label: t("skills") },
-    { href: "/items", label: t("items") },
-  ];
-
-  const toggleLang = () => setLang(lang === "ru" ? "en" : "ru");
+  const { lang, setLang, t } = useI18n();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <header className="sticky top-0 z-50 w-full border-b border-primary/20 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70 shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
-        <div className="container mx-auto px-3 sm:px-4 h-14 sm:h-16 flex items-center justify-between gap-2">
-
-          <div className="flex items-center gap-2 sm:gap-6">
-            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden text-primary h-8 w-8">
-                  <Menu className="h-5 w-5" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-[260px] border-primary/20 bg-card px-4">
-                <div className="flex items-center gap-2 mb-6 mt-2">
-                  <span className="font-cinzel text-xl font-bold text-primary">L2INT.RU</span>
-                </div>
-                <nav className="flex flex-col gap-1">
-                  {navLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`text-base font-cinzel py-2 px-3 rounded transition-colors hover:text-primary hover:bg-primary/10 ${
-                        location === link.href ? "text-primary font-bold bg-primary/10" : "text-foreground"
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                  <div className="h-px bg-border my-3" />
-                  <Link
-                    href="/admin"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2 py-2 px-3 rounded text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
-                  >
-                    <User className="h-4 w-4" />
-                    <span className="font-cinzel text-sm">{t("admin")}</span>
-                  </Link>
-                  <div className="h-px bg-border my-1" />
-                  <button
-                    onClick={toggleLang}
-                    className="flex items-center gap-2 py-2 px-3 rounded text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors text-left"
-                  >
-                    <Globe className="h-4 w-4" />
-                    <span className="font-cinzel text-sm">{lang === "ru" ? "EN" : "RU"}</span>
-                  </button>
-                  <button
-                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                    className="flex items-center gap-2 py-2 px-3 rounded text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors text-left"
-                  >
-                    {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                    <span className="font-cinzel text-sm">{theme === "dark" ? t("lightMode") : t("darkMode")}</span>
-                  </button>
-                </nav>
-              </SheetContent>
-            </Sheet>
-
-            <Link href="/" className="flex items-center gap-2 group shrink-0">
-              <span className="font-cinzel text-lg sm:text-2xl font-bold bg-gradient-to-b from-primary via-primary/80 to-primary/40 bg-clip-text text-transparent group-hover:to-primary transition-all">
-                L2INT.RU
-              </span>
-            </Link>
-
-            <nav className="hidden md:flex items-center gap-4 lg:gap-6">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`text-xs lg:text-sm font-cinzel tracking-wider uppercase transition-colors hover:text-primary hover:drop-shadow-[0_0_8px_rgba(201,162,39,0.5)] ${
-                    location === link.href ? "text-primary drop-shadow-[0_0_5px_rgba(201,162,39,0.5)]" : "text-muted-foreground"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-
-          <div className="flex items-center gap-1 sm:gap-2">
-            <AdDisplay position="header" className="hidden xl:block w-[280px] h-[40px]" />
-
+    <div className="min-h-screen bg-[#0a0b12] text-gray-200 flex flex-col">
+      {/* Header */}
+      <header className="border-b border-[#2a2d3e] bg-[#0e0f1a] sticky top-0 z-50">
+        <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
+          <div className="flex items-center gap-3">
+            {/* Mobile menu toggle */}
             <button
-              onClick={toggleLang}
-              title={t("language")}
-              className="flex items-center gap-1 px-2 py-1.5 rounded text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors text-xs font-cinzel font-bold tracking-wider border border-border hover:border-primary/40"
+              className="md:hidden text-amber-400 hover:text-amber-300"
+              onClick={() => setMobileOpen(v => !v)}
             >
-              <Globe className="h-3.5 w-3.5" />
-              <span>{lang === "ru" ? "EN" : "RU"}</span>
+              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
-
-            <Link href="/admin" className="hidden sm:flex text-muted-foreground hover:text-primary p-1.5 transition-colors rounded hover:bg-primary/10">
-              <User className="h-4 w-4" />
+            <Link href="/" className="flex items-center gap-2">
+              <Sword className="text-amber-400" size={22} />
+              <span className="font-bold text-lg tracking-wide text-amber-400 font-cinzel">L2INT.RU</span>
             </Link>
-
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="text-muted-foreground hover:text-primary h-8 w-8"
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setLang(lang === "ru" ? "en" : "ru")}
+              className="flex items-center gap-1 text-xs text-gray-400 hover:text-amber-400 transition-colors px-2 py-1 rounded border border-transparent hover:border-amber-400/30"
             >
-              <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-            </Button>
+              <Globe size={14} />
+              {lang === "ru" ? "EN" : "RU"}
+            </button>
+            <Link href="/admin" className="text-gray-500 hover:text-amber-400 transition-colors">
+              <Settings size={18} />
+            </Link>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 container mx-auto px-3 sm:px-4 py-4 sm:py-8">
-        <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
-          <div className="flex-1 max-w-full min-w-0">
-            {children}
+      <div className="flex flex-1 max-w-7xl mx-auto w-full">
+        {/* Desktop Sidebar */}
+        <aside className="hidden md:flex flex-col w-56 border-r border-[#2a2d3e] bg-[#0c0d18] py-6 px-3 sticky top-[57px] h-[calc(100vh-57px)] shrink-0">
+          <nav className="flex flex-col gap-1">
+            {navItems.map(({ path, icon: Icon, label, labelEn }) => {
+              const active = location === path || (path !== "/" && location.startsWith(path));
+              return (
+                <Link
+                  key={path}
+                  href={path}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                    active
+                      ? "bg-amber-400/10 text-amber-400 border-l-2 border-amber-400"
+                      : "text-gray-400 hover:text-gray-200 hover:bg-white/5"
+                  }`}
+                >
+                  <Icon size={17} className={active ? "text-amber-400" : "text-gray-500"} />
+                  {lang === "ru" ? label : labelEn}
+                </Link>
+              );
+            })}
+          </nav>
+          <div className="mt-auto pt-4 border-t border-[#2a2d3e]">
+            <p className="text-xs text-gray-600 px-3">Lineage 2 Database</p>
+            <p className="text-xs text-gray-700 px-3 mt-1">© 2024 L2INT.RU</p>
           </div>
-          <aside className="w-full lg:w-[260px] xl:w-[300px] shrink-0 space-y-6">
-            <AdDisplay position="sidebar" />
-          </aside>
-        </div>
-      </main>
+        </aside>
 
-      <footer className="border-t border-primary/20 bg-card py-6 sm:py-8 mt-8 sm:mt-12">
-        <div className="container mx-auto px-3 sm:px-4">
-          <AdDisplay position="footer" className="mb-6" />
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <span className="font-cinzel text-lg font-bold text-primary">L2INT.RU</span>
-              <span className="text-xs text-muted-foreground">© {new Date().getFullYear()}</span>
-            </div>
-            <p className="text-xs text-muted-foreground text-center sm:text-right max-w-sm">
-              {t("copyright")}
-            </p>
+        {/* Mobile Sidebar Overlay */}
+        {mobileOpen && (
+          <div className="fixed inset-0 z-40 md:hidden" onClick={() => setMobileOpen(false)}>
+            <div className="absolute inset-0 bg-black/60" />
+            <aside
+              className="absolute left-0 top-[57px] bottom-0 w-56 bg-[#0c0d18] border-r border-[#2a2d3e] py-6 px-3"
+              onClick={e => e.stopPropagation()}
+            >
+              <nav className="flex flex-col gap-1">
+                {navItems.map(({ path, icon: Icon, label, labelEn }) => {
+                  const active = location === path || (path !== "/" && location.startsWith(path));
+                  return (
+                    <Link
+                      key={path}
+                      href={path}
+                      onClick={() => setMobileOpen(false)}
+                      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                        active
+                          ? "bg-amber-400/10 text-amber-400 border-l-2 border-amber-400"
+                          : "text-gray-400 hover:text-gray-200 hover:bg-white/5"
+                      }`}
+                    >
+                      <Icon size={17} className={active ? "text-amber-400" : "text-gray-500"} />
+                      {lang === "ru" ? label : labelEn}
+                    </Link>
+                  );
+                })}
+              </nav>
+            </aside>
           </div>
-        </div>
+        )}
+
+        {/* Main content */}
+        <main className="flex-1 min-w-0 p-4 md:p-6">
+          {children}
+        </main>
+      </div>
+
+      <footer className="border-t border-[#2a2d3e] bg-[#0e0f1a] py-4 text-center text-sm text-gray-600">
+        L2INT.RU — {t("Информационный сайт Lineage 2", "Lineage 2 Information Database")} © 2024
       </footer>
     </div>
   );
