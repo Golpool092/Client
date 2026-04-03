@@ -1,56 +1,57 @@
-import { Switch, Route, Router as WouterRouter } from "wouter";
+import React from "react";
+import { Route, Switch } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { Layout } from "@/components/Layout";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { I18nProvider } from "@/lib/i18n";
-import NotFound from "@/pages/not-found";
+import { I18nProvider } from "./hooks/useI18n";
+import { AuthProvider } from "./hooks/useAuth";
+import Layout from "./components/Layout";
+import HomePage from "./pages/home";
+import QuestsPage from "./pages/quests";
+import QuestDetailPage from "./pages/quest-detail";
+import ClassesPage from "./pages/classes";
+import ClassDetailPage from "./pages/class-detail";
+import SkillsPage from "./pages/skills";
+import ItemsPage from "./pages/items";
+import AdminPage from "./pages/admin/index";
 
-import Home from "@/pages/home";
-import Quests from "@/pages/quests";
-import QuestDetail from "@/pages/quest-detail";
-import Classes from "@/pages/classes";
-import Skills from "@/pages/skills";
-import Items from "@/pages/items";
-import AdminLogin from "@/pages/admin/login";
-import AdminDashboard from "@/pages/admin/dashboard";
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      staleTime: 30000,
+    },
+  },
+});
 
-const queryClient = new QueryClient();
-
-function Router() {
+export default function App() {
   return (
-    <Layout>
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/quests" component={Quests} />
-        <Route path="/quests/:id" component={QuestDetail} />
-        <Route path="/classes" component={Classes} />
-        <Route path="/skills" component={Skills} />
-        <Route path="/items" component={Items} />
-        <Route path="/admin/login" component={AdminLogin} />
-        <Route path="/admin" component={AdminDashboard} />
-        <Route component={NotFound} />
-      </Switch>
-    </Layout>
-  );
-}
-
-function App() {
-  return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+    <QueryClientProvider client={queryClient}>
       <I18nProvider>
-        <QueryClientProvider client={queryClient}>
-          <TooltipProvider>
-            <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-              <Router />
-            </WouterRouter>
-            <Toaster />
-          </TooltipProvider>
-        </QueryClientProvider>
+        <AuthProvider>
+          <Switch>
+            <Route path="/admin">
+              <AdminPage />
+            </Route>
+            <Route>
+              <Layout>
+                <Switch>
+                  <Route path="/" component={HomePage} />
+                  <Route path="/quests" component={QuestsPage} />
+                  <Route path="/quests/:id" component={QuestDetailPage} />
+                  <Route path="/classes" component={ClassesPage} />
+                  <Route path="/classes/:id" component={ClassDetailPage} />
+                  <Route path="/skills" component={SkillsPage} />
+                  <Route path="/items" component={ItemsPage} />
+                  <Route>
+                    <div className="text-center py-24 text-gray-600">
+                      404 — Страница не найдена
+                    </div>
+                  </Route>
+                </Switch>
+              </Layout>
+            </Route>
+          </Switch>
+        </AuthProvider>
       </I18nProvider>
-    </ThemeProvider>
+    </QueryClientProvider>
   );
 }
-
-export default App;
