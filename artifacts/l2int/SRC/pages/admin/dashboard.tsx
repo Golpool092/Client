@@ -1,357 +1,449 @@
 import React, { useState } from "react";
-import { useLocation } from "wouter";
-import { Plus, LogOut, Edit, Trash2, CheckCircle, XCircle, Image as ImageIcon, Loader2, Eye } from "lucide-react";
+import { Link } from "wouter";
+import { useAuth } from "../../hooks/useAuth";
 import {
-  useGetMe,
-  useLogout,
-  useListAds,
-  useCreateAd,
-  useUpdateAd,
-  useDeleteAd,
-  useToggleAd,
-  useUploadAdImage,
-  getListAdsQueryKey,
-  type Ad
+  useListAllAds, useCreateAd, useUpdateAd, useDeleteAd, useToggleAd
 } from "@workspace/api-client-react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useToast } from "@/hooks/use-toast";
+import {
+  Settings, Plus, Trash2, Edit2, Eye, EyeOff, ChevronLeft, Save, X,
+  Clock, Layout, ToggleLeft, ToggleRight, Monitor, Sliders
+} from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-
-const PRESET_POSITIONS = [
-  { value: "header", label: "Шапка (header)" },
-  { value: "sidebar", label: "Сайдбар (sidebar)" },
-  { value: "content", label: "В контенте (content)" },
-  { value: "footer", label: "Подвал (footer)" },
-  { value: "custom", label: "Своё место..." },
+const POSITIONS = [
+  { value: "sidebar-top", label: "Боковая панель (верх)" },
+  { value: "sidebar-bottom", label: "Боковая панель (низ)" },
+  { value: "content-top", label: "Контент (верх)" },
+  { value: "content-bottom", label: "Контент (низ)" },
+  { value: "header", label: "Шапка" },
+  { value: "footer", label: "Подвал" },
 ];
 
+const PAGES = [
+  { value: "home", label: "Главная" },
+  { value: "quests", label: "Задания" },
+  { value: "classes", label: "Классы" },
+  { value: "skills", label: "Умения" },
+  { value: "items", label: "Предметы" },
+];
+
+const emptyForm = {
+  title: "",
+  description: "",
+  imageUrl: "",
+  linkUrl: "",
+  linkText: "",
+  position: "sidebar-top",
+  active: true,
+  displayMode: "all-pages" as "all-pages" | "specific-pages",
+  pages: [] as string[],
+  maxShows: "",
+  expiresAt: "",
+  mode: "simple" as "simple" | "advanced",
+};
+
+type AdForm = typeof emptyForm;
+
 export default function AdminDashboard() {
-  const [, setLocation] = useLocation();
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
-
-  const { data: me, isLoading: isLoadingMe, error: authError } = useGetMe({
-    query: { retry: false }
-  });
-
-  const logoutMutation = useLogout();
-  const { data: ads, isLoading: isLoadingAds } = useListAds({
-    query: { queryKey: getListAdsQueryKey() }
-  });
-
+  const { signOut, login } = useAuth();
+  const { data: ads, refetch } = useListAllAds();
   const createAd = useCreateAd();
   const updateAd = useUpdateAd();
   const deleteAd = useDeleteAd();
   const toggleAd = useToggleAd();
-  const uploadImage = useUploadAdImage();
 
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingAd, setEditingAd] = useState<Ad | null>(null);
-
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [linkUrl, setLinkUrl] = useState("");
-  const [linkText, setLinkText] = useState("");
-  const [positionPreset, setPositionPreset] = useState("sidebar");
-  const [customPosition, setCustomPosition] = useState("");
-  const [active, setActive] = useState(true);
-  const [imageUrl, setImageUrl] = useState("");
-  const [isUploading, setIsUploading] = useState(false);
-
-  const isCustomPosition = positionPreset === "custom";
-  const effectivePosition = isCustomPosition ? customPosition : positionPreset;
-
-  React.useEffect(() => {
-    if (authError || (me && !me.ok)) {
-      setLocation("/admin/login");
-    }
-  }, [authError, me, setLocation]);
-
-  const handleLogout = () => {
-    logoutMutation.mutate(undefined, {
-      onSuccess: () => setLocation("/admin/login")
-    });
-  };
+  const [showForm, setShowForm] = useState(false);
+  const [editId, setEditId] = useState<number | null>(null);
+  const [form, setForm] = useState<AdForm>({ ...emptyForm });
+  const [saving, setSaving] = useState(false);
 
   const resetForm = () => {
-    setTitle(""); setDescription(""); setLinkUrl(""); setLinkText("");
-    setPositionPreset("sidebar"); setCustomPosition(""); setActive(true); setImageUrl("");
+    setForm({ ...emptyForm });
+    setEditId(null);
+    setShowForm(false);
   };
 
-  const openNewForm = () => {
-    setEditingAd(null);
-    resetForm();
-    setIsFormOpen(true);
+  const openCreate = () => {
+    setForm({ ...emptyForm });
+    setEditId(null);
+    setShowForm(true);
   };
 
-  const openEditForm = (ad: Ad) => {
-    setEditingAd(ad);
-    setTitle(ad.title);
-    setDescription(ad.description);
-    setLinkUrl(ad.linkUrl);
-    setLinkText(ad.linkText);
-    const preset = PRESET_POSITIONS.find(p => p.value === ad.position && p.value !== "custom");
-    if (preset) {
-      setPositionPreset(ad.position);
-      setCustomPosition("");
-    } else {
-      setPositionPreset("custom");
-      setCustomPosition(ad.position);
-    }
-    setActive(ad.active);
-    setImageUrl(ad.imageUrl);
-    setIsFormOpen(true);
-  };
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64 = reader.result as string;
-      setIsUploading(true);
-      uploadImage.mutate({ data: { base64, filename: file.name } }, {
-        onSuccess: (res) => { setImageUrl(res.url); setIsUploading(false); },
-        onError: () => { toast({ variant: "destructive", title: "Ошибка загрузки изображения" }); setIsUploading(false); }
-      });
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isCustomPosition && !customPosition.trim()) {
-      toast({ variant: "destructive", title: "Укажите название позиции" });
-      return;
-    }
-    const adData = { title, description, linkUrl, linkText, position: effectivePosition, active, imageUrl };
-    if (editingAd) {
-      updateAd.mutate({ id: editingAd.id, data: adData }, {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: getListAdsQueryKey() });
-          setIsFormOpen(false);
-          toast({ title: "Баннер обновлён" });
-        }
-      });
-    } else {
-      createAd.mutate({ data: adData }, {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: getListAdsQueryKey() });
-          setIsFormOpen(false);
-          toast({ title: "Баннер создан" });
-        }
-      });
-    }
-  };
-
-  const handleDelete = (id: number) => {
-    if (confirm("Удалить этот баннер?")) {
-      deleteAd.mutate({ id }, {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: getListAdsQueryKey() });
-          toast({ title: "Баннер удалён" });
-        }
-      });
-    }
-  };
-
-  const handleToggle = (id: number) => {
-    toggleAd.mutate({ id }, {
-      onSuccess: () => queryClient.invalidateQueries({ queryKey: getListAdsQueryKey() })
+  const openEdit = (ad: any) => {
+    setForm({
+      title: ad.title || "",
+      description: ad.description || "",
+      imageUrl: ad.imageUrl || "",
+      linkUrl: ad.linkUrl || "",
+      linkText: ad.linkText || "",
+      position: ad.position || "sidebar-top",
+      active: ad.active !== undefined ? ad.active : true,
+      displayMode: ad.displayMode || "all-pages",
+      pages: ad.pages || [],
+      maxShows: ad.maxShows != null ? String(ad.maxShows) : "",
+      expiresAt: ad.expiresAt ? new Date(ad.expiresAt).toISOString().slice(0, 16) : "",
+      mode: (ad.displayMode === "all-pages" && !ad.maxShows && !ad.expiresAt) ? "simple" : "advanced",
     });
+    setEditId(ad.id);
+    setShowForm(true);
   };
 
-  if (isLoadingMe) {
-    return <div className="p-12 text-center"><Loader2 className="w-8 h-8 animate-spin mx-auto text-primary" /></div>;
-  }
+  const handleSave = async () => {
+    if (!form.title.trim()) return;
+    setSaving(true);
+    try {
+      const payload: any = {
+        title: form.title,
+        description: form.description || null,
+        imageUrl: form.imageUrl || null,
+        linkUrl: form.linkUrl || null,
+        linkText: form.linkText || null,
+        position: form.position,
+        active: form.active,
+        displayMode: form.mode === "simple" ? "all-pages" : form.displayMode,
+        pages: form.mode === "simple" ? [] : form.pages,
+        maxShows: form.mode === "advanced" && form.maxShows ? parseInt(form.maxShows) : null,
+        expiresAt: form.mode === "advanced" && form.expiresAt ? new Date(form.expiresAt).toISOString() : null,
+      };
+
+      if (editId !== null) {
+        await updateAd.mutateAsync({ id: editId, data: payload });
+      } else {
+        await createAd.mutateAsync({ data: payload });
+      }
+      await refetch();
+      resetForm();
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("Удалить это объявление?")) return;
+    await deleteAd.mutateAsync({ id });
+    await refetch();
+  };
+
+  const handleToggle = async (id: number) => {
+    await toggleAd.mutateAsync({ id });
+    await refetch();
+  };
+
+  const togglePage = (page: string) => {
+    setForm(f => ({
+      ...f,
+      pages: f.pages.includes(page) ? f.pages.filter(p => p !== page) : [...f.pages, page],
+    }));
+  };
 
   return (
-    <div className="space-y-6 sm:space-y-8 pb-12">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-border pb-4 sm:pb-6 gap-3">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-cinzel font-bold text-foreground">Панель управления</h1>
-          <p className="text-sm text-muted-foreground mt-1">Управление рекламными баннерами</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="text-xs font-semibold px-2.5 py-1 bg-primary/10 text-primary border border-primary/20 rounded">
-            {me?.role}
-          </span>
-          <Button variant="outline" onClick={handleLogout} size="sm" className="border-destructive/50 text-destructive hover:bg-destructive/10">
-            <LogOut className="w-3.5 h-3.5 mr-2" />
+    <div className="min-h-screen bg-[#0a0b12]">
+      {/* Admin Header */}
+      <header className="border-b border-[#2a2d3e] bg-[#0e0f1a] sticky top-0 z-50">
+        <div className="flex items-center justify-between px-4 py-3 max-w-6xl mx-auto">
+          <div className="flex items-center gap-3">
+            <Link href="/" className="text-gray-500 hover:text-amber-400 transition-colors">
+              <ChevronLeft size={18} />
+            </Link>
+            <Settings className="text-amber-400" size={18} />
+            <span className="font-bold text-gray-200 font-cinzel">Панель управления</span>
+            <span className="text-xs text-gray-600 hidden sm:block">· {login}</span>
+          </div>
+          <button
+            onClick={signOut}
+            className="text-sm text-gray-500 hover:text-red-400 transition-colors"
+          >
             Выйти
-          </Button>
+          </button>
         </div>
-      </div>
+      </header>
 
-      <Card className="border-primary/20">
-        <CardHeader className="flex flex-row items-center justify-between pb-3">
-          <CardTitle className="text-lg sm:text-xl font-cinzel">Рекламные баннеры</CardTitle>
-          <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-            <DialogTrigger asChild>
-              <Button onClick={openNewForm} size="sm" className="font-bold text-xs sm:text-sm">
-                <Plus className="w-3.5 h-3.5 mr-1.5" />
-                Создать баннер
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="w-[95vw] max-w-[560px] border-primary/30 max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle className="font-cinzel text-lg sm:text-xl text-primary">
-                  {editingAd ? "Редактировать баннер" : "Новый баннер"}
-                </DialogTitle>
-              </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-4 mt-2">
-                <div className="space-y-2">
-                  <Label htmlFor="title">Заголовок</Label>
-                  <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="desc">Описание</Label>
-                  <Textarea id="desc" value={description} onChange={(e) => setDescription(e.target.value)} required className="min-h-[80px]" />
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="link">URL ссылки</Label>
-                    <Input id="link" value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} required />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="linkText">Текст кнопки</Label>
-                    <Input id="linkText" value={linkText} onChange={(e) => setLinkText(e.target.value)} required />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Позиция на сайте</Label>
-                  <Select value={positionPreset} onValueChange={setPositionPreset}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {PRESET_POSITIONS.map(p => (
-                        <SelectItem key={p.value} value={p.value}>{p.label}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {isCustomPosition && (
-                    <div className="mt-2 space-y-1">
-                      <Input
-                        value={customPosition}
-                        onChange={(e) => setCustomPosition(e.target.value)}
-                        placeholder="Например: под-шапкой, между-квестами"
-                        required={isCustomPosition}
-                      />
-                      <p className="text-xs text-muted-foreground">
-                        Введите уникальное название места для этого баннера. Используйте компонент &lt;AdDisplay position="это-значение"/&gt; на странице.
-                      </p>
-                    </div>
-                  )}
-                  {!isCustomPosition && (
-                    <p className="text-xs text-muted-foreground">
-                      Баннер будет показан в позиции <code className="text-primary bg-primary/10 px-1 rounded">{positionPreset}</code> на всём сайте
-                    </p>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Switch id="active" checked={active} onCheckedChange={setActive} />
-                  <Label htmlFor="active">Активный</Label>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Изображение</Label>
-                  <div className="flex items-start gap-3">
-                    <div className="w-24 h-18 sm:w-32 sm:h-24 bg-muted border border-border rounded flex items-center justify-center overflow-hidden shrink-0">
-                      {imageUrl ? (
-                        <img src={imageUrl} alt="Preview" className="w-full h-full object-cover" />
-                      ) : (
-                        <ImageIcon className="w-6 h-6 text-muted-foreground/50" />
-                      )}
-                    </div>
-                    <div className="flex-1 space-y-2">
-                      <Input type="file" accept="image/*" onChange={handleImageUpload} className="text-xs" />
-                      <Input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="Или вставьте URL изображения..." className="text-sm" />
-                      {isUploading && (
-                        <span className="text-xs text-primary flex items-center gap-1">
-                          <Loader2 className="w-3 h-3 animate-spin" /> Загружаем...
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-2 flex justify-end gap-2">
-                  <Button type="button" variant="outline" size="sm" onClick={() => setIsFormOpen(false)}>Отмена</Button>
-                  <Button type="submit" size="sm" disabled={createAd.isPending || updateAd.isPending || isUploading}>
-                    {editingAd ? "Сохранить" : "Создать"}
-                  </Button>
-                </div>
-              </form>
-            </DialogContent>
-          </Dialog>
-        </CardHeader>
-        <CardContent>
-          {isLoadingAds ? (
-            <div className="py-8 text-center"><Loader2 className="w-6 h-6 animate-spin mx-auto text-muted-foreground" /></div>
-          ) : !ads || ads.length === 0 ? (
-            <div className="py-10 text-center text-muted-foreground text-sm">
-              <ImageIcon className="w-8 h-8 mx-auto mb-3 opacity-30" />
-              Нет добавленных баннеров
+      <div className="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
+        {/* Ads section */}
+        <div className="border border-[#2a2d3e] bg-[#0e0f1a] rounded-xl">
+          <div className="flex items-center justify-between p-5 border-b border-[#2a2d3e]">
+            <div>
+              <h2 className="font-bold text-gray-200 font-cinzel">Объявления</h2>
+              <p className="text-xs text-gray-600 mt-0.5">{ads?.length || 0} {(ads?.length || 0) === 1 ? "объявление" : "объявлений"}</p>
             </div>
-          ) : (
-            <div className="overflow-x-auto -mx-2 sm:mx-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[40px] text-xs">ID</TableHead>
-                    <TableHead className="w-[60px] text-xs">Статус</TableHead>
-                    <TableHead className="text-xs">Название</TableHead>
-                    <TableHead className="text-xs">Позиция</TableHead>
-                    <TableHead className="text-right text-xs">Действия</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {ads.map((ad) => (
-                    <TableRow key={ad.id}>
-                      <TableCell className="font-mono text-xs">{ad.id}</TableCell>
-                      <TableCell>
-                        <button onClick={() => handleToggle(ad.id)} title="Переключить" className="focus:outline-none">
-                          {ad.active
-                            ? <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />
-                            : <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
-                          }
-                        </button>
-                      </TableCell>
-                      <TableCell>
-                        <div className="font-medium text-xs sm:text-sm">{ad.title}</div>
-                        <div className="text-xs text-muted-foreground truncate max-w-[120px] sm:max-w-[180px]">{ad.linkUrl}</div>
-                      </TableCell>
-                      <TableCell>
-                        <span className="px-2 py-0.5 bg-muted rounded text-xs font-semibold uppercase">{ad.position}</span>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button variant="ghost" size="icon" onClick={() => openEditForm(ad)} className="text-primary hover:bg-primary/10 h-7 w-7 sm:h-8 sm:w-8">
-                          <Edit className="w-3.5 h-3.5" />
-                        </Button>
-                        <Button variant="ghost" size="icon" onClick={() => handleDelete(ad.id)} className="text-destructive hover:bg-destructive/10 h-7 w-7 sm:h-8 sm:w-8 ml-1">
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+            <button
+              onClick={openCreate}
+              className="flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-black font-semibold px-4 py-2 rounded-lg transition-colors text-sm"
+            >
+              <Plus size={15} />
+              Добавить
+            </button>
+          </div>
+
+          {/* Ad form */}
+          {showForm && (
+            <div className="p-5 border-b border-[#2a2d3e] bg-[#0c0d18]">
+              <div className="flex items-center justify-between mb-5">
+                <h3 className="font-semibold text-gray-200 text-sm">
+                  {editId !== null ? "Редактировать объявление" : "Новое объявление"}
+                </h3>
+                {/* Mode toggle */}
+                <div className="flex items-center gap-1 bg-[#1a1b26] rounded-lg p-1">
+                  <button
+                    onClick={() => setForm(f => ({ ...f, mode: "simple" }))}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                      form.mode === "simple" ? "bg-amber-400 text-black" : "text-gray-500 hover:text-gray-300"
+                    }`}
+                  >
+                    <Layout size={13} /> Простой
+                  </button>
+                  <button
+                    onClick={() => setForm(f => ({ ...f, mode: "advanced" }))}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                      form.mode === "advanced" ? "bg-amber-400 text-black" : "text-gray-500 hover:text-gray-300"
+                    }`}
+                  >
+                    <Sliders size={13} /> Расширенный
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">Заголовок *</label>
+                    <input
+                      type="text"
+                      value={form.title}
+                      onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+                      className="w-full bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-amber-400/50"
+                      placeholder="Название объявления"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">Описание</label>
+                    <textarea
+                      value={form.description}
+                      onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+                      rows={2}
+                      className="w-full bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-amber-400/50 resize-none"
+                      placeholder="Краткое описание..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">URL изображения</label>
+                    <input
+                      type="url"
+                      value={form.imageUrl}
+                      onChange={e => setForm(f => ({ ...f, imageUrl: e.target.value }))}
+                      className="w-full bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-amber-400/50"
+                      placeholder="https://..."
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs text-gray-500 mb-1">Ссылка (URL)</label>
+                      <input
+                        type="url"
+                        value={form.linkUrl}
+                        onChange={e => setForm(f => ({ ...f, linkUrl: e.target.value }))}
+                        className="w-full bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-amber-400/50"
+                        placeholder="https://..."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs text-gray-500 mb-1">Текст ссылки</label>
+                      <input
+                        type="text"
+                        value={form.linkText}
+                        onChange={e => setForm(f => ({ ...f, linkText: e.target.value }))}
+                        className="w-full bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-amber-400/50"
+                        placeholder="Подробнее"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">Позиция</label>
+                    <select
+                      value={form.position}
+                      onChange={e => setForm(f => ({ ...f, position: e.target.value }))}
+                      className="w-full bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-amber-400/50"
+                    >
+                      {POSITIONS.map(p => (
+                        <option key={p.value} value={p.value}>{p.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="flex items-center gap-3 py-2">
+                    <button
+                      type="button"
+                      onClick={() => setForm(f => ({ ...f, active: !f.active }))}
+                      className="flex items-center gap-2 text-sm"
+                    >
+                      {form.active
+                        ? <ToggleRight size={20} className="text-amber-400" />
+                        : <ToggleLeft size={20} className="text-gray-600" />
+                      }
+                      <span className={form.active ? "text-amber-400" : "text-gray-500"}>
+                        {form.active ? "Активно" : "Неактивно"}
+                      </span>
+                    </button>
+                  </div>
+
+                  {/* Advanced mode fields */}
+                  {form.mode === "advanced" && (
+                    <>
+                      <div>
+                        <label className="block text-xs text-gray-500 mb-2 flex items-center gap-1">
+                          <Monitor size={11} /> Показывать на страницах
+                        </label>
+                        <div className="space-y-1.5">
+                          <button
+                            type="button"
+                            onClick={() => setForm(f => ({ ...f, displayMode: "all-pages" }))}
+                            className={`w-full text-left px-3 py-1.5 rounded-lg text-xs border transition-all ${
+                              form.displayMode === "all-pages"
+                                ? "bg-amber-400/10 border-amber-400/30 text-amber-400"
+                                : "border-[#2a2d3e] text-gray-500 hover:border-gray-600"
+                            }`}
+                          >
+                            На всех страницах
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setForm(f => ({ ...f, displayMode: "specific-pages" }))}
+                            className={`w-full text-left px-3 py-1.5 rounded-lg text-xs border transition-all ${
+                              form.displayMode === "specific-pages"
+                                ? "bg-amber-400/10 border-amber-400/30 text-amber-400"
+                                : "border-[#2a2d3e] text-gray-500 hover:border-gray-600"
+                            }`}
+                          >
+                            На выбранных страницах
+                          </button>
+                        </div>
+                        {form.displayMode === "specific-pages" && (
+                          <div className="mt-2 flex flex-wrap gap-1.5">
+                            {PAGES.map(p => (
+                              <button
+                                key={p.value}
+                                type="button"
+                                onClick={() => togglePage(p.value)}
+                                className={`px-2 py-1 rounded text-xs border transition-all ${
+                                  form.pages.includes(p.value)
+                                    ? "bg-amber-400/10 border-amber-400/40 text-amber-400"
+                                    : "border-[#2a2d3e] text-gray-600 hover:border-gray-600"
+                                }`}
+                              >
+                                {p.label}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs text-gray-500 mb-1 flex items-center gap-1">
+                            <Layout size={11} /> Показов за сессию
+                          </label>
+                          <input
+                            type="number"
+                            min="1"
+                            value={form.maxShows}
+                            onChange={e => setForm(f => ({ ...f, maxShows: e.target.value }))}
+                            className="w-full bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-amber-400/50"
+                            placeholder="∞ (без ограничений)"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-gray-500 mb-1 flex items-center gap-1">
+                            <Clock size={11} /> Истекает
+                          </label>
+                          <input
+                            type="datetime-local"
+                            value={form.expiresAt}
+                            onChange={e => setForm(f => ({ ...f, expiresAt: e.target.value }))}
+                            className="w-full bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-amber-400/50"
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 mt-5 pt-4 border-t border-[#2a2d3e]">
+                <button
+                  onClick={handleSave}
+                  disabled={saving || !form.title.trim()}
+                  className="flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-black font-semibold px-5 py-2 rounded-lg text-sm disabled:opacity-50 transition-colors"
+                >
+                  <Save size={14} />
+                  {saving ? "Сохранение..." : "Сохранить"}
+                </button>
+                <button
+                  onClick={resetForm}
+                  className="flex items-center gap-2 text-gray-500 hover:text-gray-300 text-sm transition-colors"
+                >
+                  <X size={14} /> Отмена
+                </button>
+              </div>
             </div>
           )}
-        </CardContent>
-      </Card>
+
+          {/* Ads list */}
+          <div className="divide-y divide-[#2a2d3e]">
+            {!ads || ads.length === 0 ? (
+              <div className="py-12 text-center text-gray-600">
+                <p>Нет объявлений. Нажмите «Добавить» для создания первого.</p>
+              </div>
+            ) : (
+              ads.map((ad: any) => {
+                const isExpired = ad.expiresAt && new Date(ad.expiresAt) < new Date();
+                return (
+                  <div key={ad.id} className={`p-4 flex items-start gap-4 hover:bg-[#0c0d18] transition-colors ${isExpired ? "opacity-60" : ""}`}>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                        <span className={`inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded ${ad.active ? "text-green-400 bg-green-400/10" : "text-gray-600 bg-gray-600/10"}`}>
+                          {ad.active ? <><Eye size={10} /> Активно</> : <><EyeOff size={10} /> Неактивно</>}
+                        </span>
+                        {isExpired && <span className="text-xs text-red-400 bg-red-400/10 px-1.5 py-0.5 rounded">Истекло</span>}
+                        <span className="text-xs text-gray-600">{POSITIONS.find(p => p.value === ad.position)?.label || ad.position}</span>
+                        {ad.displayMode === "specific-pages" && ad.pages?.length > 0 && (
+                          <span className="text-xs text-blue-400">{ad.pages.join(", ")}</span>
+                        )}
+                        {ad.maxShows && <span className="text-xs text-purple-400">max {ad.maxShows} показов</span>}
+                        {ad.expiresAt && !isExpired && <span className="text-xs text-orange-400 flex items-center gap-0.5"><Clock size={10} /> до {new Date(ad.expiresAt).toLocaleDateString("ru")}</span>}
+                      </div>
+                      <p className="text-sm font-medium text-gray-300 truncate">{ad.title}</p>
+                      {ad.description && <p className="text-xs text-gray-600 truncate mt-0.5">{ad.description}</p>}
+                    </div>
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button
+                        onClick={() => handleToggle(ad.id)}
+                        title={ad.active ? "Деактивировать" : "Активировать"}
+                        className="p-2 text-gray-600 hover:text-amber-400 rounded-lg hover:bg-amber-400/10 transition-all"
+                      >
+                        {ad.active ? <EyeOff size={15} /> : <Eye size={15} />}
+                      </button>
+                      <button
+                        onClick={() => openEdit(ad)}
+                        className="p-2 text-gray-600 hover:text-blue-400 rounded-lg hover:bg-blue-400/10 transition-all"
+                      >
+                        <Edit2 size={15} />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(ad.id)}
+                        className="p-2 text-gray-600 hover:text-red-400 rounded-lg hover:bg-red-400/10 transition-all"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
