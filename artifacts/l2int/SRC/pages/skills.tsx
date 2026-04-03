@@ -1,139 +1,157 @@
 import React, { useState } from "react";
-import { Zap, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { SKILL_CATEGORIES } from "@/lib/skill-data";
-import { useI18n } from "@/lib/i18n";
+import { useI18n } from "../hooks/useI18n";
+import { skills } from "../data/skill-data";
+import { Sword, Filter, Zap, Clock, BarChart2 } from "lucide-react";
+import AdDisplay from "../components/AdDisplay";
 
-const typeColor: Record<string, string> = {
-  active: "bg-red-500/10 text-red-400 border-red-500/30",
-  passive: "bg-blue-500/10 text-blue-400 border-blue-500/30",
-  toggle: "bg-green-500/10 text-green-400 border-green-500/30",
+const elementColors: Record<string, string> = {
+  fire: "text-red-400 bg-red-400/10 border-red-400/30",
+  water: "text-blue-400 bg-blue-400/10 border-blue-400/30",
+  wind: "text-cyan-400 bg-cyan-400/10 border-cyan-400/30",
+  earth: "text-yellow-600 bg-yellow-600/10 border-yellow-600/30",
+  dark: "text-purple-400 bg-purple-400/10 border-purple-400/30",
+  holy: "text-yellow-300 bg-yellow-300/10 border-yellow-300/30",
+  none: "text-gray-400 bg-gray-400/10 border-gray-400/30",
 };
 
-export default function Skills() {
-  const { t, lang } = useI18n();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState("all");
+const typeLabels: Record<string, [string, string]> = {
+  active: ["Активное", "Active"],
+  passive: ["Пассивное", "Passive"],
+  toggle: ["Переключение", "Toggle"],
+  aura: ["Аура", "Aura"],
+};
 
-  const filtered = SKILL_CATEGORIES.map(cat => {
-    const skills = cat.skills.filter(s => {
-      const name = lang === "ru" ? s.name : s.nameEn;
-      const matchSearch = !searchQuery || name.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchSearch;
-    });
-    return { ...cat, skills };
-  }).filter(c => {
-    if (activeCategory !== "all" && c.id !== activeCategory) return false;
-    return c.skills.length > 0;
+const elementLabels: Record<string, [string, string]> = {
+  fire: ["Огонь", "Fire"],
+  water: ["Вода", "Water"],
+  wind: ["Ветер", "Wind"],
+  earth: ["Земля", "Earth"],
+  dark: ["Тьма", "Dark"],
+  holy: ["Свет", "Holy"],
+  none: ["Нейтральный", "None"],
+};
+
+export default function SkillsPage() {
+  const { t, lang } = useI18n();
+  const [search, setSearch] = useState("");
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [elementFilter, setElementFilter] = useState("all");
+
+  const filtered = skills.filter(s => {
+    const name = lang === "ru" ? s.nameRu : s.name;
+    const className = lang === "ru" ? s.classNameRu : s.className;
+    const matchSearch = !search || name.toLowerCase().includes(search.toLowerCase()) || className.toLowerCase().includes(search.toLowerCase());
+    const matchType = typeFilter === "all" || s.type === typeFilter;
+    const matchEl = elementFilter === "all" || s.element === elementFilter;
+    return matchSearch && matchType && matchEl;
   });
 
   return (
-    <div className="space-y-6 sm:space-y-8 pb-12">
-      <div className="border-b border-border pb-4 sm:pb-6">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-cinzel font-bold text-foreground flex items-center gap-2 sm:gap-3">
-          <Zap className="w-6 h-6 sm:w-8 sm:h-8 text-primary shrink-0" />
-          {t("skillsTitle")}
-        </h1>
-        <p className="text-sm sm:text-base text-muted-foreground mt-2">{t("skillsSubtitle")}</p>
+    <div className="space-y-6">
+      <div className="flex items-center gap-3">
+        <Sword className="text-amber-400" size={22} />
+        <h1 className="text-2xl font-bold text-white font-cinzel">{t("Умения", "Skills")}</h1>
+        <span className="text-xs text-gray-600 bg-[#1a1b26] px-2 py-0.5 rounded">{filtered.length}</span>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-4 w-4 text-muted-foreground" />
-          </div>
-          <Input
-            type="search"
-            placeholder={t("searchSkillPlaceholder")}
-            className="w-full pl-9 h-10 sm:h-12 bg-card border-border focus-visible:ring-primary text-sm"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+      <div className="flex flex-wrap gap-3 border border-[#2a2d3e] bg-[#0e0f1a] rounded-xl p-4">
+        <div className="flex items-center gap-2 text-gray-500 shrink-0">
+          <Filter size={14} />
         </div>
-        <div className="flex flex-wrap gap-1.5">
-          <button
-            onClick={() => setActiveCategory("all")}
-            className={`px-3 py-1.5 rounded text-xs font-cinzel font-bold border transition-colors ${
-              activeCategory === "all" ? "bg-primary text-primary-foreground border-primary" : "border-border text-muted-foreground hover:border-primary/50 hover:text-primary"
-            }`}
-          >
-            {lang === "ru" ? "Все" : "All"}
-          </button>
-          {SKILL_CATEGORIES.map(cat => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`px-3 py-1.5 rounded text-xs font-cinzel font-bold border transition-colors ${
-                activeCategory === cat.id ? "bg-primary text-primary-foreground border-primary" : "border-border text-muted-foreground hover:border-primary/50 hover:text-primary"
-              }`}
-            >
-              {lang === "ru" ? cat.name.split(" / ")[0] : cat.nameEn.split(" / ")[0]}
-            </button>
+        <input
+          type="text"
+          placeholder={t("Поиск по умению или классу...", "Search by skill or class...")}
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          className="flex-1 min-w-[200px] bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-1.5 text-sm text-gray-300 placeholder-gray-600 focus:outline-none focus:border-amber-400/50"
+        />
+        <select
+          value={typeFilter}
+          onChange={e => setTypeFilter(e.target.value)}
+          className="bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-1.5 text-sm text-gray-300 focus:outline-none focus:border-amber-400/50"
+        >
+          <option value="all">{t("Все типы", "All types")}</option>
+          {Object.entries(typeLabels).map(([k, [ru, en]]) => (
+            <option key={k} value={k}>{t(ru, en)}</option>
           ))}
-        </div>
+        </select>
+        <select
+          value={elementFilter}
+          onChange={e => setElementFilter(e.target.value)}
+          className="bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-1.5 text-sm text-gray-300 focus:outline-none focus:border-amber-400/50"
+        >
+          <option value="all">{t("Все элементы", "All elements")}</option>
+          {Object.entries(elementLabels).map(([k, [ru, en]]) => (
+            <option key={k} value={k}>{t(ru, en)}</option>
+          ))}
+        </select>
       </div>
 
-      {filtered.length === 0 ? (
-        <div className="text-center py-16 bg-card border border-border rounded-lg">
-          <Zap className="w-10 h-10 text-muted-foreground/30 mx-auto mb-4" />
-          <h3 className="text-lg font-bold text-foreground">{t("nothingFound")}</h3>
-          <button className="mt-4 text-primary text-sm hover:underline" onClick={() => setSearchQuery("")}>
-            {t("resetSearch")}
-          </button>
-        </div>
-      ) : (
-        <div className="space-y-6 sm:space-y-8">
-          {filtered.map(cat => (
-            <section key={cat.id} className="space-y-3">
-              <h2 className="font-cinzel font-bold text-base sm:text-xl text-primary border-b border-primary/20 pb-2">
-                {lang === "ru" ? cat.name : cat.nameEn}
-              </h2>
-              <div className="space-y-2">
-                {cat.skills.map(skill => (
-                  <div
-                    key={skill.id}
-                    className="bg-card border border-border rounded-lg p-3 sm:p-4 hover:border-primary/40 transition-colors"
-                  >
-                    <div className="flex flex-wrap items-start gap-2 sm:gap-3">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex flex-wrap items-center gap-2 mb-1">
-                          <h3 className="font-cinzel font-bold text-sm sm:text-base text-foreground">
-                            {lang === "ru" ? skill.name : skill.nameEn}
-                          </h3>
-                          <span className={`text-xs px-2 py-0.5 rounded border font-medium ${typeColor[skill.type]}`}>
-                            {lang === "ru" ? (skill.type === "active" ? t("active") : skill.type === "passive" ? t("passive") : t("toggle")) : skill.type}
-                          </span>
-                          <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded">
-                            {t("level")} {skill.level}+
-                          </span>
-                        </div>
-                        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{skill.description}</p>
-                        <div className="flex flex-wrap gap-2 mt-2">
-                          {skill.mp > 0 && (
-                            <span className="text-xs text-blue-400 bg-blue-400/10 border border-blue-400/20 px-2 py-0.5 rounded">
-                              MP: {skill.mp}
-                            </span>
-                          )}
-                          {skill.reuse !== "—" && (
-                            <span className="text-xs text-amber-400 bg-amber-400/10 border border-amber-400/20 px-2 py-0.5 rounded">
-                              {lang === "ru" ? "Перезарядка" : "Reuse"}: {skill.reuse}
-                            </span>
-                          )}
-                          {skill.classes.map(cls => (
-                            <span key={cls} className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded border border-border/50">
-                              {cls}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="lg:col-span-3 space-y-3">
+          {filtered.map(skill => (
+            <div key={skill.id} className="border border-[#2a2d3e] bg-[#0e0f1a] rounded-xl p-5">
+              <div className="flex items-start justify-between gap-4 mb-3">
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap mb-1">
+                    <span className={`text-xs px-2 py-0.5 rounded-full border ${elementColors[skill.element || "none"]}`}>
+                      {t(elementLabels[skill.element || "none"][0], elementLabels[skill.element || "none"][1])}
+                    </span>
+                    <span className="text-xs text-gray-600">{t(typeLabels[skill.type][0], typeLabels[skill.type][1])}</span>
+                    <span className="text-xs text-gray-600">{t("Макс. уровень", "Max Lv")}: {skill.maxLevel}</span>
                   </div>
+                  <h3 className="font-semibold text-gray-200 font-cinzel">{lang === "ru" ? skill.nameRu : skill.name}</h3>
+                  <p className="text-xs text-amber-400/70 mt-0.5">{lang === "ru" ? skill.classNameRu : skill.className}</p>
+                </div>
+                <div className="shrink-0">
+                  <div className="p-2 bg-amber-400/10 rounded-lg">
+                    <Zap size={18} className="text-amber-400" />
+                  </div>
+                </div>
+              </div>
+              <p className="text-sm text-gray-400 leading-relaxed mb-3">
+                {lang === "ru" ? skill.descriptionRu : skill.description}
+              </p>
+              <div className="flex flex-wrap gap-4 border-t border-[#2a2d3e] pt-3">
+                {skill.mpCost > 0 && (
+                  <div className="flex items-center gap-1.5">
+                    <BarChart2 size={13} className="text-blue-400" />
+                    <span className="text-xs text-gray-500">{t("Мана", "MP")}: <span className="text-blue-400 font-medium">{skill.mpCost}</span></span>
+                  </div>
+                )}
+                {skill.castTime > 0 && (
+                  <div className="flex items-center gap-1.5">
+                    <Clock size={13} className="text-gray-500" />
+                    <span className="text-xs text-gray-500">{t("Время каста", "Cast")}: <span className="text-gray-300 font-medium">{skill.castTime}s</span></span>
+                  </div>
+                )}
+                {skill.cooldown > 0 && (
+                  <div className="flex items-center gap-1.5">
+                    <Clock size={13} className="text-orange-400" />
+                    <span className="text-xs text-gray-500">{t("Откат", "CD")}: <span className="text-orange-400 font-medium">{skill.cooldown}s</span></span>
+                  </div>
+                )}
+                {skill.range > 0 && (
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs text-gray-500">{t("Дальность", "Range")}: <span className="text-gray-300 font-medium">{skill.range}</span></span>
+                  </div>
+                )}
+              </div>
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {(lang === "ru" ? skill.effectsRu : skill.effects).map((e, i) => (
+                  <span key={i} className="text-xs text-green-400 bg-green-400/5 border border-green-400/20 px-2 py-0.5 rounded">{e}</span>
                 ))}
               </div>
-            </section>
+            </div>
           ))}
+          {filtered.length === 0 && (
+            <div className="text-center py-16 text-gray-600">{t("Ничего не найдено", "Nothing found")}</div>
+          )}
         </div>
-      )}
+        <div className="lg:col-span-1">
+          <AdDisplay position="sidebar-top" page="skills" />
+        </div>
+      </div>
     </div>
   );
 }

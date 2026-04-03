@@ -1,117 +1,142 @@
 import React, { useState } from "react";
-import { Shield, ChevronRight } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { RACES, type ClassNode } from "@/lib/class-data";
-import { useI18n } from "@/lib/i18n";
+import { Link } from "wouter";
+import { useI18n } from "../hooks/useI18n";
+import { classes } from "../data/class-data";
+import { Shield, ChevronRight, Filter } from "lucide-react";
+import AdDisplay from "../components/AdDisplay";
 
-function ClassTree({ nodes, lang, depth = 0 }: { nodes: ClassNode[]; lang: string; depth?: number }) {
-  const colors = [
-    "border-primary/60 bg-primary/10 text-primary",
-    "border-amber-500/50 bg-amber-500/10 text-amber-400",
-    "border-blue-400/50 bg-blue-400/10 text-blue-300",
-    "border-green-400/50 bg-green-400/10 text-green-300",
-  ];
-  const color = colors[Math.min(depth, colors.length - 1)];
+const typeColors: Record<string, string> = {
+  fighter: "text-red-400 bg-red-400/10 border-red-400/30",
+  mage: "text-blue-400 bg-blue-400/10 border-blue-400/30",
+  priest: "text-green-400 bg-green-400/10 border-green-400/30",
+  rogue: "text-yellow-400 bg-yellow-400/10 border-yellow-400/30",
+};
 
-  return (
-    <div className={`space-y-2 ${depth > 0 ? "ml-3 sm:ml-6 mt-2 pl-3 sm:pl-4 border-l border-border" : ""}`}>
-      {nodes.map((node, idx) => (
-        <div key={idx} className="space-y-2">
-          <div className={`flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 px-3 py-2 sm:py-2.5 rounded-lg border ${color}`}>
-            <div className="flex items-center gap-2">
-              {depth > 0 && <ChevronRight className="w-3.5 h-3.5 shrink-0 opacity-60" />}
-              <span className="font-cinzel font-bold text-xs sm:text-sm leading-snug">
-                {lang === "ru" ? node.name : node.nameEn}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 pl-5 sm:pl-0">
-              <span className="text-xs text-muted-foreground px-2 py-0.5 bg-background/40 rounded border border-border/50">
-                {node.level}+
-              </span>
-              <span className="text-xs text-muted-foreground opacity-70">{node.role}</span>
-            </div>
-          </div>
-          {node.children && node.children.length > 0 && (
-            <ClassTree nodes={node.children} lang={lang} depth={depth + 1} />
-          )}
-        </div>
-      ))}
-    </div>
-  );
-}
+const typeLabels: Record<string, [string, string]> = {
+  fighter: ["Боец", "Fighter"],
+  mage: ["Маг", "Mage"],
+  priest: ["Жрец", "Priest"],
+  rogue: ["Разбойник", "Rogue"],
+};
 
-export default function Classes() {
+const raceLabels: Record<string, [string, string]> = {
+  Human: ["Человек", "Human"],
+  Elf: ["Эльф", "Elf"],
+  "Dark Elf": ["Тёмный Эльф", "Dark Elf"],
+  Orc: ["Орк", "Orc"],
+  Dwarf: ["Гном", "Dwarf"],
+};
+
+export default function ClassesPage() {
   const { t, lang } = useI18n();
-  const [activeRace, setActiveRace] = useState("human");
+  const [search, setSearch] = useState("");
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [raceFilter, setRaceFilter] = useState("all");
 
-  const currentRace = RACES.find(r => r.id === activeRace) || RACES[0];
+  const filtered = classes.filter(c => {
+    const name = lang === "ru" ? c.nameRu : c.name;
+    const matchSearch = !search || name.toLowerCase().includes(search.toLowerCase());
+    const matchType = typeFilter === "all" || c.type === typeFilter;
+    const matchRace = raceFilter === "all" || c.race === raceFilter;
+    return matchSearch && matchType && matchRace;
+  });
+
+  const races = [...new Set(classes.map(c => c.race))];
 
   return (
-    <div className="space-y-6 sm:space-y-8 pb-12">
-      <div className="border-b border-border pb-4 sm:pb-6">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-cinzel font-bold text-foreground flex items-center gap-2 sm:gap-3">
-          <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-primary shrink-0" />
-          {t("classesTitle")}
-        </h1>
-        <p className="text-sm sm:text-base text-muted-foreground mt-2">{t("classesSubtitle")}</p>
+    <div className="space-y-6">
+      <div className="flex items-center gap-3">
+        <Shield className="text-amber-400" size={22} />
+        <h1 className="text-2xl font-bold text-white font-cinzel">{t("Классы", "Classes")}</h1>
+        <span className="text-xs text-gray-600 bg-[#1a1b26] px-2 py-0.5 rounded">{filtered.length}</span>
       </div>
 
-      <Tabs defaultValue="human" value={activeRace} onValueChange={setActiveRace} className="w-full">
-        <TabsList className="w-full justify-start h-auto flex-wrap bg-card border border-border p-1 gap-1">
-          {RACES.map(race => (
-            <TabsTrigger
-              key={race.id}
-              value={race.id}
-              className="font-cinzel font-bold text-xs sm:text-sm px-2 sm:px-3 py-1.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-            >
-              {lang === "ru" ? race.name.split(" ")[0] : race.nameEn}
-            </TabsTrigger>
+      <div className="flex flex-wrap gap-3 border border-[#2a2d3e] bg-[#0e0f1a] rounded-xl p-4">
+        <div className="flex items-center gap-2 text-gray-500 shrink-0">
+          <Filter size={14} />
+          <span className="text-xs">{t("Фильтры", "Filters")}</span>
+        </div>
+        <input
+          type="text"
+          placeholder={t("Поиск по классу...", "Search by class...")}
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          className="flex-1 min-w-[200px] bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-1.5 text-sm text-gray-300 placeholder-gray-600 focus:outline-none focus:border-amber-400/50"
+        />
+        <select
+          value={typeFilter}
+          onChange={e => setTypeFilter(e.target.value)}
+          className="bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-1.5 text-sm text-gray-300 focus:outline-none focus:border-amber-400/50"
+        >
+          <option value="all">{t("Все типы", "All types")}</option>
+          {Object.entries(typeLabels).map(([k, [ru, en]]) => (
+            <option key={k} value={k}>{t(ru, en)}</option>
           ))}
-        </TabsList>
+        </select>
+        <select
+          value={raceFilter}
+          onChange={e => setRaceFilter(e.target.value)}
+          className="bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-1.5 text-sm text-gray-300 focus:outline-none focus:border-amber-400/50"
+        >
+          <option value="all">{t("Все расы", "All races")}</option>
+          {races.map(r => (
+            <option key={r} value={r}>{t(raceLabels[r]?.[0] || r, r)}</option>
+          ))}
+        </select>
+      </div>
 
-        {RACES.map(race => (
-          <TabsContent key={race.id} value={race.id} className="mt-4 sm:mt-6 space-y-4 sm:space-y-6">
-            <div className="bg-card border border-border rounded-lg p-4 sm:p-5 space-y-3">
-              <h2 className="text-xl sm:text-2xl font-cinzel font-bold text-primary">
-                {lang === "ru" ? race.name : race.nameEn}
-              </h2>
-              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                {lang === "ru" ? race.description : race.descriptionEn}
-              </p>
-              <div className="flex flex-wrap gap-2 pt-1">
-                {(lang === "ru" ? race.bonuses : race.bonusesEn).map((bonus, i) => (
-                  <span
-                    key={i}
-                    className="text-xs px-2.5 py-1 bg-primary/10 text-primary border border-primary/30 rounded-full"
-                  >
-                    {bonus}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <h3 className="font-cinzel font-bold text-base sm:text-lg text-foreground border-b border-border pb-2">
-                {t("classPath")}
-              </h3>
-              {race.paths.map((path, i) => (
-                <div key={i} className="bg-card border border-border rounded-lg p-4 sm:p-5 space-y-3">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-primary" />
-                    <h4 className="font-cinzel font-bold text-sm sm:text-base text-foreground">
-                      {lang === "ru" ? path.name : path.nameEn}
-                    </h4>
-                    <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded">{path.role}</span>
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="lg:col-span-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {filtered.map(cls => (
+              <Link key={cls.id} href={`/classes/${cls.id}`} className="block group">
+                <div className="border border-[#2a2d3e] hover:border-amber-400/40 bg-[#0e0f1a] rounded-xl p-5 transition-all hover:bg-[#14151f] h-full">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className={`text-xs px-2 py-0.5 rounded-full border ${typeColors[cls.type]}`}>
+                          {t(typeLabels[cls.type][0], typeLabels[cls.type][1])}
+                        </span>
+                        <span className="text-xs text-gray-600">{t("Тир", "Tier")} {cls.tier}</span>
+                      </div>
+                      <h3 className="font-semibold text-gray-200 group-hover:text-white transition-colors font-cinzel">
+                        {lang === "ru" ? cls.nameRu : cls.name}
+                      </h3>
+                      <p className="text-xs text-gray-600 mt-0.5">{t(raceLabels[cls.race]?.[0] || cls.race, cls.race)} · Lv.{cls.requiredLevel}+</p>
+                    </div>
+                    <ChevronRight size={16} className="text-gray-600 group-hover:text-amber-400 shrink-0 transition-colors" />
                   </div>
-                  {path.children && (
-                    <ClassTree nodes={path.children} lang={lang} depth={0} />
-                  )}
+                  <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
+                    {lang === "ru" ? cls.descriptionRu : cls.description}
+                  </p>
+                  <div className="mt-3 grid grid-cols-3 gap-2 pt-3 border-t border-[#2a2d3e]">
+                    <div className="text-center">
+                      <p className="text-xs text-gray-600">STR</p>
+                      <p className="text-sm font-bold text-amber-400">{cls.stats.str}</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xs text-gray-600">INT</p>
+                      <p className="text-sm font-bold text-blue-400">{cls.stats.int}</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xs text-gray-600">CON</p>
+                      <p className="text-sm font-bold text-green-400">{cls.stats.con}</p>
+                    </div>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </TabsContent>
-        ))}
-      </Tabs>
+              </Link>
+            ))}
+            {filtered.length === 0 && (
+              <div className="col-span-2 text-center py-16 text-gray-600">
+                {t("Ничего не найдено", "Nothing found")}
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="lg:col-span-1">
+          <AdDisplay position="sidebar-top" page="classes" />
+        </div>
+      </div>
     </div>
   );
 }
