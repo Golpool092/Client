@@ -1,188 +1,169 @@
 import { Router } from "express";
 import { db, adsTable } from "@workspace/db";
-import { eq } from "drizzle-orm";
-import { sessions } from "./auth";
-import { CreateAdBody, UpdateAdBody } from "@workspace/api-zod";
-import fs from "fs";
-import path from "path";
+import { eq, and, or, arrayContains } from "drizzle-orm";
 
 const router = Router();
 
-function requireAdmin(req: any, res: any, next: any) {
-  const token = req.cookies?.admin_token;
-  if (token && sessions.has(token)) {
-    next();
-  } else {
-    res.status(401).json({ error: "Unauthorized" });
-  }
+function isAdmin(req: any): boolean {
+  return req.session?.authenticated === true;
 }
 
 function formatAd(ad: any) {
   return {
-    id: ad.id,
-    title: ad.title,
-    description: ad.description,
-    imageUrl: ad.imageUrl,
-    linkUrl: ad.linkUrl,
-    linkText: ad.linkText,
-    position: ad.position,
-    active: ad.active,
-    createdAt: ad.createdAt?.toISOString() ?? new Date().toISOString(),
+    ...ad,
+    pages: ad.pages ?? [],
+    displayMode: ad.displayMode ?? "all-pages",
+    expiresAt: ad.expiresAt ? ad.expiresAt.toISOString() : null,
+    createdAt: ad.createdAt.toISOString(),
+    updatedAt: ad.updatedAt.toISOString(),
   };
 }
 
-router.get("/ads", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const ads = await db.select().from(adsTable).orderBy(adsTable.id);
-    res.json(ads.map(formatAd));
-  } catch (err) {
-    req.log.error({ err }, "Failed to list ads");
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-router.post("/ads", requireAdmin, async (req, res) => {
-  const parsed = CreateAdBody.safeParse(req.body);
-  if (!parsed.success) {
-    res.status(400).json({ error: "Invalid request body" });
-    return;
-  }
-  try {
-    const [ad] = await db.insert(adsTable).values({
-      title: parsed.data.title,
-      description: parsed.data.description,
-      imageUrl: parsed.data.imageUrl,
-      linkUrl: parsed.data.linkUrl,
-      linkText: parsed.data.linkText,
-      position: parsed.data.position,
-      active: parsed.data.active,
-    }).returning();
-    res.status(201).json(formatAd(ad));
-  } catch (err) {
-    req.log.error({ err }, "Failed to create ad");
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-router.get("/ads/upload-image", requireAdmin, (req, res) => {
-  res.json({ url: "" });
-});
-
-router.post("/ads/upload-image", requireAdmin, async (req, res) => {
-  const parsed = req.body;
-  if (!parsed.base64 || !parsed.filename) {
-    res.status(400).json({ error: "base64 and filename required" });
-    return;
-  }
-  try {
-    const uploadsDir = path.join(process.cwd(), "uploads");
-    if (!fs.existsSync(uploadsDir)) {
-      fs.mkdirSync(uploadsDir, { recursive: true });
+    const { page, position } = req.query as { page?: string; position?: string };
+    
+    let allAds = await db.select().from(adsTable).where(eq(adsTable.active, true));
+    
+    const now = new Date();
+    allAds = allAds.filter(ad => !ad.expiresAt || ad.expiresAt > now);
+    
+    if (page) {
+      allAds = allAds.filter(ad => {
+        if (ad.displayMode === "all-pages") return true;
+        return ad.pages && ad.pages.includes(page);
+      });
     }
-    const ext = path.extname(parsed.filename) || ".png";
-    const name = `${Date.now()}${ext}`;
-    const filePath = path.join(uploadsDir, name);
-    const base64Data = parsed.base64.replace(/^data:[^;]+;base64,/, "");
-    fs.writeFileSync(filePath, Buffer.from(base64Data, "base64"));
-    res.json({ url: `/api/ads/images/${name}` });
+    
+    if (position) {
+      allAds = allAds.filter(ad => ad.position === position);
+    }
+    
+    res.json(allAds.map(formatAd));
   } catch (err) {
-    req.log.error({ err }, "Failed to upload image");
-    res.status(500).json({ error: "Upload failed" });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
-router.get("/ads/images/:name", (req, res) => {
-  const uploadsDir = path.join(process.cwd(), "uploads");
-  const filePath = path.join(uploadsDir, req.params.name);
-  if (fs.existsSync(filePath)) {
-    res.sendFile(filePath);
-  } else {
-    res.status(404).json({ error: "Not found" });
-  }
-});
-
-router.get("/ads/:id", async (req, res) => {
-  const id = parseInt(req.params.id);
-  if (isNaN(id)) {
-    res.status(400).json({ error: "Invalid ID" });
+router.get("/all", async (req, res) => {
+  if (!isAdmin(req)) {
+    res.status(401).json({ error: "Not authenticated" });
     return;
   }
   try {
+    const allAds = await db.select().from(adsTable);
+    res.json(allAds.map(formatAd));
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.post("/create", async (req, res) => {
+  if (!isAdmin(req)) {
+    res.status(401).json({ error: "Not authenticated" });
+    return;
+  }
+  try {
+    const body = req.body as any;
+    const [created] = await db.insert(adsTable).values({
+      title: body.title,
+      description: body.description ?? null,
+      imageUrl: body.imageUrl ?? null,
+      linkUrl: body.linkUrl ?? null,
+      linkText: body.linkText ?? null,
+      position: body.position ?? "sidebar-top",
+      active: body.active !== undefined ? body.active : true,
+      displayMode: body.displayMode ?? "all-pages",
+      pages: body.pages ?? [],
+      maxShows: body.maxShows ?? null,
+      expiresAt: body.expiresAt ? new Date(body.expiresAt) : null,
+    }).returning();
+    res.status(201).json(formatAd(created));
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10);
     const [ad] = await db.select().from(adsTable).where(eq(adsTable.id, id));
     if (!ad) {
-      res.status(404).json({ error: "Not found" });
+      res.status(404).json({ error: "Ad not found" });
       return;
     }
     res.json(formatAd(ad));
   } catch (err) {
-    req.log.error({ err }, "Failed to get ad");
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
-router.put("/ads/:id", requireAdmin, async (req, res) => {
-  const id = parseInt(req.params.id);
-  if (isNaN(id)) {
-    res.status(400).json({ error: "Invalid ID" });
-    return;
-  }
-  const parsed = UpdateAdBody.safeParse(req.body);
-  if (!parsed.success) {
-    res.status(400).json({ error: "Invalid request body" });
+router.put("/:id", async (req, res) => {
+  if (!isAdmin(req)) {
+    res.status(401).json({ error: "Not authenticated" });
     return;
   }
   try {
-    const [ad] = await db.update(adsTable).set({
-      title: parsed.data.title,
-      description: parsed.data.description,
-      imageUrl: parsed.data.imageUrl,
-      linkUrl: parsed.data.linkUrl,
-      linkText: parsed.data.linkText,
-      position: parsed.data.position,
-      active: parsed.data.active,
-    }).where(eq(adsTable.id, id)).returning();
-    if (!ad) {
-      res.status(404).json({ error: "Not found" });
+    const id = parseInt(req.params.id, 10);
+    const body = req.body as any;
+    const update: any = { updatedAt: new Date() };
+    
+    if (body.title !== undefined) update.title = body.title;
+    if (body.description !== undefined) update.description = body.description;
+    if (body.imageUrl !== undefined) update.imageUrl = body.imageUrl;
+    if (body.linkUrl !== undefined) update.linkUrl = body.linkUrl;
+    if (body.linkText !== undefined) update.linkText = body.linkText;
+    if (body.position !== undefined) update.position = body.position;
+    if (body.active !== undefined) update.active = body.active;
+    if (body.displayMode !== undefined) update.displayMode = body.displayMode;
+    if (body.pages !== undefined) update.pages = body.pages;
+    if (body.maxShows !== undefined) update.maxShows = body.maxShows;
+    if (body.expiresAt !== undefined) update.expiresAt = body.expiresAt ? new Date(body.expiresAt) : null;
+
+    const [updated] = await db.update(adsTable).set(update).where(eq(adsTable.id, id)).returning();
+    if (!updated) {
+      res.status(404).json({ error: "Ad not found" });
       return;
     }
-    res.json(formatAd(ad));
+    res.json(formatAd(updated));
   } catch (err) {
-    req.log.error({ err }, "Failed to update ad");
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
-router.delete("/ads/:id", requireAdmin, async (req, res) => {
-  const id = parseInt(req.params.id);
-  if (isNaN(id)) {
-    res.status(400).json({ error: "Invalid ID" });
+router.delete("/:id", async (req, res) => {
+  if (!isAdmin(req)) {
+    res.status(401).json({ error: "Not authenticated" });
     return;
   }
   try {
-    await db.delete(adsTable).where(eq(adsTable.id, id));
+    const id = parseInt(req.params.id, 10);
+    const [deleted] = await db.delete(adsTable).where(eq(adsTable.id, id)).returning();
+    if (!deleted) {
+      res.status(404).json({ error: "Ad not found" });
+      return;
+    }
     res.json({ message: "Deleted" });
   } catch (err) {
-    req.log.error({ err }, "Failed to delete ad");
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
-router.post("/ads/:id/toggle", requireAdmin, async (req, res) => {
-  const id = parseInt(req.params.id);
-  if (isNaN(id)) {
-    res.status(400).json({ error: "Invalid ID" });
+router.post("/:id/toggle", async (req, res) => {
+  if (!isAdmin(req)) {
+    res.status(401).json({ error: "Not authenticated" });
     return;
   }
   try {
-    const [current] = await db.select().from(adsTable).where(eq(adsTable.id, id));
-    if (!current) {
-      res.status(404).json({ error: "Not found" });
+    const id = parseInt(req.params.id, 10);
+    const [ad] = await db.select().from(adsTable).where(eq(adsTable.id, id));
+    if (!ad) {
+      res.status(404).json({ error: "Ad not found" });
       return;
     }
-    const [ad] = await db.update(adsTable).set({ active: !current.active }).where(eq(adsTable.id, id)).returning();
-    res.json(formatAd(ad));
+    const [updated] = await db.update(adsTable).set({ active: !ad.active, updatedAt: new Date() }).where(eq(adsTable.id, id)).returning();
+    res.json(formatAd(updated));
   } catch (err) {
-    req.log.error({ err }, "Failed to toggle ad");
     res.status(500).json({ error: "Internal server error" });
   }
 });

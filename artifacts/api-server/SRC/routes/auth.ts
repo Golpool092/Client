@@ -1,53 +1,49 @@
 import { Router } from "express";
-import { LoginBody } from "@workspace/api-zod";
 import { ADMIN_LOGIN, ADMIN_PASSWORD } from "../config/admin.js";
+import crypto from "crypto";
 
 const router = Router();
 
-const sessions = new Set<string>();
+router.post("/login", (req: any, res) => {
+  const { login, password } = req.body as { login?: string; password?: string };
 
-function generateToken(): string {
-  return Math.random().toString(36).slice(2) + Date.now().toString(36);
-}
-
-router.post("/auth/login", (req, res) => {
-  const parsed = LoginBody.safeParse(req.body);
-  if (!parsed.success) {
-    res.status(400).json({ error: "Invalid request body" });
+  if (!login || !password) {
+    res.status(400).json({ error: "Login and password are required" });
     return;
   }
-  const { login, password } = parsed.data;
-  if (login === ADMIN_LOGIN && password === ADMIN_PASSWORD) {
-    const token = generateToken();
-    sessions.add(token);
-    res.cookie("admin_token", token, {
-      httpOnly: true,
-      sameSite: "lax",
-      maxAge: 1000 * 60 * 60 * 24,
-    });
-    res.json({ ok: true, role: "admin" });
-  } else {
-    res.status(401).json({ error: "Неверный логин или пароль" });
+
+  if (login !== ADMIN_LOGIN || password !== ADMIN_PASSWORD) {
+    res.status(401).json({ error: "Invalid credentials" });
+    return;
   }
+
+  const token = crypto.randomBytes(32).toString("hex");
+  req._sessions[token] = { authenticated: true, login };
+
+  res.cookie("session_token", token, {
+    httpOnly: true,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    sameSite: "lax",
+  });
+
+  res.json({ authenticated: true, login });
 });
 
-router.post("/auth/logout", (req, res) => {
-  const token = req.cookies?.admin_token;
-  if (token) {
-    sessions.delete(token);
+router.post("/logout", (req: any, res) => {
+  const token = req.cookies?.["session_token"];
+  if (token && req._sessions) {
+    delete req._sessions[token];
   }
-  res.clearCookie("admin_token");
+  res.clearCookie("session_token");
   res.json({ message: "Logged out" });
 });
 
-router.get("/auth/me", (req, res) => {
-  const token = req.cookies?.admin_token;
-  if (token && sessions.has(token)) {
-    res.json({ ok: true, role: "admin" });
+router.get("/me", (req: any, res) => {
+  if (req.session?.authenticated) {
+    res.json({ authenticated: true, login: req.session.login });
   } else {
     res.status(401).json({ error: "Not authenticated" });
   }
 });
 
-export { sessions };
 export default router;
