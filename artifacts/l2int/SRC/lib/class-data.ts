@@ -11,9 +11,7 @@ export interface RaceData {
   name: string;
   nameEn: string;
   description: string;
-  descriptionEn: string;
   bonuses: string[];
-  bonusesEn: string[];
   paths: ClassNode[];
 }
 
@@ -23,232 +21,173 @@ export const RACES: RaceData[] = [
     name: "Люди (Human)",
     nameEn: "Human",
     description: "Люди — наиболее универсальная раса. Имеют сбалансированные характеристики и самое большое разнообразие классов. Подходят как новичкам, так и опытным игрокам.",
-    descriptionEn: "Humans are the most versatile race with balanced stats and widest class selection.",
     bonuses: ["Сбалансированные характеристики", "Большое разнообразие классов", "Хорошая репутация в игровом мире"],
-    bonusesEn: ["Balanced stats", "Widest class variety", "Good reputation in-game"],
     paths: [
       {
-        name: "Воин (Fighter)",
-        nameEn: "Fighter",
-        level: 1,
-        role: "Физический ДД/Танк",
+        name: "Воин (Fighter)", nameEn: "Fighter", level: 1, role: "Физический ДД/Танк",
         children: [
-          {
-            name: "Воин → Гладиатор (Gladiator)",
-            nameEn: "Warrior → Gladiator",
-            level: 20,
-            role: "Физический ДД (мечи)",
+          { name: "Гладиатор (Gladiator)", nameEn: "Gladiator", level: 20, role: "Физический ДД (мечи)",
             children: [{ name: "Дуэлянт (Duelist)", nameEn: "Duelist", level: 76, role: "Мастер дуэлей" }]
           },
-          {
-            name: "Воин → Военачальник (Warlord)",
-            nameEn: "Warrior → Warlord",
-            level: 20,
-            role: "Копьё + AoE",
+          { name: "Военачальник (Warlord)", nameEn: "Warlord", level: 20, role: "Копьё + AoE",
             children: [{ name: "Дредноут (Dreadnought)", nameEn: "Dreadnought", level: 76, role: "AoE воин" }]
           },
-          {
-            name: "Рыцарь → Паладин (Paladin)",
-            nameEn: "Knight → Paladin",
-            level: 20,
-            role: "Танк (свет)",
+          { name: "Паладин (Paladin)", nameEn: "Paladin", level: 20, role: "Танк (свет)",
             children: [{ name: "Рыцарь Феникса (Phoenix Knight)", nameEn: "Phoenix Knight", level: 76, role: "Светлый танк" }]
           },
-          {
-            name: "Рыцарь → Тёмный Мститель (Dark Avenger)",
-            nameEn: "Knight → Dark Avenger",
-            level: 20,
-            role: "Танк (тьма)",
-            children: [{ name: "Рыцарь Ада (Hell Knight)", nameEn: "Hell Knight", level: 76, role: "Тёмный танк" }]
+          { name: "Тёмный Мститель (Dark Avenger)", nameEn: "Dark Avenger", level: 20, role: "Танк (тьма)",
+            children: [{ name: "Адский Рыцарь (Hell Knight)", nameEn: "Hell Knight", level: 76, role: "Тёмный танк" }]
           },
-          {
-            name: "Разбойник → Охотник за Сокровищами",
-            nameEn: "Rogue → Treasure Hunter",
-            level: 20,
-            role: "Ловкач / Скаут",
-            children: [{ name: "Авантюрист (Adventurer)", nameEn: "Adventurer", level: 76, role: "Мастер скрытности" }]
-          },
-          {
-            name: "Разбойник → Ястребиный Глаз (Hawkeye)",
-            nameEn: "Rogue → Hawkeye",
-            level: 20,
-            role: "Лучник",
-            children: [{ name: "Сагиттариус (Sagittarius)", nameEn: "Sagittarius", level: 76, role: "Элитный лучник" }]
-          },
+          { name: "Следопыт (Rogue)", nameEn: "Rogue", level: 20, role: "Ловкач/Лучник",
+            children: [
+              { name: "Мастер клинков (Treasure Hunter)", nameEn: "Treasure Hunter", level: 40, role: "Разведчик",
+                children: [{ name: "Пред. судьбы (Fortune Seeker)", nameEn: "Fortune Seeker", level: 76, role: "Авантюрист" }]
+              },
+              { name: "Ястреб (Hawkeye)", nameEn: "Hawkeye", level: 40, role: "Лучник",
+                children: [{ name: "Сагиттариус (Sagittarius)", nameEn: "Sagittarius", level: 76, role: "Лучник-мастер" }]
+              }
+            ]
+          }
         ]
       },
       {
-        name: "Маг (Mystic)",
-        nameEn: "Mystic",
-        level: 1,
-        role: "Магический ДД/Саппорт",
+        name: "Маг (Mage)", nameEn: "Mage", level: 1, role: "Магический ДД/Поддержка",
         children: [
-          {
-            name: "Маг → Чародей (Sorcerer)",
-            nameEn: "Wizard → Sorcerer",
-            level: 20,
-            role: "Маг огня",
-            children: [{ name: "Архмаг (Archmage)", nameEn: "Archmage", level: 76, role: "Величайший маг" }]
+          { name: "Волшебник (Wizard)", nameEn: "Wizard", level: 20, role: "Маг огня/воды/земли",
+            children: [
+              { name: "Маг Огня (Sorcerer)", nameEn: "Sorcerer", level: 40, role: "Маг огня",
+                children: [{ name: "Ар. маг (Archmage)", nameEn: "Archmage", level: 76, role: "Верховный маг огня" }]
+              },
+              { name: "Маг Воды (Necromancer)", nameEn: "Necromancer", level: 40, role: "Некромант",
+                children: [{ name: "Соев. мертвецов (Soultaker)", nameEn: "Soultaker", level: 76, role: "Мастер мёртвых" }]
+              },
+              { name: "Призыватель (Warlock)", nameEn: "Warlock", level: 40, role: "Призыватель",
+                children: [{ name: "Аркан призыв (Arcana Lord)", nameEn: "Arcana Lord", level: 76, role: "Повелитель духов" }]
+              }
+            ]
           },
-          {
-            name: "Маг → Некромант (Necromancer)",
-            nameEn: "Wizard → Necromancer",
-            level: 20,
-            role: "Тёмная магия",
-            children: [{ name: "Похититель Душ (Soultaker)", nameEn: "Soultaker", level: 76, role: "Мастер тьмы" }]
-          },
-          {
-            name: "Маг → Варлок (Warlock)",
-            nameEn: "Wizard → Warlock",
-            level: 20,
-            role: "Призыватель",
-            children: [{ name: "Аркана Лорд (Arcana Lord)", nameEn: "Arcana Lord", level: 76, role: "Мастер призыва" }]
-          },
-          {
-            name: "Жрец → Епископ (Bishop)",
-            nameEn: "Cleric → Bishop",
-            level: 20,
-            role: "Хилер",
-            children: [{ name: "Кардинал (Cardinal)", nameEn: "Cardinal", level: 76, role: "Верховный целитель" }]
-          },
-          {
-            name: "Жрец → Пророк (Prophet)",
-            nameEn: "Cleric → Prophet",
-            level: 20,
-            role: "Баффер",
-            children: [{ name: "Иерофант (Hierophant)", nameEn: "Hierophant", level: 76, role: "Мастер баффов" }]
-          },
+          { name: "Клирик (Cleric)", nameEn: "Cleric", level: 20, role: "Лекарь/Поддержка",
+            children: [
+              { name: "Епископ (Bishop)", nameEn: "Bishop", level: 40, role: "Главный хилер",
+                children: [{ name: "Кардинал (Cardinal)", nameEn: "Cardinal", level: 76, role: "Высший жрец" }]
+              },
+              { name: "Пророк (Prophet)", nameEn: "Prophet", level: 40, role: "Баффер",
+                children: [{ name: "Иерофант (Hierophant)", nameEn: "Hierophant", level: 76, role: "Мастер баффов" }]
+              }
+            ]
+          }
         ]
       }
     ]
   },
   {
     id: "elf",
-    name: "Эльфы (Elf)",
+    name: "Светлые эльфы (Elf)",
     nameEn: "Elf",
-    description: "Эльфы — грациозная раса, живущая в лесах. Высокая скорость и ловкость, уступают людям в силе. Отличные лучники и быстрые воины. Имеют бонус к скорости передвижения.",
-    descriptionEn: "Elves are a graceful race living in forests. High speed and dexterity, excellent archers.",
-    bonuses: ["Высокая скорость передвижения", "Бонус к DEX", "Специальные умения воды", "Хорошие лучники"],
-    bonusesEn: ["High movement speed", "DEX bonus", "Water skills", "Excellent archers"],
+    description: "Эльфы — изящная и быстрая раса. Отличные лучники и маги воды/воздуха. Имеют бонусы к скорости и ловкости.",
+    bonuses: ["Высокая скорость передвижения", "Бонус к DEX и WIT", "Сильные лучники и маги воды"],
     paths: [
       {
-        name: "Воин-Эльф",
-        nameEn: "Elven Fighter",
-        level: 1,
-        role: "Быстрый воин",
+        name: "Эльф-воин (Elven Fighter)", nameEn: "Elven Fighter", level: 1, role: "Физический ДД",
         children: [
-          {
-            name: "Рыцарь Эльфов → Храмовник (Temple Knight)",
-            nameEn: "Elven Knight → Temple Knight",
-            level: 20,
-            role: "Танк",
-            children: [{ name: "Эвасор (Evas Templar)", nameEn: "Evas Templar", level: 76, role: "Эльфийский танк" }]
+          { name: "Эльф-рыцарь (Elven Knight)", nameEn: "Elven Knight", level: 20, role: "Танк/ДД",
+            children: [
+              { name: "Темплар (Temple Knight)", nameEn: "Temple Knight", level: 40, role: "Эльф-танк",
+                children: [{ name: "Эваст. рыцарь (Eva's Templar)", nameEn: "Eva's Templar", level: 76, role: "Светлый танк-эльф" }]
+              },
+              { name: "Страж (Swordsinger)", nameEn: "Swordsinger", level: 40, role: "Поддержка-певец",
+                children: [{ name: "Мастер клинка (Sword Muse)", nameEn: "Sword Muse", level: 76, role: "Мастер клинка-певец" }]
+              }
+            ]
           },
-          {
-            name: "Следопыт → Охотник за Призраками (Plainswalker)",
-            nameEn: "Scout → Plainswalker",
-            level: 20,
-            role: "Скаут",
-            children: [{ name: "Ветер Ночи (Wind Rider)", nameEn: "Wind Rider", level: 76, role: "Элитный разведчик" }]
-          },
-          {
-            name: "Следопыт → Серебряный Ranger",
-            nameEn: "Scout → Silver Ranger",
-            level: 20,
-            role: "Лучник",
-            children: [{ name: "Мумус (Moonlight Sentinel)", nameEn: "Moonlight Sentinel", level: 76, role: "Лучник-эльф" }]
-          },
+          { name: "Эльф-следопыт (Elven Scout)", nameEn: "Elven Scout", level: 20, role: "Лучник/Ловкач",
+            children: [
+              { name: "Планарный странник (Plainswalker)", nameEn: "Plainswalker", level: 40, role: "Скоростной ДД",
+                children: [{ name: "Ветер леса (Wind Rider)", nameEn: "Wind Rider", level: 76, role: "Мастер скорости" }]
+              },
+              { name: "Серебряный рейнджер (Silver Ranger)", nameEn: "Silver Ranger", level: 40, role: "Лучник",
+                children: [{ name: "Мунлайт сентинел (Moonlight Sentinel)", nameEn: "Moonlight Sentinel", level: 76, role: "Лунный страж" }]
+              }
+            ]
+          }
         ]
       },
       {
-        name: "Маг-Эльф",
-        nameEn: "Elven Mystic",
-        level: 1,
-        role: "Поддержка / Маг",
+        name: "Эльф-маг (Elven Mage)", nameEn: "Elven Mage", level: 1, role: "Маг воды/воздуха",
         children: [
-          {
-            name: "Маг Эльфов → Чародей Эльфов",
-            nameEn: "Elven Wizard → Spellsinger",
-            level: 20,
-            role: "Маг воды",
-            children: [{ name: "Мистик Эвы (Mystic Muse)", nameEn: "Mystic Muse", level: 76, role: "Могущественный маг" }]
+          { name: "Эльф-волшебник (Elven Wizard)", nameEn: "Elven Wizard", level: 20, role: "Маг",
+            children: [
+              { name: "Ворожея (Spellsinger)", nameEn: "Spellsinger", level: 40, role: "Маг воды",
+                children: [{ name: "Архзаклинатель (Mystic Muse)", nameEn: "Mystic Muse", level: 76, role: "Высшая ворожея" }]
+              },
+              { name: "Элементалист (Elemental Summoner)", nameEn: "Elemental Summoner", level: 40, role: "Призыватель",
+                children: [{ name: "Эваст. призыватель (Elemental Master)", nameEn: "Elemental Master", level: 76, role: "Мастер стихий" }]
+              }
+            ]
           },
-          {
-            name: "Жрица Эльфов → Хранитель Эльфов",
-            nameEn: "Elven Oracle → Elven Elder",
-            level: 20,
-            role: "Хилер-баффер",
-            children: [{ name: "Евангелист (Eva's Saint)", nameEn: "Eva's Saint", level: 76, role: "Святой целитель" }]
-          },
+          { name: "Эльф-жрец (Elven Oracle)", nameEn: "Elven Oracle", level: 20, role: "Хилер/Поддержка",
+            children: [
+              { name: "Прорицатель (Elven Elder)", nameEn: "Elven Elder", level: 40, role: "Хилер",
+                children: [{ name: "Страж Эвы (Eva's Saint)", nameEn: "Eva's Saint", level: 76, role: "Верховный жрец Эвы" }]
+              }
+            ]
+          }
         ]
       }
     ]
   },
   {
-    id: "darkelf",
-    name: "Тёмные Эльфы (Dark Elf)",
+    id: "dark-elf",
+    name: "Тёмные эльфы (Dark Elf)",
     nameEn: "Dark Elf",
-    description: "Тёмные Эльфы — изгнанная часть эльфийского народа. Высокая атака и скорость, тёмная магия. Один из лучших классов для ДД-роли. Слабее в защите.",
-    descriptionEn: "Dark Elves — banished elves with high attack and dark magic. Best DPS race.",
-    bonuses: ["Высокий урон", "Тёмная магия", "Отличные одиночные ДД", "Высокий INT и STR"],
-    bonusesEn: ["High damage", "Dark magic", "Excellent solo DPS", "High INT and STR"],
+    description: "Тёмные эльфы — сильные и опасные. Высокая атака, хорошие маги тьмы и некроманты. Имеют бонус к STR и INT.",
+    bonuses: ["Высокий STR и INT", "Лучшие маги тьмы", "Мощные воины-ДД"],
     paths: [
       {
-        name: "Воин Тёмных Эльфов",
-        nameEn: "Dark Fighter",
-        level: 1,
-        role: "Быстрый агрессивный воин",
+        name: "Тёмный воин (Dark Fighter)", nameEn: "Dark Fighter", level: 1, role: "Физический ДД",
         children: [
-          {
-            name: "Рыцарь Тьмы → Рыцарь Призраков (Shillien Knight)",
-            nameEn: "Dark Knight → Shillien Knight",
-            level: 20,
-            role: "Тёмный танк",
-            children: [{ name: "Страж Шиллен (Shillien Templar)", nameEn: "Shillien Templar", level: 76, role: "Тёмный танк" }]
+          { name: "Рыцарь тьмы (Palus Knight)", nameEn: "Palus Knight", level: 20, role: "Танк/ДД",
+            children: [
+              { name: "Тёмный рыцарь (Shillien Knight)", nameEn: "Shillien Knight", level: 40, role: "Тёмный танк",
+                children: [{ name: "Шилл. стражник (Shillien Templar)", nameEn: "Shillien Templar", level: 76, role: "Верховный тёмный танк" }]
+              },
+              { name: "Мастер лезвий (Bladedancer)", nameEn: "Bladedancer", level: 40, role: "Поддержка-танцор",
+                children: [{ name: "Спектральный танцор (Spectral Dancer)", nameEn: "Spectral Dancer", level: 76, role: "Мастер танца" }]
+              }
+            ]
           },
-          {
-            name: "Убийца → Аббадон Воин (Bladedancer)",
-            nameEn: "Assassin → Bladedancer",
-            level: 20,
-            role: "Танцор/Баффер",
-            children: [{ name: "Спектр (Spectral Dancer)", nameEn: "Spectral Dancer", level: 76, role: "Тёмный танцор" }]
-          },
-          {
-            name: "Убийца → Охотник-призрак (Abyss Walker)",
-            nameEn: "Assassin → Abyss Walker",
-            level: 20,
-            role: "Убийца",
-            children: [{ name: "Призрачный Скиталец (Ghost Hunter)", nameEn: "Ghost Hunter", level: 76, role: "Мастер убийства" }]
-          },
-          {
-            name: "Убийца → Тёмный Рейнджер (Phantom Ranger)",
-            nameEn: "Assassin → Phantom Ranger",
-            level: 20,
-            role: "Тёмный лучник",
-            children: [{ name: "Phantom Ranger → Ghost Sentinel", nameEn: "Ghost Sentinel", level: 76, role: "Тёмный стрелок" }]
-          },
+          { name: "Ассасин (Assassin)", nameEn: "Assassin", level: 20, role: "Ловкач/Убийца",
+            children: [
+              { name: "Абисс-ходок (Abyss Walker)", nameEn: "Abyss Walker", level: 40, role: "Теневой ДД",
+                children: [{ name: "Призрак охотника (Ghost Hunter)", nameEn: "Ghost Hunter", level: 76, role: "Мастер теней" }]
+              },
+              { name: "Тёмный рейнджер (Phantom Ranger)", nameEn: "Phantom Ranger", level: 40, role: "Тёмный лучник",
+                children: [{ name: "Призрак стрелка (Ghost Sentinel)", nameEn: "Ghost Sentinel", level: 76, role: "Тёмный лучник-мастер" }]
+              }
+            ]
+          }
         ]
       },
       {
-        name: "Маг Тёмных Эльфов",
-        nameEn: "Dark Mystic",
-        level: 1,
-        role: "Тёмный маг",
+        name: "Тёмный маг (Dark Mage)", nameEn: "Dark Mage", level: 1, role: "Маг тьмы",
         children: [
-          {
-            name: "Тёмный Маг → Тёмный Маг (Spellhowler)",
-            nameEn: "Dark Wizard → Spellhowler",
-            level: 20,
-            role: "Маг тьмы / ДД",
-            children: [{ name: "Штормовой Страдалец (Storm Screamer)", nameEn: "Storm Screamer", level: 76, role: "Тёмный маг" }]
+          { name: "Тёмный волшебник (Dark Wizard)", nameEn: "Dark Wizard", level: 20, role: "Маг тьмы",
+            children: [
+              { name: "Тёмный наг (Spellhowler)", nameEn: "Spellhowler", level: 40, role: "Маг тьмы/огня",
+                children: [{ name: "Штормовой вестник (Storm Screamer)", nameEn: "Storm Screamer", level: 76, role: "Верховный маг тьмы" }]
+              },
+              { name: "Тёмный призыватель (Phantom Summoner)", nameEn: "Phantom Summoner", level: 40, role: "Призыватель теней",
+                children: [{ name: "Спект. маг (Spectral Master)", nameEn: "Spectral Master", level: 76, role: "Мастер призраков" }]
+              }
+            ]
           },
-          {
-            name: "Жрица Шиллен → Жрица Шиллен",
-            nameEn: "Shillien Oracle → Shillien Elder",
-            level: 20,
-            role: "Хилер тьмы",
-            children: [{ name: "Жрица Шиллен (Shillien Saint)", nameEn: "Shillien Saint", level: 76, role: "Тёмный целитель" }]
-          },
+          { name: "Жрица Шиллены (Shillien Oracle)", nameEn: "Shillien Oracle", level: 20, role: "Тёмный хилер",
+            children: [
+              { name: "Шилл. прорицательница (Shillien Elder)", nameEn: "Shillien Elder", level: 40, role: "Тёмный хилер",
+                children: [{ name: "Шилл. святая (Shillien Saint)", nameEn: "Shillien Saint", level: 76, role: "Верховная жрица тьмы" }]
+              }
+            ]
+          }
         ]
       }
     ]
@@ -257,126 +196,82 @@ export const RACES: RaceData[] = [
     id: "orc",
     name: "Орки (Orc)",
     nameEn: "Orc",
-    description: "Орки — мощная воинственная раса с огромной физической силой. Лучшие танки и шаманы. Имеют уникальные боевые кличи и гимны, усиливающие всю группу.",
-    descriptionEn: "Orcs are powerful warriors with immense physical strength. Best tanks and group support.",
-    bonuses: ["Высокий CON и STR", "Уникальные боевые кличи", "Отличные танки", "Бонус к HP"],
-    bonusesEn: ["High CON and STR", "Unique war cries", "Excellent tanks", "HP bonus"],
+    description: "Орки — самая сильная и выносливая раса. Высокий STR и CON. Лучшие в ближнем бою, отличные шаманы.",
+    bonuses: ["Наивысший STR и CON", "Стойкость к стунам", "Мощные шаманы-баферы"],
     paths: [
       {
-        name: "Воин-Орк",
-        nameEn: "Orc Fighter",
-        level: 1,
-        role: "Тяжёлый воин",
+        name: "Орк-воин (Orc Fighter)", nameEn: "Orc Fighter", level: 1, role: "Сильнейший физ. ДД",
         children: [
-          {
-            name: "Орк-воин → Орк-разрушитель (Destroyer)",
-            nameEn: "Orc Raider → Destroyer",
-            level: 20,
-            role: "Тяжёлый физический ДД",
-            children: [{ name: "Тиран (Titan)", nameEn: "Titan", level: 76, role: "Непобедимый воин" }]
+          { name: "Монах (Monk)", nameEn: "Monk", level: 20, role: "Бой без оружия",
+            children: [
+              { name: "Тиран (Tyrant)", nameEn: "Tyrant", level: 40, role: "Мощный кулачный боец",
+                children: [{ name: "Grand Khavatari", nameEn: "Grand Khavatari", level: 76, role: "Верховный кулачный мастер" }]
+              }
+            ]
           },
-          {
-            name: "Орк-монах → Тайкун (Tyrant)",
-            nameEn: "Orc Monk → Tyrant",
-            level: 20,
-            role: "Кулачный боец",
-            children: [{ name: "Повелитель Гран Кейна (Grand Khavatari)", nameEn: "Grand Khavatari", level: 76, role: "Мастер ближнего боя" }]
-          },
+          { name: "Орк-рейдер (Orc Raider)", nameEn: "Orc Raider", level: 20, role: "Мощный воин",
+            children: [
+              { name: "Разрушитель (Destroyer)", nameEn: "Destroyer", level: 40, role: "AoE ДД с большой силой",
+                children: [{ name: "Титан (Titan)", nameEn: "Titan", level: 76, role: "Верховный разрушитель" }]
+              }
+            ]
+          }
         ]
       },
       {
-        name: "Шаман-Орк",
-        nameEn: "Orc Mystic",
-        level: 1,
-        role: "Шаман / Поддержка",
+        name: "Орк-шаман (Orc Shaman)", nameEn: "Orc Shaman", level: 1, role: "Шаман/Баффер",
         children: [
-          {
-            name: "Шаман → Оверлорд (Overlord)",
-            nameEn: "Shaman → Overlord",
-            level: 20,
-            role: "Клановый поддерживатель",
-            children: [{ name: "Доминатор (Dominator)", nameEn: "Dominator", level: 76, role: "Клановый лидер" }]
+          { name: "Захватчик душ (Overlord)", nameEn: "Overlord", level: 20, role: "Клановый баффер",
+            children: [{ name: "Доминатор (Dominator)", nameEn: "Dominator", level: 76, role: "Верховный клановый маг" }]
           },
-          {
-            name: "Шаман → Плакальщик (Warcryer)",
-            nameEn: "Shaman → Warcryer",
-            level: 20,
-            role: "Баффер-певец",
-            children: [{ name: "Дум Крайер (Doomcryer)", nameEn: "Doomcryer", level: 76, role: "Мастер боевых гимнов" }]
-          },
+          { name: "Варвар (Warcryer)", nameEn: "Warcryer", level: 20, role: "Групповой баффер",
+            children: [{ name: "Досплетатель (Doomcryer)", nameEn: "Doomcryer", level: 76, role: "Групповой баффер высшего уровня" }]
+          }
         ]
       }
     ]
   },
   {
     id: "dwarf",
-    name: "Дворфы (Dwarf)",
+    name: "Гномы (Dwarf)",
     nameEn: "Dwarf",
-    description: "Дворфы — мастера ремёсел и торговли. Единственная раса, способная добывать ресурсы и создавать предметы путём крафта. В бою используют молоты и топоры.",
-    descriptionEn: "Dwarves are masters of crafting and trade. Only race capable of crafting items.",
-    bonuses: ["Только они могут крафтить", "Добыча руды (Spoil)", "Высокая защита", "Личный склад увеличен"],
-    bonusesEn: ["Only crafters in game", "Spoil skill", "High defense", "Expanded personal storage"],
+    description: "Гномы — мастера ремёсел и торговли. Спойлеры и крафтеры. Единственная раса с доступом к крафту высокого уровня.",
+    bonuses: ["Уникальный спойл (получение ресурсов с монстров)", "Крафт и создание предметов", "Высокий CON"],
     paths: [
       {
-        name: "Воин-Дворф",
-        nameEn: "Dwarven Fighter",
-        level: 1,
-        role: "Боец / Крафтер",
+        name: "Гном-воин (Dwarf Fighter)", nameEn: "Dwarf Fighter", level: 1, role: "Воин/Спойлер",
         children: [
-          {
-            name: "Дворфийский Воин → Щитоносец (Scavenger)",
-            nameEn: "Dwarven Fighter → Scavenger",
-            level: 20,
-            role: "Фармер ресурсов",
-            children: [{ name: "Бурильщик Фортуны (Fortune Seeker)", nameEn: "Fortune Seeker", level: 76, role: "Мастер добычи" }]
+          { name: "Спойлер (Scavenger)", nameEn: "Scavenger", level: 20, role: "Спойл ресурсов с монстров",
+            children: [{ name: "Мастер удара (Bounty Hunter)", nameEn: "Bounty Hunter", level: 76, role: "Спойлер высшего уровня" }]
           },
-          {
-            name: "Дворфийский Воин → Крафтер (Artisan)",
-            nameEn: "Dwarven Fighter → Artisan",
-            level: 20,
-            role: "Мастер крафта",
-            children: [{ name: "Мастер Артефактов (Maestro)", nameEn: "Maestro", level: 76, role: "Лучший крафтер" }]
-          },
+          { name: "Артизан (Artisan)", nameEn: "Artisan", level: 20, role: "Крафтер",
+            children: [{ name: "Варфоргер (Warsmith)", nameEn: "Warsmith", level: 76, role: "Верховный крафтер" }]
+          }
         ]
       }
     ]
   },
   {
     id: "kamael",
-    name: "Камаэль (Kamael)",
+    name: "Камаэли (Kamael)",
     nameEn: "Kamael",
-    description: "Камаэль — загадочная раса крылатых существ с уникальными умениями. Имеют свою уникальную 1-ю профессию и особые механики. Используют мечи одной рукой и стрелковое оружие особого типа.",
-    descriptionEn: "Kamael are mysterious winged beings with unique skills and mechanics.",
-    bonuses: ["Уникальные умения расы", "Особый тип оружия", "Поглощение опыта врагов", "Высокая скорость атаки"],
-    bonusesEn: ["Unique race skills", "Special weapon type", "Experience absorption", "High attack speed"],
+    description: "Камаэли — уникальная раса с крыльями. Только мужские и женские с разными путями развития. Поглощают умения убитых существ.",
+    bonuses: ["Уникальная способность: поглощение душ", "Эксклюзивные классы", "Два саб-класса для 3-й профессии"],
     paths: [
       {
-        name: "Воин-Камаэль",
-        nameEn: "Kamael Soldier",
-        level: 1,
-        role: "Универсальный воин",
+        name: "Воин-камаэль (Kamael Soldier)", nameEn: "Kamael Soldier", level: 1, role: "Воин особой расы",
         children: [
-          {
-            name: "Инквизитор (Trooper)",
-            nameEn: "Trooper",
-            level: 20,
-            role: "Физический ДД",
-            children: [
-              { name: "Доминатор (Doombringer)", nameEn: "Doombringer", level: 76, role: "Мощный воин" },
-              { name: "Мастер Душ (Soul Hound)", nameEn: "Soul Hound", level: 76, role: "Охотник за душами" }
-            ]
+          { name: "Инспектор (Inspector)", nameEn: "Inspector", level: 20, role: "Особый воин",
+            children: [{ name: "Юисис (Judicator)", nameEn: "Judicator", level: 76, role: "Верховный инспектор" }]
           },
-          {
-            name: "Разведчик (Warder)",
-            nameEn: "Warder",
-            level: 20,
-            role: "Скаут",
-            children: [
-              { name: "Арбалетчик (Trickster)", nameEn: "Trickster", level: 76, role: "Ловкий стрелок" }
-            ]
+          { name: "Страж (Trooper)", nameEn: "Trooper", level: 20, role: "Воин (мужской)",
+            children: [{ name: "Берсерк (Berserker)", nameEn: "Berserker", level: 76, role: "Ярый берсерк" }]
           },
+          { name: "Ополченка (Warder)", nameEn: "Warder", level: 20, role: "Воин (женский)",
+            children: [{ name: "Соукастер (Soulbreaker)", nameEn: "Soulbreaker", level: 76, role: "Ломательница душ" }]
+          }
         ]
-      },
+      }
     ]
-  },
+  }
 ];

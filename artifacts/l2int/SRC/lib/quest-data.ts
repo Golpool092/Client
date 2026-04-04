@@ -4,512 +4,517 @@ export interface Quest {
   titleEn: string;
   level: string;
   repeat: "once" | "repeatable" | "daily";
+  type?: string;
   startNpc: string;
   location: string;
   reward: string;
   description: string;
   steps: string[];
+  requirements?: string;
+  chronicle?: string;
 }
 
 export interface QuestCategory {
   id: string;
   title: string;
-  titleEn: string;
   quests: Quest[];
 }
 
 export const QUEST_CATEGORIES: QuestCategory[] = [
   {
-    id: "prof",
+    id: "profession",
     title: "КВЕСТЫ НА ПРОФЕССИИ",
-    titleEn: "PROFESSION QUESTS",
     quests: [
       {
-        id: "prof-1",
-        title: "Квесты на первую профессию (I)",
+        id: "1st-profession",
+        title: "Квест на первую профессию (I)",
         titleEn: "1st Class Transfer Quests",
         level: "20+",
         repeat: "once",
-        startNpc: "Различные NPC (зависит от расы)",
-        location: "Различные стартовые города",
+        startNpc: "Class Master (мастер класса вашей расы)",
+        location: "Стартовые города (в зависимости от расы)",
         reward: "Смена класса, SP, Adena",
-        description: "Переход на первую профессию — важный шаг развития вашего персонажа. Каждая раса и стартовый класс имеет свою уникальную цепочку квестов. После выполнения вы получаете доступ к продвинутым умениям.",
+        requirements: "Нет требований",
+        chronicle: "Chronicle 1",
+        description: "Переход на первую профессию — важный шаг развития персонажа. Каждая раса и стартовый класс имеет свою цепочку квестов. После выполнения вы получаете доступ к продвинутым умениям и снаряжению.",
         steps: [
-          "Найдите наставника своего класса (Class Master) в городе",
-          "Получите задание от наставника",
+          "Достигните 20 уровня",
+          "Найдите наставника своего класса (Class Master) в ближайшем городе",
+          "Получите задание от наставника и выполните все требования",
           "Соберите необходимые предметы или убейте указанных монстров",
           "Вернитесь к наставнику для получения новой профессии",
           "Посетите Guild Master для финального подтверждения смены класса"
         ]
       },
       {
-        id: "prof-2",
-        title: "Квесты на вторую профессию (II)",
+        id: "2nd-profession",
+        title: "Квест на вторую профессию (II)",
         titleEn: "2nd Class Transfer Quests",
         level: "40+",
         repeat: "once",
         startNpc: "Hierarch (Giran)",
         location: "Giran, Dark Elven Village, Goddard",
         reward: "Смена класса, опыт, SP",
+        requirements: "Нет требований",
+        chronicle: "Chronicle 1",
         description: "Вторая профессия открывает значительно больше возможностей: новые скиллы, статы. Квест состоит из нескольких этапов и требует посещения разных локаций. Рекомендуется иметь хорошую группу.",
         steps: [
           "Поговорите с Hierarch в Giran при достижении 40 уровня",
-          "Пройдите испытание — Trials of the Seeker / Scholar / Pilgrim / Martyr (зависит от класса)",
+          "Пройдите испытание — Trials of the Seeker / Scholar / Pilgrim / Martyr (в зависимости от класса)",
           "Соберите все необходимые предметы для испытания",
           "Получите 'Mark of the ...' — знак вашей профессии",
           "Вернитесь к Hierarch и пройдите финальную смену класса"
         ]
       },
       {
-        id: "prof-3",
-        title: "Квесты на третью профессию (III)",
+        id: "3rd-profession",
+        title: "Квест на третью профессию (III)",
         titleEn: "3rd Class Transfer Quests",
         level: "76+",
         repeat: "once",
         startNpc: "Berbatis (Goddard)",
         location: "Goddard, Hellbound, Imperial Tomb",
         reward: "3-я профессия, Forgotten Scroll",
+        requirements: "Нет требований",
+        chronicle: "Chronicle 5",
         description: "Смена на третью профессию — одно из важнейших событий в Lineage 2. Квест требует прохождения сложных подземелий и сбора множества предметов. Лучше выполнять в группе. Включает поход в Imperial Tomb.",
         steps: [
           "Достигните 76 уровня и поговорите с Berbatis в Goddard",
           "Получите задание 'Saga of the ...' для вашего класса",
-          "Найдите все 5 Knowledge Fragment в разных подземельях",
-          "Войдите в Imperial Tomb и пройдите испытание",
-          "Соберите Ancient Hero Soul и вернитесь к Berbatis",
-          "Получите финальное благословение и смените профессию"
+          "Пройдите испытания в Imperial Tomb и соберите все необходимые предметы",
+          "Убейте боссов подземелья (с группой)",
+          "Вернитесь к Berbatis и получите 3-ю профессию и Forgotten Scrolls"
         ]
       },
       {
-        id: "prof-4",
-        title: "Квест на четвертую профессию (IV)",
-        titleEn: "4th Class Transfer Quest (Awakening)",
+        id: "4th-profession",
+        title: "Квест на четвертую профессию (IV) — Awakening",
+        titleEn: "4th Class Transfer / Awakening",
         level: "85+",
         repeat: "once",
-        startNpc: "Sebion (Goddard Castle Town)",
-        location: "Goddard, Gracia Continent, Dimensional Rift",
-        reward: "Пробуждение (Awakening), Angel Cat Buff, XP Boost",
-        description: "Пробуждение — переломный момент в истории персонажа. При достижении 85 уровня вы получаете доступ к квесту пробуждения, который трансформирует ваш класс в один из классов-наследников (Ertheia). Вы получаете мощные новые умения.",
+        startNpc: "Pantheon (Goddard), Orion (Elven Village)",
+        location: "Различные локации",
+        reward: "4-я профессия, Awaken Power",
+        requirements: "Нет требований",
+        chronicle: "Goddess of Destruction",
+        description: "Четвёртая профессия — Пробуждение (Awakening). Доступна с патча Goddess of Destruction. Открывает новые возможности и существенно изменяет геймплей персонажа.",
         steps: [
           "Достигните 85 уровня",
-          "Поговорите с Sebion — он расскажет о вашем пробуждении",
-          "Войдите в Dimensional Rift через специальный портал",
-          "Пройдите испытания в Dimensional Rift (несколько волн монстров)",
-          "Поговорите с Духом вашего класса внутри Rift",
-          "Вернитесь к Sebion и завершите пробуждение",
-          "Получите Angel Cat Buff и новые умения"
+          "Получите и выполните квест 'Awakening of Destiny'",
+          "Пройдите инстанс Purgatory — испытание на силу",
+          "Выберите финальный класс из доступных вариантов",
+          "Завершите квест и получите Awaken Power"
         ]
-      },
+      }
     ]
   },
   {
-    id: "special",
-    title: "ПРОКАЧКА И ОСОБЫЕ",
-    titleEn: "LEVELING & SPECIAL",
+    id: "subclass",
+    title: "КВЕСТЫ НА СУБКЛАСС",
     quests: [
       {
-        id: "sa",
-        title: "Прокачка Кристалла Души (SA)",
-        titleEn: "Soul Crystal (SA) Leveling",
+        id: "an-arrogant-search",
+        title: "An Arrogant Search (Самонадеянный поиск)",
+        titleEn: "An Arrogant Search",
+        level: "75+",
+        repeat: "once",
+        startNpc: "Arujien — Ivory Tower (Башня из слоновой кости)",
+        location: "Ivory Tower (Башня Слоновой Кости)",
+        reward: "Доступ к Baium / Прохождение к Bayum",
+        requirements: "Sub-class квест (предшественник)",
+        chronicle: "Chronicle 2",
+        description: "Квест для прохода к Байму. После обновления Gracia Final, есть альтернативное прохождение. Необходим для выполнения квестов на сабкласс.",
+        steps: [
+          "Поговорите с Arujien в Ivory Tower",
+          "Исследуйте подземелья и соберите ключевые предметы",
+          "Убейте необходимых монстров в указанных локациях",
+          "Верните предметы Arujien для получения доступа к Baium"
+        ]
+      },
+      {
+        id: "fate-whisper",
+        title: "Fate's Whisper (Шепот Судьбы)",
+        titleEn: "Fate's Whisper",
+        level: "75+",
+        repeat: "once",
+        startNpc: "Pantheon (Goddard)",
+        location: "Goddard и различные локации",
+        reward: "Право на взятие саб-классов (для всех рас кроме камаэль)",
+        requirements: "An Arrogant Search (завершён), 75+ уровень",
+        chronicle: "Chronicle 3",
+        description: "Основной квест для получения права на саб-класс (для рас кроме камаэлей). Включает несколько подквестов: Mimir's Elixir и Seeds of Chaos.",
+        steps: [
+          "Поговорите с Pantheon в Goddard",
+          "Выполните подквест Mimir's Elixir (для всех рас кроме камаэль)",
+          "Соберите 3 Sacred Elixir у боссов: Baium, Antharas, Valakas",
+          "Верните эликсиры Pantheon",
+          "Получите право на взятие сабклассов"
+        ]
+      },
+      {
+        id: "seeds-of-chaos",
+        title: "Seeds of Chaos (Семена Хаоса)",
+        titleEn: "Seeds of Chaos",
+        level: "75+",
+        repeat: "once",
+        startNpc: "Chaos Witch Valerie",
+        location: "Различные локации",
+        reward: "Право на взятие саб-классов (только для камаэль)",
+        requirements: "Только для расы Kamael",
+        chronicle: "Chronicle 5",
+        description: "Квест на право взятия сабклассов исключительно для расы Kamael. Является альтернативой Mimir's Elixir.",
+        steps: [
+          "Поговорите с Chaos Witch Valerie",
+          "Соберите Seeds of Chaos из указанных мест",
+          "Выполните ритуал для расы Kamael",
+          "Получите разрешение на взятие сабкласса"
+        ]
+      }
+    ]
+  },
+  {
+    id: "weapon-enhancement",
+    title: "КВЕСТ НА УЛУЧШЕНИЕ ОРУЖИЯ (SA)",
+    quests: [
+      {
+        id: "enhance-your-weapon",
+        title: "Enhance Your Weapon (Усиление оружия)",
+        titleEn: "Enhance Your Weapon",
         level: "40+",
         repeat: "repeatable",
-        startNpc: "Spirit Vortex (зависит от уровня SA)",
-        location: "Разные подземелья",
-        reward: "Повышение уровня Soul Crystal",
-        description: "Soul Crystal (Кристалл Души) — особый предмет, который наделяет оружие специальными характеристиками. Для его прокачки нужно убить определённых боссов с активным кристаллом в инвентаре. Кристалл имеет 14 уровней (SA 1-14).",
+        startNpc: "Grand Magister Jurek (Гиран), Magister Gideon (Орен), Magister Winonin (Аден)",
+        location: "Town of Giran, Town of Oren, Town of Aden",
+        reward: "Soul Crystal (кристалл душ, уровень повышается)",
+        requirements: "Нет требований",
+        chronicle: "Chronicle 2",
+        description: "Квест на прокачку Кристалла Души (SA — Special Ability). Кристаллы бывают трёх видов: Синий, Зелёный, Красный. Уровень кристалла от 1 до 18. При убийстве определённых монстров кристалл может повыситься в уровне. Разные уровни кристалла дают разные SA-эффекты на оружие.",
         steps: [
-          "Получите Soul Crystal у NPC Warehouse Chief или купите на рынке",
-          "Узнайте у Spirit Vortex какого монстра нужно убить для следующего уровня",
-          "Активируйте кристалл в инвентаре и убейте нужного монстра",
-          "После убийства кристалл повысит уровень (шанс не 100%)",
-          "Повторяйте до нужного уровня SA"
+          "Возьмите задание у одного из трёх NPC магов",
+          "Получите кристалл нужного вида (синий/зелёный/красный) в инвентарь",
+          "Убивайте боссов-монстров с кристаллом в руках (шанс повышения уровня)",
+          "Если нужно несколько кристаллов — выбросьте предыдущий на землю и возьмите новый",
+          "При достижении нужного уровня кристалла — вставьте SA в оружие"
         ]
-      },
+      }
+    ]
+  },
+  {
+    id: "noblesse",
+    title: "КВЕСТ НА ДВОРЯНСТВО (NOBLESSE)",
+    quests: [
       {
-        id: "pk",
-        title: "Квест на отмытие РК (PK Count)",
-        titleEn: "PK Count Removal Quest",
-        level: "Any",
-        repeat: "repeatable",
-        startNpc: "Priest of the Birth (различные деревни)",
-        location: "Giran, Oren, Aden, Rune",
-        reward: "Снятие 1 PK-очка",
-        description: "Если вы убивали других игроков (PK kills), ваш персонаж получает красное имя и штрафы. Этот квест позволяет снять PK-очки. За каждое PK нужно выполнить квест отдельно. Требует уничтожения определённых монстров.",
-        steps: [
-          "Найдите Priest of the Birth в ближайшем городе",
-          "Получите задание на уничтожение злых существ",
-          "Убейте необходимое количество монстров (около 100-200 штук)",
-          "Вернитесь к священнику для отпущения грехов",
-          "Один квест снимает одно PK-очко"
-        ]
-      },
-      {
-        id: "cubic",
-        title: "Квест на Кубик (Cubic)",
-        titleEn: "Cubic Quest",
-        level: "35+",
-        repeat: "repeatable",
-        startNpc: "Mion (Primeval Isle / разные локации)",
-        location: "Primeval Isle",
-        reward: "Различные кубики-помощники",
-        description: "Кубики (Cubics) — магические сущности, следующие за персонажем и помогающие в бою. Разные кубики имеют разные эффекты: атака, лечение, дебаф. Квест выдаётся в зависимости от класса персонажа.",
-        steps: [
-          "Найдите NPC, выдающего задание для вашего класса",
-          "Соберите необходимые ингредиенты",
-          "Выполните условия (убийства, сбор предметов)",
-          "Получите нужный кубик"
-        ]
-      },
-      {
-        id: "transform",
-        title: "Квест на Трансформацию",
-        titleEn: "Transformation Quest",
-        level: "55+",
+        id: "noblesse",
+        title: "Квест на Noblesse (Дворянство)",
+        titleEn: "Noblesse Quest",
+        level: "75+",
         repeat: "once",
-        startNpc: "Maestro Leorin (Dion / Goddard)",
-        location: "Dion, Goddard, Shilen's Mystic",
-        reward: "Transformation Sealbook",
-        description: "Трансформация позволяет персонажу принять облик могущественного монстра, получив его умения и характеристики. Квест требует сбора душ существ и посещения нескольких NPC.",
+        startNpc: "Shadith (Valley of Saints), Giran",
+        location: "Valley of Saints, различные локации",
+        reward: "Noblesse статус, Noblesse Tiara",
+        requirements: "Saб-класс 75+ уровня",
+        chronicle: "Chronicle 2",
+        description: "Для получения Noblesse (Дворянства) необходимо прокачать сабкласс до 75 уровня и выполнить цепочку квестов. Noblesse открывает Олимпиаду, дополнительные скиллы и возможность воскрешения бесплатно.",
         steps: [
-          "Поговорите с Maestro Leorin в Dion на 55+ уровне",
-          "Получите Crystal of Purity и отправьтесь к Shilen's Mystic",
-          "Соберите Darkness Fragment убивая Shade в Cemetary of Execution",
-          "Убейте Dark Soul Collector и принесите Dark Crystal",
-          "Вернитесь к Leorin для получения трансформационной книги"
+          "Прокачайте любой сабкласс до 75 уровня",
+          "Поговорите с Shadith в Valley of Saints",
+          "Выполните требования квеста (сбор предметов, убийство боссов)",
+          "Получите Noblesse статус и Noblesse Tiara"
         ]
-      },
-      {
-        id: "family",
-        title: "Квест семьи Нейт (Nate's Family)",
-        titleEn: "Nate's Family Quest",
-        level: "15+",
-        repeat: "once",
-        startNpc: "Nate (Gludin Village)",
-        location: "Gludin Village, Ruins of Despair",
-        reward: "Ring of Nate, Adena",
-        description: "Трогательная история о семье, разлучённой трагедией. Начинается в Gludin Village и ведёт вас через руины к загадочным событиям. Хорошая награда для начального уровня.",
-        steps: [
-          "Найдите Nate в Gludin Village",
-          "Узнайте историю его семьи и получите задание",
-          "Отправьтесь в Ruins of Despair на поиски",
-          "Соберите необходимые предметы",
-          "Вернитесь к Nate с результатами"
-        ]
-      },
+      }
     ]
   },
   {
     id: "pailaka",
-    title: "ПАЙЛАКА (PAILAKA)",
-    titleEn: "PAILAKA INSTANCES",
+    title: "КВЕСТЫ ПАЙЛАКА",
     quests: [
       {
-        id: "pailaka-1",
-        title: "Пайлака — Песня льда и огня",
+        id: "pailaka-ice-fire",
+        title: "Pailaka — Song of Ice and Fire (Песня льда и огня)",
         titleEn: "Pailaka — Song of Ice and Fire",
         level: "36–42",
-        repeat: "daily",
-        startNpc: "Ketra Orc Shaman (Ketra Orc Outpost)",
-        location: "Ketra Orc Outpost / Pailaka Instance",
-        reward: "Pailaka Ring, XP/SP, Adena",
-        description: "Первый Pailaka — инстанс-квест для персонажей 36–42 уровня. Можно проходить в одиночку. Внутри вас ждут несколько боссов и ловушки. Предметы из инстанса нельзя вынести — только XP и специальная награда.",
+        repeat: "repeatable",
+        startNpc: "Уточните у Travel Guide NPC",
+        location: "Pailaka Dungeon (инстанс)",
+        reward: "Серьги Omen Beast (D-grade), SP, опыт",
+        requirements: "Уровень 36–42",
+        chronicle: "Chronicle 5",
+        description: "Пайлака — серия инстанс-квестов для разных диапазонов уровней. Первый Пайлака (Песня льда и огня) рассчитан на уровни 36-42. Выполняется в одиночку в инстансе со своей экипировкой внутри.",
         steps: [
-          "Поговорите с Ketra Orc Shaman при уровне 36-42",
-          "Войдите в инстанс Pailaka (Song of Ice & Fire)",
-          "Убейте первого мини-босса Adiantum",
-          "Пройдите ледяную и огненную зоны",
-          "Убейте финального босса Brakiel",
-          "Соберите награду и выйдите из инстанса"
+          "Возьмите квест у соответствующего NPC",
+          "Войдите в инстанс Pailaka",
+          "Внутри инстанса вы получите временное снаряжение",
+          "Убейте боссов инстанса и выполните задачи",
+          "Выйдите и получите награды"
         ]
       },
       {
-        id: "pailaka-2",
-        title: "Пайлака — Наследие Дьявола",
+        id: "pailaka-devil-legacy",
+        title: "Pailaka — Devil's Legacy (Наследие Дьявола)",
         titleEn: "Pailaka — Devil's Legacy",
         level: "61–67",
-        repeat: "daily",
-        startNpc: "Adventurer Guide (Goddard)",
-        location: "Goddard / Pailaka Instance",
-        reward: "Pailaka Earring, XP/SP",
-        description: "Второй Pailaka подходит для одиночной игры с 61 по 67 уровень. Он сложнее первого — больше врагов и боссы с особой механикой. Рекомендуется иметь сет D-grade или C-grade.",
+        repeat: "repeatable",
+        startNpc: "Уточните у Travel Guide NPC",
+        location: "Pailaka Dungeon (инстанс)",
+        reward: "Браслет C-grade, SP, опыт",
+        requirements: "Уровень 61–67",
+        chronicle: "Chronicle 5",
+        description: "Второй Пайлака для уровней 61-67. Продолжение серии квестов-инстансов с уникальными испытаниями.",
         steps: [
-          "Поговорите с Adventurer Guide в Goddard",
-          "Войдите в Pailaka (Devil's Legacy)",
-          "Уничтожьте охранников-боссов по порядку",
-          "Не забывайте использовать специальные предметы из инстанса",
-          "Убейте финального босса Greed",
-          "Заберите награду"
+          "Возьмите квест у соответствующего NPC (уровень 61-67)",
+          "Войдите в инстанс",
+          "Выполните задания и убейте боссов",
+          "Получите награду — браслет C-grade"
         ]
       },
       {
-        id: "pailaka-3",
-        title: "Пайлака — Раненый Дракон",
+        id: "pailaka-injured-dragon",
+        title: "Pailaka — Injured Dragon (Раненый Дракон)",
         titleEn: "Pailaka — Injured Dragon",
         level: "73–77",
-        repeat: "daily",
-        startNpc: "Adventurer Guide (Aden / Rune)",
-        location: "Aden Castle Town / Pailaka Instance",
-        reward: "Pailaka Necklace, XP/SP высокий",
-        description: "Самый сложный из трёх Pailaka — для уровней 73–77. Требует хорошей экипировки и понимания механик. Финальный boss Latana может вызвать проблемы даже опытным игрокам. Отличный источник XP на этом уровне.",
+        repeat: "repeatable",
+        startNpc: "Уточните у Travel Guide NPC",
+        location: "Pailaka Dungeon (инстанс)",
+        reward: "Рубашка A-grade, SP, опыт",
+        requirements: "Уровень 73–77",
+        chronicle: "Chronicle 5",
+        description: "Третий и финальный Пайлака для уровней 73-77. Самый сложный из трёх инстансов серии.",
         steps: [
-          "Поговорите с Adventurer Guide в Aden или Rune",
-          "Войдите в Pailaka (Injured Dragon)",
-          "Пройдите зону с многочисленными ловушками",
-          "Убейте мини-боссов Dragon Keeper",
-          "Деактивируйте кристаллы-ловушки",
-          "Победите Latana и заберите награду"
+          "Возьмите квест у соответствующего NPC (уровень 73-77)",
+          "Войдите в инстанс Pailaka Injured Dragon",
+          "Пройдите испытания и победите дракона",
+          "Получите Рубашку A-grade"
         ]
-      },
+      }
+    ]
+  },
+  {
+    id: "pk-clean",
+    title: "КВЕСТ НА ОТМЫТИЕ PK",
+    quests: [
+      {
+        id: "repent-sins",
+        title: "Repent Your Sins (Покайтесь в грехах)",
+        titleEn: "Repent Your Sins",
+        level: "0+",
+        repeat: "repeatable",
+        startNpc: "Priest of Repentance — разные города",
+        location: "Различные города Аден",
+        reward: "Снижение PK-счётчика",
+        requirements: "Наличие PK kills",
+        chronicle: "Chronicle 1",
+        description: "Квест на отмытие PK (Player Kill) счётчика. Выполняется у священника в городах. Позволяет снизить количество PK и избежать штрафов.",
+        steps: [
+          "Найдите Priest of Repentance в любом городе",
+          "Возьмите задание и выполните требуемые условия",
+          "Принесите предметы-жертвоприношения",
+          "Получите снижение PK-счётчика"
+        ]
+      }
     ]
   },
   {
     id: "pets",
-    title: "ПИТОМЦЫ И МАУНТЫ",
-    titleEn: "PETS & MOUNTS",
+    title: "КВЕСТЫ НА ПИТОМЦЕВ",
     quests: [
       {
-        id: "wolf",
-        title: "Квест на Волка (Wolf Collar)",
-        titleEn: "Wolf Quest (Wolf Collar)",
+        id: "wolf-quest",
+        title: "Get a Pet — Волк (Wolf Collar)",
+        titleEn: "Get a Pet — Wolf",
         level: "15+",
         repeat: "once",
-        startNpc: "Martin (Gludin Village)",
-        location: "Gludin Village, Ruins of Agony",
-        reward: "Wolf Collar — призыв обычного волка",
-        description: "Волк — первый питомец-компаньон, доступный практически всем персонажам. Следует за вами, помогает в бою, получает опыт и растёт. При правильной прокачке превращается в Great Wolf.",
+        startNpc: "Terry (Gludin Village) / пастух",
+        location: "Gludin Village и окрестности",
+        reward: "Wolf Collar (поводок волка)",
+        requirements: "Нет требований",
+        chronicle: "Chronicle 1",
+        description: "Квест на получение волка-питомца. Волк — боевой питомец, который помогает в бою. Требует поводок для призыва.",
         steps: [
-          "Найдите Martin в Gludin Village (16+ уровень)",
-          "Получите задание на поиск волка",
-          "Убейте 100 Kasha Wolf в Ruins of Agony",
-          "Соберите 50 Wolf Fang",
-          "Вернитесь к Martin и получите Wolf Collar"
+          "Поговорите с Terry в Gludin Village",
+          "Выполните задание: соберите необходимые предметы",
+          "Убейте указанных монстров в окрестностях",
+          "Вернитесь к Terry и получите Wolf Collar"
         ]
       },
       {
-        id: "subclass",
-        title: "Квест на Сабкласс (Sub-class)",
-        titleEn: "Sub-class Quest",
-        level: "75+",
+        id: "buffalo-quest",
+        title: "Help the Uncle — Бык (Baby Buffalo)",
+        titleEn: "Help the Uncle — Baby Buffalo",
+        level: "15+",
         repeat: "once",
-        startNpc: "Hardin (Hardin's Private Academy)",
-        location: "Hardin's Academy, Forge of Gods, Blazing Swamp",
-        reward: "Право добавить сабкласс",
-        description: "Сабкласс позволяет персонажу иметь второй (дополнительный) класс. На сабклассе можно прокачаться до 80 уровня. Квест сложный: требует убийства эпик-боссов Cabrio, Hallate, Kernon, Golkonda.",
+        startNpc: "Mia (Gludin Village)",
+        location: "Gludin Village",
+        reward: "Baby Buffalo Panpipe (флейта для призыва буйвола)",
+        requirements: "Нет требований",
+        chronicle: "Chronicle 3",
+        description: "Квест для получения питомца — бычка Baby Buffalo. Питомец восстанавливает здоровье и ману владельца.",
         steps: [
-          "Поговорите с Hardin на 75 уровне",
-          "Убейте всех 4 Baium's Guards в Tower of Insolence",
-          "Убейте Cabrio в Forest of the Dead",
-          "Убейте Hallate в Forge of Gods",
-          "Убейте Kernon в Blazing Swamp",
-          "Убейте Golkonda в Dragon Valley",
-          "Соберите Seal of Binding и вернитесь к Hardin"
+          "Поговорите с Mia в Gludin Village",
+          "Выполните поручения дяди",
+          "Соберите необходимые предметы",
+          "Получите Baby Buffalo Panpipe"
         ]
-      },
+      }
+    ]
+  },
+  {
+    id: "transformation",
+    title: "КВЕСТ НА ТРАНСФОРМАЦИЮ",
+    quests: [
       {
-        id: "freya",
-        title: "Квесты на Фрею",
-        titleEn: "Freya Quests",
+        id: "more-than-meets-eye",
+        title: "More Than Meets the Eye (Трансформация)",
+        titleEn: "More Than Meets the Eye",
+        level: "55+",
+        repeat: "once",
+        startNpc: "Бетти — Gludio или другие NPC",
+        location: "Различные локации",
+        reward: "Книга трансформации (Transformation Sealbook)",
+        requirements: "Нет требований",
+        chronicle: "Chronicle 3",
+        description: "Квест на получение трансформации. Позволяет персонажу временно превращаться в монстров, получая их умения и характеристики.",
+        steps: [
+          "Поговорите с NPC трансформации",
+          "Соберите необходимые предметы для ритуала",
+          "Убейте определённых монстров",
+          "Получите Transformation Sealbook"
+        ]
+      }
+    ]
+  },
+  {
+    id: "cubic",
+    title: "КВЕСТ НА КУБИК",
+    quests: [
+      {
+        id: "special-order",
+        title: "A Special Order — Кубик (Cubic)",
+        titleEn: "A Special Order",
+        level: "50+",
+        repeat: "once",
+        startNpc: "Mimi the Fairy — Ivory Tower",
+        location: "Ivory Tower (Башня Слоновой Кости)",
+        reward: "Cubic (кубик) — магический помощник в бою",
+        requirements: "Нет требований",
+        chronicle: "Chronicle 2",
+        description: "Квест на получение кубика (Cubic) — специального магического существа, которое помогает в бою: атакует врагов, лечит, баффает. Разные классы получают разные кубики.",
+        steps: [
+          "Поговорите с Mimi the Fairy в Ivory Tower",
+          "Соберите необходимые ингредиенты для создания кубика",
+          "Убейте нужных монстров и принесите трофеи",
+          "Создайте кубик и получите его"
+        ]
+      }
+    ]
+  },
+  {
+    id: "freya",
+    title: "КВЕСТЫ НА ФРЕЮ",
+    quests: [
+      {
+        id: "other-side-truth",
+        title: "The Other Side of Truth (Квест Фреи)",
+        titleEn: "The Other Side of Truth",
         level: "82+",
         repeat: "repeatable",
-        startNpc: "Rafforty (Jinia Guild Hideout)",
-        location: "Jinia Guild Hideout, Freya's instance",
-        reward: "Ice Queen's Tiara, Freya's Ring/Earring/Necklace",
-        description: "Целая серия квестов, связанных с ледяной королевой Freyou. Включает как сюжетные задания, так и повторяемые. Финальная награда — уникальные украшения Freya, одни из лучших в игре на данном уровне.",
+        startNpc: "Rafforty — Freya (Ice Palace)",
+        location: "Freya's Domain (Ледяной Дворец)",
+        reward: "Ожерелье Фреи (Queen of Ice Necklace), опыт, SP",
+        requirements: "82+ уровень, рекомендуется группа",
+        chronicle: "Gracia Final",
+        description: "Серия квестов связанных с Фреей — ледяной королевой. Включает несколько этапов и инстансов. Награда — мощное ожерелье S84-грейда.",
         steps: [
-          "Найдите Rafforty в Jinia Guild Hideout",
-          "Пройдите вводный квест Ice Queen's Sorrow",
-          "Выполните серию дополнительных заданий от Jinia",
-          "Войдите в инстанс Ice Palace и убейте Ice Queen Freya",
-          "Соберите Ice Queen's Tears и вернитесь к Rafforty",
-          "Получите финальную награду"
+          "Поговорите с Rafforty в Freya's Domain",
+          "Выполните серию заданий, связанных с Фреей",
+          "Пройдите инстанс Ice Palace в группе",
+          "Победите Фрею и получите ожерелье Queen of Ice Necklace"
         ]
-      },
-      {
-        id: "buffalo",
-        title: "Квест на Большого Волка (Baby Buffalo)",
-        titleEn: "Baby Buffalo Quest",
-        level: "25+",
-        repeat: "once",
-        startNpc: "Melia (Elven Village)",
-        location: "Elven Village, Elven Ruins",
-        reward: "Baby Buffalo Collar",
-        description: "Baby Buffalo — особый питомец-маг, который помогает своему хозяину магическими атаками и баффами. Квест проходится в Elven Village и окрестностях.",
-        steps: [
-          "Найдите Melia в Elven Village",
-          "Соберите необходимые ингредиенты в Elven Ruins",
-          "Убейте Starving Elven Rabbit и Starving Elven Boar",
-          "Принесите предметы обратно к Melia",
-          "Получите Baby Buffalo Collar"
-        ]
-      },
-      {
-        id: "cougar",
-        title: "Квест на Большого Кота (Baby Cougar)",
-        titleEn: "Baby Cougar Quest",
-        level: "24+",
-        repeat: "once",
-        startNpc: "Martin (Gludio)",
-        location: "Gludio Territory",
-        reward: "Baby Cougar Collar",
-        description: "Baby Cougar — проворный питомец-воин, атакующий физически. Отличается высокой скоростью атаки. Квест проходится в районе Gludio.",
-        steps: [
-          "Найдите Martin в Gludio",
-          "Получите задание на сбор Cougar Soul",
-          "Убейте 200 Plains Cougar в Gludio Territory",
-          "Принесите Cougar Soul к Martin",
-          "Получите Baby Cougar Collar"
-        ]
-      },
-      {
-        id: "kookaburra",
-        title: "Квест на Большого Крокодила (Baby Kookaburra)",
-        titleEn: "Baby Kookaburra Quest",
-        level: "24+",
-        repeat: "once",
-        startNpc: "Mion (Dark Elven Village)",
-        location: "Dark Elven Village Territory",
-        reward: "Baby Kookaburra Collar",
-        description: "Baby Kookaburra — вспомогательный питомец с умениями лечения. Особенно полезен для соло-игроков — периодически лечит хозяина.",
-        steps: [
-          "Найдите Mion в Dark Elven Village",
-          "Соберите Kookaburra Feather от Dark Kookaburra",
-          "Убейте монстров в Dark Elven Territory",
-          "Вернитесь к Mion с собранными предметами",
-          "Получите Baby Kookaburra Collar"
-        ]
-      },
-      {
-        id: "lion",
-        title: "Квест на Льва (Great Wolf)",
-        titleEn: "Great Wolf Quest",
-        level: "55+",
-        repeat: "once",
-        startNpc: "Martin (Gludin Village)",
-        location: "Gludin, Cruma Tower, Sea of Spores",
-        reward: "Great Wolf Collar (эволюция волка)",
-        description: "Great Wolf — улучшенная версия обычного Волка. Значительно мощнее, быстрее и может носить специальную броню. Для его получения нужен уже прокачанный Wolf до определённого уровня.",
-        steps: [
-          "Иметь Wolf 55+ уровня",
-          "Поговорите с Martin в Gludin Village",
-          "Получите задание на Evolution",
-          "Соберите специальные предметы в Cruma Tower",
-          "Убейте Named Monster в Sea of Spores",
-          "Вернитесь к Martin и получите Great Wolf Collar"
-        ]
-      },
-      {
-        id: "horse",
-        title: "Квест на Рыцарского Коня",
-        titleEn: "Strider Quest",
-        level: "55+",
-        repeat: "once",
-        startNpc: "Lekon (Hunter's Village)",
-        location: "Hunter's Village, Alligator Island",
-        reward: "Hatchling (Strider Egg) → Strider",
-        description: "Страйдер — боевой маунт, позволяющий передвигаться быстрее. Выращивается из яйца (Hatchling) через несколько стадий. Может перевозить пассажира в мирных условиях.",
-        steps: [
-          "Поговорите с Lekon в Hunter's Village",
-          "Получите Hatchling Egg",
-          "Вырастите Hatchling до 55 уровня (долго!)",
-          "Вернитесь к Lekon с Hatchling 55+ уровня",
-          "Пройдите эволюцию — получите настоящего Strider"
-        ]
-      },
+      }
     ]
   },
   {
-    id: "epic",
-    title: "ЭПИК КВЕСТЫ И БОССЫ",
-    titleEn: "EPIC QUESTS & BOSSES",
+    id: "lord-path",
+    title: "ПУТЬ ЛОРДА (ТЕРРИТОРИАЛЬНЫЕ ВОЙНЫ)",
     quests: [
       {
-        id: "baium",
-        title: "Квест на Байума (Baium)",
-        titleEn: "Baium Quest",
-        level: "75+",
+        id: "lord-aden",
+        title: "Path to Becoming a Lord — Aden",
+        titleEn: "Path to Becoming a Lord — Aden",
+        level: "0+",
         repeat: "repeatable",
-        startNpc: "Вход через Tower of Insolence",
-        location: "Tower of Insolence (13 этаж)",
-        reward: "Baium's Ring, Baium's Soul Crystal",
-        description: "Байум — один из первых Эпик боссов в Lineage 2. Находится на вершине Tower of Insolence. Убивается кланами и альянсами. Респавн примерно 5 дней. Ring of Baium — один из лучших аксессуаров для многих классов.",
+        type: "Повторяемый, Групповой",
+        startNpc: "Chamberlain of Light (Камергер Света)",
+        location: "Aden Territory (Земли Адена)",
+        reward: "Выбор Награды (Unknown Reward)",
+        requirements: "Нет требований",
+        chronicle: "Gracia",
+        description: "Квест на становление лордом территории Аден. Связан с системой Territory Wars (территориальных войн). Победители могут управлять территорией и получать доходы.",
         steps: [
-          "Соберите рейд-группу (20+ человек рекомендуется)",
-          "Поднимитесь на 13-й этаж Tower of Insolence",
-          "Найдите Статую Ангела у входа к Baium",
-          "Один участник использует специальную статую для призыва",
-          "Убейте Baium (много HP, сильные атаки)",
-          "Соберите лут — Ring of Baium, Baium Crystal"
+          "Поговорите с Chamberlain of Light в Aden Territory",
+          "Выполните задания для становления лордом",
+          "Участвуйте в Territorial Wars",
+          "При победе — получите статус лорда территории"
         ]
       },
       {
-        id: "antharas",
-        title: "Квест на Антараса (Antharas)",
-        titleEn: "Antharas Quest",
-        level: "80+",
+        id: "lord-innadril",
+        title: "Path to Becoming a Lord — Innadril",
+        titleEn: "Path to Becoming a Lord — Innadril",
+        level: "0+",
         repeat: "repeatable",
-        startNpc: "High Priest Orven (Giran)",
-        location: "Dragon Valley, Antharas Lair",
-        reward: "Antharas' Earring, Dragon Scale",
-        description: "Антарас — огромный дракон, один из сильнейших боссов в игре. Требует организованного рейда от 36 до 200+ человек. Квест открывает доступ в его логово — Antharas Lair. Earring of Antharas — лучшая серьга для многих билдов.",
+        type: "Повторяемый, Групповой",
+        startNpc: "Chamberlain of Light (Камергер Света)",
+        location: "Innadril Territory (Земли Иннадрила)",
+        reward: "Выбор Награды",
+        requirements: "Нет требований",
+        chronicle: "Gracia",
+        description: "Квест на становление лордом территории Иннадрил. Часть системы Territory Wars.",
         steps: [
-          "Поговорите с High Priest Orven в Giran",
-          "Соберите 10 Heart of Warding (от монстров в Dragon Valley)",
-          "Возьмите квест на вход в Antharas Lair",
-          "Соберите рейд из нескольких десятков человек",
-          "Войдите в Antharas Lair и убейте Antharas",
-          "Заберите Earring of Antharas"
+          "Поговорите с Chamberlain of Light в Innadril Territory",
+          "Выполните задания для территории",
+          "Участвуйте в Territory Wars",
+          "Станьте лордом Иннадрила"
         ]
       },
       {
-        id: "valakas",
-        title: "Квест на Валакаса (Valakas)",
-        titleEn: "Valakas Quest",
-        level: "80+",
+        id: "lord-schuttgart",
+        title: "Path to Becoming a Lord — Schuttgart",
+        titleEn: "Path to Becoming a Lord — Schuttgart",
+        level: "0+",
         repeat: "repeatable",
-        startNpc: "Witch Kalis (Aden)",
-        location: "Hot Springs / Valakas Lair",
-        reward: "Valakas' Necklace",
-        description: "Валакас — ещё один дракон-босс. Его нашейник считается лучшим в игре долгое время. Для входа нужно набрать 'тепло' в Hot Springs. Сам бой крайне сложный — применяет массовый AoE и заклинания.",
+        type: "Повторяемый, Групповой",
+        startNpc: "Chamberlain of Light (Камергер Света)",
+        location: "Schuttgart Territory (Земли Шутгарта)",
+        reward: "Выбор Награды",
+        requirements: "Нет требований",
+        chronicle: "Gracia",
+        description: "Квест на становление лордом территории Шутгарт.",
         steps: [
-          "Поговорите с Witch Kalis в Aden",
-          "Отправьтесь в Hot Springs и охотьтесь там, набирая 'тепловые очки'",
-          "После набора необходимого количества очков вернитесь к Kalis",
-          "Получите доступ в Valakas Lair",
-          "Соберите 45–200 человек и войдите в логово",
-          "Убейте Valakas и заберите Necklace of Valakas"
+          "Поговорите с Chamberlain of Light в Schuttgart Territory",
+          "Выполните задания квеста",
+          "Участвуйте в Territory Wars",
+          "Станьте лордом Шутгарта"
         ]
       },
+      {
+        id: "lord-oren",
+        title: "Path to Becoming a Lord — Oren",
+        titleEn: "Path to Becoming a Lord — Oren",
+        level: "0+",
+        repeat: "repeatable",
+        type: "Повторяемый, Групповой",
+        startNpc: "Chamberlain of Light (Камергер Света)",
+        location: "Oren Territory (Земли Орена)",
+        reward: "Выбор Награды",
+        requirements: "Нет требований",
+        chronicle: "Gracia",
+        description: "Квест на становление лордом территории Орен.",
+        steps: [
+          "Поговорите с Chamberlain of Light в Oren Territory",
+          "Выполните задания квеста",
+          "Участвуйте в Territory Wars",
+          "Станьте лордом Орена"
+        ]
+      }
     ]
-  },
-  {
-    id: "clan",
-    title: "КЛАНОВЫЕ КВЕСТЫ",
-    titleEn: "CLAN QUESTS",
-    quests: [
-      {
-        id: "clan-hall",
-        title: "Квест на Клан Холл (Clan Hall)",
-        titleEn: "Clan Hall Quest",
-        level: "40+",
-        repeat: "once",
-        startNpc: "Clan Manager (города)",
-        location: "Различные Clan Hall",
-        reward: "Клановый особняк",
-        description: "Клановые особняки — дома для кланов, предоставляющие баффы и другие преимущества. Часть из них продаётся на аукционе, другие — зарабатываются через клановые квесты.",
-        steps: [
-          "Имейте клан уровня 3+",
-          "Найдите доступный Clan Hall на карте",
-          "Заплатите залог или выиграйте аукцион",
-          "Заселите Clan Hall"
-        ]
-      },
-    ]
-  },
-];
-
-export function findQuestById(id: string): Quest | undefined {
-  for (const cat of QUEST_CATEGORIES) {
-    const quest = cat.quests.find(q => q.id === id);
-    if (quest) return quest;
   }
-  return undefined;
-}
+];
