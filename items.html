@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Предметы — L2INT.RU</title>
+<meta name="description" content="База данных предметов Lineage 2: оружие, броня, украшения всех грейдов.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="menu-btn" id="menu-btn">☰</button>
+  <a href="index.html" class="topbar-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    L2INT.RU
+  </a>
+  <nav class="topbar-nav">
+    <a href="index.html">Главная</a>
+    <a href="quests.html">Квесты</a>
+    <a href="guides.html">Гайды</a>
+    <a href="classes.html">Классы</a>
+    <a href="skills.html">Умения</a>
+    <a href="items.html" class="active">Предметы</a>
+  </nav>
+  <div class="topbar-right">
+    <button class="theme-btn" id="theme-btn" title="Сменить тему">☀️</button>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+      <a href="index.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Главная</a>
+      <a href="quests.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Квесты</a>
+      <a href="guides.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/></svg>Гайды</a>
+      <a href="classes.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/></svg>Классы</a>
+      <a href="skills.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Умения</a>
+      <a href="items.html" class="sidebar-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Предметы</a>
+      <a href="subclass.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Сабкласс</a>
+      <a href="mammon.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Мамон</a>
+    </nav>
+    <div class="sidebar-ad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/></svg>Место для<br>вашей рекламы</div>
+    <div class="sidebar-ad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/></svg>Место для<br>вашей рекламы</div>
+    <div class="sidebar-footer">Lineage 2 Interlude / Gracia<br>© 2024 L2INT.RU</div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <div class="page-header-top">
+        <div>
+          <h1>Предметы</h1>
+          <div class="page-header-meta">90+ предметов в базе данных</div>
+        </div>
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" class="search-input" data-table="items-table" placeholder="Поиск предметов...">
+        </div>
+      </div>
+    </div>
+
+    <!-- Фильтр по типу -->
+    <div class="filters" data-target="items-table">
+      <button class="filter-btn active" data-filter="all">Все</button>
+      <button class="filter-btn" data-filter="weapon-s">Оружие S-грейд</button>
+      <button class="filter-btn" data-filter="weapon-a">Оружие A-грейд</button>
+      <button class="filter-btn" data-filter="armor-s">Броня S-грейд</button>
+      <button class="filter-btn" data-filter="armor-a">Броня A-грейд</button>
+      <button class="filter-btn" data-filter="jewelry">Украшения / Аксессуары</button>
+      <button class="filter-btn" data-filter="consumable">Расходники / Свитки</button>
+    </div>
+
+    <!-- Фильтр по грейду -->
+    <div class="filters">
+      <button class="filter-btn active">Все грейды</button>
+      <button class="filter-btn">S</button>
+      <button class="filter-btn">A</button>
+      <button class="filter-btn">B</button>
+      <button class="filter-btn">C</button>
+      <button class="filter-btn">D</button>
+      <button class="filter-btn">No Grade</button>
+      <button class="filter-btn">Special</button>
+    </div>
+
+    <div id="items-table">
+
+      <!-- ОРУЖИЕ S-ГРЕЙД -->
+      <div class="section-block">
+        <div class="section-title">Оружие S-грейд</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Название</th><th>Грейд</th><th>Тип</th><th>Характеристики</th><th>Классы</th><th>Цена</th></tr></thead>
+            <tbody>
+              <tr data-filter="weapon-s" data-modal="modal-i1">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-s">S</span>
+                    <div>
+                      <strong>Tallum Blade (двойной меч)</strong>
+                      <div class="item-desc-short">Один из лучших двойных мечей S-грейда. Отлично подходит для…</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-s">S</span></td>
+                <td style="color:var(--text2)">Оружие<br>Двойной меч</td>
+                <td style="color:var(--text2)">P.Atk: <strong style="color:var(--text)">284</strong> M.Atk: 137</td>
+                <td style="color:var(--text2)">Дуэлист, Гладиатор</td>
+                <td class="item-price">~200kk<br>Adena</td>
+              </tr>
+              <tr data-filter="weapon-s" data-modal="modal-i2">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-s">S</span>
+                    <div>
+                      <strong>Dragon Hunter Axe</strong>
+                      <div class="item-desc-short">Топор охотника на драконов. Мощное оружие для воинов S-грейд…</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-s">S</span></td>
+                <td style="color:var(--text2)">Оружие<br>Боевой топор</td>
+                <td style="color:var(--text2)">P.Atk: <strong style="color:var(--text)">344</strong> M.Atk: 137</td>
+                <td style="color:var(--text2)">Воин, Дредноут</td>
+                <td class="item-price">~300kk<br>Adena</td>
+              </tr>
+              <tr data-filter="weapon-s" data-modal="modal-i3">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-s">S</span>
+                    <div>
+                      <strong>Arcana Mace</strong>
+                      <div class="item-desc-short">Аркановый жезл — оружие магов высшего уровня. Высокий M.Atk…</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-s">S</span></td>
+                <td style="color:var(--text2)">Оружие<br>Жезл</td>
+                <td style="color:var(--text2)">P.Atk: <strong style="color:var(--text)">183</strong> M.Atk: 231</td>
+                <td style="color:var(--text2)">Маг, Хилер, Бафф</td>
+                <td class="item-price">~250kk<br>Adena</td>
+              </tr>
+              <tr data-filter="weapon-s" data-modal="modal-i4">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-s">S</span>
+                    <div>
+                      <strong>Draconic Bow</strong>
+                      <div class="item-desc-short">Лук из драконьей кости. Наиболее мощный лук S-грейда…</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-s">S</span></td>
+                <td style="color:var(--text2)">Оружие<br>Лук</td>
+                <td style="color:var(--text2)">P.Atk: <strong style="color:var(--text)">378</strong> M.Atk: 137</td>
+                <td style="color:var(--text2)">Сагиттариус, Лун…</td>
+                <td class="item-price">~280kk<br>Adena</td>
+              </tr>
+              <tr data-filter="weapon-s" data-modal="modal-i5">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-s">S</span>
+                    <div>
+                      <strong>Forgotten Blade</strong>
+                      <div class="item-desc-short">Забытый клинок — легендарный меч высшей силы…</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-s">S</span></td>
+                <td style="color:var(--text2)">Оружие<br>Одноручный меч</td>
+                <td style="color:var(--text2)">P.Atk: <strong style="color:var(--text)">325</strong> M.Atk: 137</td>
+                <td style="color:var(--text2)">Все воины S</td>
+                <td class="item-price">~350kk<br>Adena</td>
+              </tr>
+              <tr data-filter="weapon-s">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-s">S</span>
+                    <div>
+                      <strong>Basalt Battlehammer</strong>
+                      <div class="item-desc-short">Базальтовый боевой молот. Высокий урон для дварфов…</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-s">S</span></td>
+                <td style="color:var(--text2)">Оружие<br>Тупое</td>
+                <td style="color:var(--text2)">P.Atk: <strong style="color:var(--text)">360</strong> M.Atk: 137</td>
+                <td style="color:var(--text2)">Все воины S</td>
+                <td class="item-price">~270kk<br>Adena</td>
+              </tr>
+              <tr data-filter="weapon-s">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-s">S</span>
+                    <div>
+                      <strong>Imperial Staff</strong>
+                      <div class="item-desc-short">Императорский посох. Идеален для хилеров и баферов…</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-s">S</span></td>
+                <td style="color:var(--text2)">Оружие<br>Посох</td>
+                <td style="color:var(--text2)">P.Atk: <strong style="color:var(--text)">183</strong> M.Atk: 245</td>
+                <td style="color:var(--text2)">Маг, Хилер</td>
+                <td class="item-price">~180kk<br>Adena</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ОРУЖИЕ A-ГРЕЙД -->
+      <div class="section-block">
+        <div class="section-title">Оружие A-грейд</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Название</th><th>Грейд</th><th>Тип</th><th>Характеристики</th><th>Классы</th><th>Цена</th></tr></thead>
+            <tbody>
+              <tr data-filter="weapon-a" data-modal="modal-i6">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-a">A</span>
+                    <div>
+                      <strong>Tallum Blade (A)</strong>
+                      <div class="item-desc-short">A-грейд версия. Доступна начиная с 61 уровня.</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-a">A</span></td>
+                <td style="color:var(--text2)">Двойной меч</td>
+                <td style="color:var(--text2)">P.Atk: <strong style="color:var(--text)">236</strong> M.Atk: 109</td>
+                <td style="color:var(--text2)">Гладиатор, Воин</td>
+                <td class="item-price">~12kk<br>Adena</td>
+              </tr>
+              <tr data-filter="weapon-a">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-a">A</span>
+                    <div>
+                      <strong>Dark Legion's Edge</strong>
+                      <div class="item-desc-short">Клинок тёмного легиона. Популярный меч A-грейда…</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-a">A</span></td>
+                <td style="color:var(--text2)">Двуручный меч</td>
+                <td style="color:var(--text2)">P.Atk: <strong style="color:var(--text)">281</strong> M.Atk: 109</td>
+                <td style="color:var(--text2)">Воины A</td>
+                <td class="item-price">~15kk<br>Adena</td>
+              </tr>
+              <tr data-filter="weapon-a">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-a">A</span>
+                    <div>
+                      <strong>Nighmare Staff</strong>
+                      <div class="item-desc-short">Посох кошмара. Отличный выбор для магов A-грейда.</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-a">A</span></td>
+                <td style="color:var(--text2)">Посох</td>
+                <td style="color:var(--text2)">P.Atk: <strong style="color:var(--text)">149</strong> M.Atk: 195</td>
+                <td style="color:var(--text2)">Маги A</td>
+                <td class="item-price">~11kk<br>Adena</td>
+              </tr>
+              <tr data-filter="weapon-a">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-a">A</span>
+                    <div>
+                      <strong>Bow of Peril</strong>
+                      <div class="item-desc-short">Лук гибели. Основной лук A-грейда для лучников.</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-a">A</span></td>
+                <td style="color:var(--text2)">Лук</td>
+                <td style="color:var(--text2)">P.Atk: <strong style="color:var(--text)">313</strong> M.Atk: 109</td>
+                <td style="color:var(--text2)">Лучники A</td>
+                <td class="item-price">~9kk<br>Adena</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- БРОНЯ S-ГРЕЙД -->
+      <div class="section-block">
+        <div class="section-title">Броня S-грейд</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Название</th><th>Грейд</th><th>Тип</th><th>Характеристики</th><th>Классы</th><th>Цена</th></tr></thead>
+            <tbody>
+              <tr data-filter="armor-s" data-modal="modal-i7">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-s">S</span>
+                    <div>
+                      <strong>Tallum Plate Armor</strong>
+                      <div class="item-desc-short">Тяжёлая броня S-грейда для воинов. Высокая защита…</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-s">S</span></td>
+                <td style="color:var(--text2)">Броня<br>Тяжёлая</td>
+                <td style="color:var(--text2)">P.Def: <strong style="color:var(--text)">265</strong> M.Def: 62</td>
+                <td style="color:var(--text2)">Воины S</td>
+                <td class="item-price">~180kk<br>Adena</td>
+              </tr>
+              <tr data-filter="armor-s">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-s">S</span>
+                    <div>
+                      <strong>Dark Crystal Robe</strong>
+                      <div class="item-desc-short">Роба из тёмного кристалла. Идеальна для магов…</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-s">S</span></td>
+                <td style="color:var(--text2)">Броня<br>Роба</td>
+                <td style="color:var(--text2)">P.Def: <strong style="color:var(--text)">94</strong> M.Def: 134</td>
+                <td style="color:var(--text2)">Маги S</td>
+                <td class="item-price">~150kk<br>Adena</td>
+              </tr>
+              <tr data-filter="armor-s">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-s">S</span>
+                    <div>
+                      <strong>Major Arcana Robe</strong>
+                      <div class="item-desc-short">Роба высшего аркана. Топ-броня для хилеров и магов…</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-s">S</span></td>
+                <td style="color:var(--text2)">Броня<br>Роба</td>
+                <td style="color:var(--text2)">P.Def: <strong style="color:var(--text)">110</strong> M.Def: 152</td>
+                <td style="color:var(--text2)">Маги, Хилеры S</td>
+                <td class="item-price">~200kk<br>Adena</td>
+              </tr>
+              <tr data-filter="armor-s">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-s">S</span>
+                    <div>
+                      <strong>Dynasty Leather Armor</strong>
+                      <div class="item-desc-short">Кожаная броня Династии. Для лучников и разведчиков…</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-s">S</span></td>
+                <td style="color:var(--text2)">Броня<br>Лёгкая</td>
+                <td style="color:var(--text2)">P.Def: <strong style="color:var(--text)">198</strong> M.Def: 79</td>
+                <td style="color:var(--text2)">Лучники, Разв. S</td>
+                <td class="item-price">~160kk<br>Adena</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- УКРАШЕНИЯ -->
+      <div class="section-block">
+        <div class="section-title">Украшения и аксессуары</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Название</th><th>Грейд</th><th>Тип</th><th>Эффект</th><th>Бонус</th></tr></thead>
+            <tbody>
+              <tr data-filter="jewelry" data-modal="modal-i8">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-s">S</span>
+                    <div>
+                      <strong>Baium's Ring</strong>
+                      <div class="item-desc-short">Кольцо Байума. Лучшее кольцо для воинов…</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-s">S</span></td>
+                <td style="color:var(--text2)">Кольцо</td>
+                <td style="color:var(--text2)">P.Atk +5%, HP +445, MP +153</td>
+                <td style="color:var(--gold)">Raid Drop</td>
+              </tr>
+              <tr data-filter="jewelry">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-s">S</span>
+                    <div>
+                      <strong>Antharas' Earring</strong>
+                      <div class="item-desc-short">Серьга Антараса. Топ-аксессуар для всех классов…</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-s">S</span></td>
+                <td style="color:var(--text2)">Серьга</td>
+                <td style="color:var(--text2)">M.Def +5%, HP +630, MP +153</td>
+                <td style="color:var(--gold)">Raid Drop</td>
+              </tr>
+              <tr data-filter="jewelry">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-s">S</span>
+                    <div>
+                      <strong>Valakas' Necklace</strong>
+                      <div class="item-desc-short">Ожерелье Валакаса. Легендарный аксессуар…</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-s">S</span></td>
+                <td style="color:var(--text2)">Ожерелье</td>
+                <td style="color:var(--text2)">P.Atk +4%, M.Atk +4%, HP +630</td>
+                <td style="color:var(--gold)">Raid Drop</td>
+              </tr>
+              <tr data-filter="jewelry">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-s">S</span>
+                    <div>
+                      <strong>Zaken's Earring</strong>
+                      <div class="item-desc-short">Серьга Закена. Популярный аксессуар…</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-s">S</span></td>
+                <td style="color:var(--text2)">Серьга</td>
+                <td style="color:var(--text2)">Speed +7, HP +315, MP +78</td>
+                <td style="color:var(--gold)">Raid Drop</td>
+              </tr>
+              <tr data-filter="jewelry">
+                <td>
+                  <div class="item-name-col">
+                    <span class="grade grade-a">A</span>
+                    <div>
+                      <strong>Ring of Queen Ant</strong>
+                      <div class="item-desc-short">Кольцо Королевы муравьёв. Доступный рейд-аксессуар…</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="grade grade-a">A</span></td>
+                <td style="color:var(--text2)">Кольцо</td>
+                <td style="color:var(--text2)">HP +315, MP +78</td>
+                <td style="color:var(--gold)">Raid Drop</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- РАСХОДНИКИ -->
+      <div class="section-block">
+        <div class="section-title">Расходники и свитки</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Название</th><th>Тип</th><th>Эффект</th><th>Где взять</th></tr></thead>
+            <tbody>
+              <tr data-filter="consumable" data-modal="modal-i9">
+                <td><strong>Greater CP Potion</strong><br><small style="color:var(--text3)">Восстановление боевой силы</small></td>
+                <td style="color:var(--text2)">Зелье CP</td>
+                <td style="color:var(--text2)">+1400 CP мгновенно</td>
+                <td style="color:var(--text2)">Магазин / Крафт</td>
+              </tr>
+              <tr data-filter="consumable">
+                <td><strong>Greater HP Potion</strong><br><small style="color:var(--text3)">Восстановление здоровья</small></td>
+                <td style="color:var(--text2)">Зелье HP</td>
+                <td style="color:var(--text2)">+1000 HP мгновенно</td>
+                <td style="color:var(--text2)">Магазин / Крафт</td>
+              </tr>
+              <tr data-filter="consumable">
+                <td><strong>Scroll of Escape</strong><br><small style="color:var(--text3)">Телепортация в город</small></td>
+                <td style="color:var(--text2)">Свиток</td>
+                <td style="color:var(--text2)">Телепорт в ближайший город</td>
+                <td style="color:var(--text2)">Магазин / Дроп</td>
+              </tr>
+              <tr data-filter="consumable">
+                <td><strong>Scroll of Resurrection</strong><br><small style="color:var(--text3)">Воскрешение</small></td>
+                <td style="color:var(--text2)">Свиток</td>
+                <td style="color:var(--text2)">Воскрешает союзника с 70% опыта</td>
+                <td style="color:var(--text2)">Крафт / Дроп</td>
+              </tr>
+              <tr data-filter="consumable">
+                <td><strong>Enchant Armor S</strong><br><small style="color:var(--text3)">Улучшение брони S-грейда</small></td>
+                <td style="color:var(--text2)">Свиток улучшения</td>
+                <td style="color:var(--text2)">+1 к броне S-грейда (шанс)</td>
+                <td style="color:var(--text2)">Рейды / Магазин</td>
+              </tr>
+              <tr data-filter="consumable">
+                <td><strong>Enchant Weapon S</strong><br><small style="color:var(--text3)">Улучшение оружия S-грейда</small></td>
+                <td style="color:var(--text2)">Свиток улучшения</td>
+                <td style="color:var(--text2)">+1 к оружию S-грейда (шанс)</td>
+                <td style="color:var(--text2)">Рейды / Магазин</td>
+              </tr>
+              <tr data-filter="consumable">
+                <td><strong>Blessed Enchant Weapon S</strong><br><small style="color:var(--text3)">Безопасное улучшение</small></td>
+                <td style="color:var(--text2)">Свиток безопасного улучшения</td>
+                <td style="color:var(--text2)">+1 без риска поломки оружия</td>
+                <td style="color:var(--text2)">Olympiad / Events</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- MODALS -->
+<div class="modal-bg" id="modal-i1" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-i1').classList.remove('open')">×</button>
+    <h2><span class="grade grade-s" style="margin-right:8px">S</span>Tallum Blade (двойной меч)</h2>
+    <div class="modal-meta">Оружие · Двойной меч · S-грейд</div>
+    <div class="modal-section"><h3>Описание</h3><p>Один из лучших двойных мечей S-грейда. Отлично подходит для Gladiator и Duelist. Обладает высоким физическим уроном и хорошим балансом характеристик.</p></div>
+    <div class="modal-section"><h3>Характеристики</h3>
+      <div class="stat-row">
+        <span class="stat-pill">P.Atk: <strong>284</strong></span>
+        <span class="stat-pill">M.Atk: <strong>137</strong></span>
+        <span class="stat-pill">Скорость атаки: <strong>325</strong></span>
+        <span class="stat-pill">Крит. шанс: <strong>8</strong></span>
+      </div>
+    </div>
+    <div class="modal-section"><h3>Для кого</h3><p>Gladiator, Duelist — основные пользователи. Также могут использовать Hawkeye, Dark Avenger при наличии умений.</p></div>
+    <div class="modal-section"><h3>Цена и где взять</h3><p>~200kk Adena на рынке. Можно скрафтить: требует Durable Mold + Crafting Mold + большое количество кристаллов S-грейда.</p></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-i4" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-i4').classList.remove('open')">×</button>
+    <h2><span class="grade grade-s" style="margin-right:8px">S</span>Draconic Bow</h2>
+    <div class="modal-meta">Оружие · Лук · S-грейд</div>
+    <div class="modal-section"><h3>Описание</h3><p>Draconic Bow — лучший лук в игре. Создан из костей дракона. Наносит огромный урон и имеет уникальный эффект: шанс нанести дополнительный огненный урон.</p></div>
+    <div class="modal-section"><h3>Характеристики</h3>
+      <div class="stat-row">
+        <span class="stat-pill">P.Atk: <strong>378</strong></span>
+        <span class="stat-pill">M.Atk: <strong>137</strong></span>
+        <span class="stat-pill">Дальность: <strong>500</strong></span>
+        <span class="stat-pill">Скорость: <strong>293</strong></span>
+      </div>
+    </div>
+    <div class="modal-section"><h3>Для кого</h3><p>Sagittarius, Moon Knight, Ghost Sentinel, Wind Rider — все классы лучников S-грейда.</p></div>
+  </div>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>

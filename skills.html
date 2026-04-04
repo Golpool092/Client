@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Умения — L2INT.RU</title>
+<meta name="description" content="База данных умений и скиллов Lineage 2 для всех классов.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="menu-btn" id="menu-btn">☰</button>
+  <a href="index.html" class="topbar-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    L2INT.RU
+  </a>
+  <nav class="topbar-nav">
+    <a href="index.html">Главная</a>
+    <a href="quests.html">Квесты</a>
+    <a href="guides.html">Гайды</a>
+    <a href="classes.html">Классы</a>
+    <a href="skills.html" class="active">Умения</a>
+    <a href="items.html">Предметы</a>
+  </nav>
+  <div class="topbar-right">
+    <button class="theme-btn" id="theme-btn" title="Сменить тему">☀️</button>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+      <a href="index.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Главная</a>
+      <a href="quests.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Квесты</a>
+      <a href="guides.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/></svg>Гайды</a>
+      <a href="classes.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/></svg>Классы</a>
+      <a href="skills.html" class="sidebar-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Умения</a>
+      <a href="items.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/></svg>Предметы</a>
+      <a href="subclass.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Сабкласс</a>
+      <a href="mammon.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Мамон</a>
+    </nav>
+    <div class="sidebar-ad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/></svg>Место для<br>вашей рекламы</div>
+    <div class="sidebar-footer">Lineage 2 Interlude / Gracia<br>© 2024 L2INT.RU</div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <div class="page-header-top">
+        <div>
+          <h1>Умения</h1>
+          <div class="page-header-meta">120+ умений в базе данных</div>
+        </div>
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" class="search-input" data-table="skills-table" placeholder="Поиск умений...">
+        </div>
+      </div>
+    </div>
+
+    <div class="filters" data-target="skills-table">
+      <button class="filter-btn active" data-filter="all">Все</button>
+      <button class="filter-btn" data-filter="warrior">Воины</button>
+      <button class="filter-btn" data-filter="knight">Рыцари</button>
+      <button class="filter-btn" data-filter="archer">Лучники</button>
+      <button class="filter-btn" data-filter="mage">Маги</button>
+      <button class="filter-btn" data-filter="healer">Хилеры</button>
+      <button class="filter-btn" data-filter="common">Общие</button>
+      <button class="filter-btn" data-filter="active">Активные</button>
+      <button class="filter-btn" data-filter="passive">Пассивные</button>
+      <button class="filter-btn" data-filter="toggle">Переключаемые</button>
+    </div>
+
+    <div id="skills-table">
+
+      <!-- ОБЩИЕ УМЕНИЯ -->
+      <div class="section-block">
+        <div class="section-title">Общие умения (доступны всем)</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Умение</th><th>Тип</th><th>Уровень</th><th>Описание</th><th>MP</th></tr></thead>
+            <tbody>
+              <tr data-filter="common active" data-modal="modal-s1">
+                <td><div class="skill-name-col"><div class="skill-icon">💊</div><div><strong>Elixir</strong><div class="skill-desc">Восстановление HP</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>1+</td>
+                <td style="color:var(--text2)">Восстанавливает HP персонажа</td>
+                <td>—</td>
+              </tr>
+              <tr data-filter="common active" data-modal="modal-s2">
+                <td><div class="skill-name-col"><div class="skill-icon">⚡</div><div><strong>Recharge</strong><div class="skill-desc">Восстановление MP</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>1+</td>
+                <td style="color:var(--text2)">Восстанавливает MP</td>
+                <td>—</td>
+              </tr>
+              <tr data-filter="common passive">
+                <td><div class="skill-name-col"><div class="skill-icon">💪</div><div><strong>Might</strong><div class="skill-desc">Увеличивает атаку</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-passive">Пассивный</span></td>
+                <td>1+</td>
+                <td style="color:var(--text2)">P.Atk +10%</td>
+                <td>—</td>
+              </tr>
+              <tr data-filter="common active">
+                <td><div class="skill-name-col"><div class="skill-icon">🛡️</div><div><strong>Shield</strong><div class="skill-desc">Увеличивает защиту</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>1+</td>
+                <td style="color:var(--text2)">P.Def +30% на 2 мин</td>
+                <td>70</td>
+              </tr>
+              <tr data-filter="common active">
+                <td><div class="skill-name-col"><div class="skill-icon">🏃</div><div><strong>Wind Walk</strong><div class="skill-desc">Ускорение движения</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>1+</td>
+                <td style="color:var(--text2)">Скорость +25% на 2 мин</td>
+                <td>55</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- УМЕНИЯ ВОИНОВ -->
+      <div class="section-block">
+        <div class="section-title">Умения воинов</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Умение</th><th>Тип</th><th>Уровень</th><th>Описание</th><th>Перезарядка</th></tr></thead>
+            <tbody>
+              <tr data-filter="warrior active" data-modal="modal-s3">
+                <td><div class="skill-name-col"><div class="skill-icon">⚔️</div><div><strong>Power Strike</strong><div class="skill-desc">Мощный удар</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>3</td>
+                <td style="color:var(--text2)">P.Atk +30% single hit. Power 2066</td>
+                <td>6 сек</td>
+              </tr>
+              <tr data-filter="warrior active" data-modal="modal-s4">
+                <td><div class="skill-name-col"><div class="skill-icon">🌪️</div><div><strong>Whirlwind</strong><div class="skill-desc">AoE атака</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>40</td>
+                <td style="color:var(--text2)">Наносит урон всем врагам вокруг. Power 2415</td>
+                <td>10 сек</td>
+              </tr>
+              <tr data-filter="warrior active">
+                <td><div class="skill-name-col"><div class="skill-icon">🔥</div><div><strong>Burning Strike</strong><div class="skill-desc">Удар с огнём</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>52</td>
+                <td style="color:var(--text2)">Огненный урон + шанс поджечь. Power 3024</td>
+                <td>8 сек</td>
+              </tr>
+              <tr data-filter="warrior passive">
+                <td><div class="skill-name-col"><div class="skill-icon">💪</div><div><strong>Weapon Mastery</strong><div class="skill-desc">Мастерство оружия</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-passive">Пассивный</span></td>
+                <td>1</td>
+                <td style="color:var(--text2)">P.Atk +12 при использовании мечей</td>
+                <td>—</td>
+              </tr>
+              <tr data-filter="warrior active">
+                <td><div class="skill-name-col"><div class="skill-icon">🏃</div><div><strong>Rush</strong><div class="skill-desc">Рывок к цели</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>20</td>
+                <td style="color:var(--text2)">Рывок к цели + оглушение 2 сек</td>
+                <td>15 сек</td>
+              </tr>
+              <tr data-filter="warrior active">
+                <td><div class="skill-name-col"><div class="skill-icon">⚡</div><div><strong>Dual Blow</strong><div class="skill-desc">Двойной удар</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>20</td>
+                <td style="color:var(--text2)">Два быстрых удара. Power 1800×2</td>
+                <td>5 сек</td>
+              </tr>
+              <tr data-filter="warrior active">
+                <td><div class="skill-name-col"><div class="skill-icon">🌊</div><div><strong>Sonic Storm</strong><div class="skill-desc">Звуковой шторм</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>64</td>
+                <td style="color:var(--text2)">AoE удар волной. Power 3510</td>
+                <td>10 сек</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- УМЕНИЯ МАГОВ -->
+      <div class="section-block">
+        <div class="section-title">Умения магов</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Умение</th><th>Тип</th><th>Уровень</th><th>Описание</th><th>MP</th></tr></thead>
+            <tbody>
+              <tr data-filter="mage active" data-modal="modal-s5">
+                <td><div class="skill-name-col"><div class="skill-icon">❄️</div><div><strong>Blizzard</strong><div class="skill-desc">Ледяная буря</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>78</td>
+                <td style="color:var(--text2)">Наносит мощный ледяной урон по области. Power 3624</td>
+                <td>238</td>
+              </tr>
+              <tr data-filter="mage active">
+                <td><div class="skill-name-col"><div class="skill-icon">⚡</div><div><strong>Storm Bolt</strong><div class="skill-desc">Удар молнии</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>40</td>
+                <td style="color:var(--text2)">Молниеносный удар. Power 2910, stunned 2 сек</td>
+                <td>156</td>
+              </tr>
+              <tr data-filter="mage active">
+                <td><div class="skill-name-col"><div class="skill-icon">🔥</div><div><strong>Fire Blast</strong><div class="skill-desc">Огненный взрыв</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>20</td>
+                <td style="color:var(--text2)">Мощный огненный урон. Power 2210</td>
+                <td>102</td>
+              </tr>
+              <tr data-filter="mage passive">
+                <td><div class="skill-name-col"><div class="skill-icon">📚</div><div><strong>Spell Power</strong><div class="skill-desc">Сила заклинаний</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-passive">Пассивный</span></td>
+                <td>1</td>
+                <td style="color:var(--text2)">M.Atk +10%</td>
+                <td>—</td>
+              </tr>
+              <tr data-filter="mage toggle">
+                <td><div class="skill-name-col"><div class="skill-icon">🌀</div><div><strong>Mana Burn</strong><div class="skill-desc">Сжигание маны</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-toggle">Переключаемый</span></td>
+                <td>55</td>
+                <td style="color:var(--text2)">Атаки сжигают МП врага вместо HP</td>
+                <td>30/с</td>
+              </tr>
+              <tr data-filter="mage active">
+                <td><div class="skill-name-col"><div class="skill-icon">🌊</div><div><strong>Hurricane</strong><div class="skill-desc">Ураган</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>64</td>
+                <td style="color:var(--text2)">Воздушный AoE нюк. Power 2870</td>
+                <td>192</td>
+              </tr>
+              <tr data-filter="mage active">
+                <td><div class="skill-name-col"><div class="skill-icon">💀</div><div><strong>Death Spike</strong><div class="skill-desc">Шип смерти</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>52</td>
+                <td style="color:var(--text2)">Тёмная магия. Power 2650. Drains HP</td>
+                <td>174</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- УМЕНИЯ ХИЛЕРОВ -->
+      <div class="section-block">
+        <div class="section-title">Умения хилеров и саппортов</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Умение</th><th>Тип</th><th>Уровень</th><th>Описание</th><th>MP</th></tr></thead>
+            <tbody>
+              <tr data-filter="healer active" data-modal="modal-s6">
+                <td><div class="skill-name-col"><div class="skill-icon">✨</div><div><strong>Greater Heal</strong><div class="skill-desc">Мощное исцеление</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>40</td>
+                <td style="color:var(--text2)">Восстанавливает 1200–1400 HP цели</td>
+                <td>98</td>
+              </tr>
+              <tr data-filter="healer active">
+                <td><div class="skill-name-col"><div class="skill-icon">💫</div><div><strong>Salvation</strong><div class="skill-desc">Спасение</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>78</td>
+                <td style="color:var(--text2)">Воскрешает мёртвого союзника на месте</td>
+                <td>210</td>
+              </tr>
+              <tr data-filter="healer active">
+                <td><div class="skill-name-col"><div class="skill-icon">🌟</div><div><strong>Celestial Shield</strong><div class="skill-desc">Небесный щит</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>62</td>
+                <td style="color:var(--text2)">Делает цель неуязвимой на 5 сек</td>
+                <td>116</td>
+              </tr>
+              <tr data-filter="healer active">
+                <td><div class="skill-name-col"><div class="skill-icon">🔴</div><div><strong>Battle Heal</strong><div class="skill-desc">Боевое исцеление</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>1</td>
+                <td style="color:var(--text2)">Быстрое исцеление в бою. +400 HP</td>
+                <td>46</td>
+              </tr>
+              <tr data-filter="healer active">
+                <td><div class="skill-name-col"><div class="skill-icon">💛</div><div><strong>Purify</strong><div class="skill-desc">Очищение</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>20</td>
+                <td style="color:var(--text2)">Снимает все отрицательные эффекты</td>
+                <td>62</td>
+              </tr>
+              <tr data-filter="healer active">
+                <td><div class="skill-name-col"><div class="skill-icon">💙</div><div><strong>Recharge</strong><div class="skill-desc">Восстановление МП</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>1</td>
+                <td style="color:var(--text2)">Восстанавливает MP цели</td>
+                <td>72</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- УМЕНИЯ ЛУЧНИКОВ -->
+      <div class="section-block">
+        <div class="section-title">Умения лучников и разведчиков</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Умение</th><th>Тип</th><th>Уровень</th><th>Описание</th><th>Перезарядка</th></tr></thead>
+            <tbody>
+              <tr data-filter="archer active" data-modal="modal-s7">
+                <td><div class="skill-name-col"><div class="skill-icon">🏹</div><div><strong>Arrow Rain</strong><div class="skill-desc">Дождь стрел</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>58</td>
+                <td style="color:var(--text2)">AoE атака из лука. Power 2140 по области</td>
+                <td>12 сек</td>
+              </tr>
+              <tr data-filter="archer active">
+                <td><div class="skill-name-col"><div class="skill-icon">🎯</div><div><strong>Snipe</strong><div class="skill-desc">Меткий выстрел</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>40</td>
+                <td style="color:var(--text2)">Дальний выстрел с огромной дальностью. Power 3200</td>
+                <td>10 сек</td>
+              </tr>
+              <tr data-filter="archer passive">
+                <td><div class="skill-name-col"><div class="skill-icon">🏹</div><div><strong>Bow Mastery</strong><div class="skill-desc">Мастерство лука</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-passive">Пассивный</span></td>
+                <td>1</td>
+                <td style="color:var(--text2)">Атака с лука +12 P.Atk</td>
+                <td>—</td>
+              </tr>
+              <tr data-filter="archer active">
+                <td><div class="skill-name-col"><div class="skill-icon">⚡</div><div><strong>Lethal Shot</strong><div class="skill-desc">Смертельный выстрел</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>52</td>
+                <td style="color:var(--text2)">Шанс мгновенной смерти (10%). Power 2900</td>
+                <td>12 сек</td>
+              </tr>
+              <tr data-filter="archer toggle">
+                <td><div class="skill-name-col"><div class="skill-icon">🌀</div><div><strong>Focus</strong><div class="skill-desc">Концентрация</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-toggle">Переключаемый</span></td>
+                <td>20</td>
+                <td style="color:var(--text2)">Скорость -20%, крит. шанс +20%</td>
+                <td>—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- УМЕНИЯ РЫЦАРЕЙ -->
+      <div class="section-block">
+        <div class="section-title">Умения рыцарей и танков</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Умение</th><th>Тип</th><th>Уровень</th><th>Описание</th><th>MP / КД</th></tr></thead>
+            <tbody>
+              <tr data-filter="knight active" data-modal="modal-s8">
+                <td><div class="skill-name-col"><div class="skill-icon">🛡️</div><div><strong>Provoke</strong><div class="skill-desc">Провокация</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>1</td>
+                <td style="color:var(--text2)">Переключает агрессию монстра на себя</td>
+                <td>42 / 5с</td>
+              </tr>
+              <tr data-filter="knight active">
+                <td><div class="skill-name-col"><div class="skill-icon">🔨</div><div><strong>Shield Slam</strong><div class="skill-desc">Удар щитом</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>20</td>
+                <td style="color:var(--text2)">Оглушение + урон. Power 1400, stun 3 сек</td>
+                <td>76 / 8с</td>
+              </tr>
+              <tr data-filter="knight passive">
+                <td><div class="skill-name-col"><div class="skill-icon">🛡️</div><div><strong>Shield Mastery</strong><div class="skill-desc">Мастерство щита</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-passive">Пассивный</span></td>
+                <td>1</td>
+                <td style="color:var(--text2)">Шанс блока +15%</td>
+                <td>—</td>
+              </tr>
+              <tr data-filter="knight active">
+                <td><div class="skill-name-col"><div class="skill-icon">✨</div><div><strong>Divine Protection</strong><div class="skill-desc">Защита Богов</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-active">Активный</span></td>
+                <td>40</td>
+                <td style="color:var(--text2)">Снижает входящий урон на 50% на 30 сек</td>
+                <td>110 / 30с</td>
+              </tr>
+              <tr data-filter="knight toggle">
+                <td><div class="skill-name-col"><div class="skill-icon">🔵</div><div><strong>Hate Aura</strong><div class="skill-desc">Аура ненависти</div></div></div></td>
+                <td><span class="skill-type-badge skill-type-toggle">Переключаемый</span></td>
+                <td>30</td>
+                <td style="color:var(--text2)">Постоянно генерирует ненависть монстров</td>
+                <td>20МП/с</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- MODALS -->
+<div class="modal-bg" id="modal-s1" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-s1').classList.remove('open')">×</button>
+    <h2>💊 Elixir</h2>
+    <div class="modal-meta">Активный · Общий · Уровень 1+</div>
+    <div class="modal-section"><h3>Описание</h3><p>Использование зелья для восстановления HP. Доступно всем классам с самого начала игры.</p></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-s5" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-s5').classList.remove('open')">×</button>
+    <h2>❄️ Blizzard</h2>
+    <div class="modal-meta">Активный · Маг (Spellhowler) · Уровень 78</div>
+    <div class="modal-section"><h3>Описание</h3><p>Одно из сильнейших AoE заклинаний в игре. Вызывает ледяную бурю, наносящую огромный урон всем врагам в области. Особенно эффективно против нежити.</p></div>
+    <div class="modal-section"><h3>Характеристики</h3>
+      <div class="stat-row">
+        <span class="stat-pill">Power: <strong>3624</strong></span>
+        <span class="stat-pill">MP: <strong>238</strong></span>
+        <span class="stat-pill">Cast: <strong>2.0 сек</strong></span>
+        <span class="stat-pill">Cooldown: <strong>10 сек</strong></span>
+        <span class="stat-pill">Radius: <strong>500</strong></span>
+      </div>
+    </div>
+    <div class="modal-section"><h3>Требования</h3><p>Класс: Spellhowler (3-я профессия) или Storm Screamer. Уровень умения: 1–15 (макс). Требует Crystal of Destruction для максимального уровня.</p></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-s6" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-s6').classList.remove('open')">×</button>
+    <h2>✨ Greater Heal</h2>
+    <div class="modal-meta">Активный · Хилер (Bishop) · Уровень 40</div>
+    <div class="modal-section"><h3>Описание</h3><p>Мощное заклинание исцеления, восстанавливающее большое количество HP цели. Основное умение Bishop в группе.</p></div>
+    <div class="modal-section"><h3>Характеристики</h3>
+      <div class="stat-row">
+        <span class="stat-pill">HP: <strong>1200–1400</strong></span>
+        <span class="stat-pill">MP: <strong>98</strong></span>
+        <span class="stat-pill">Cast: <strong>3.0 сек</strong></span>
+        <span class="stat-pill">Cooldown: <strong>3 сек</strong></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>

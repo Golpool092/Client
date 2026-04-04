@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мамон (Mammon) — L2INT.RU</title>
+<meta name="description" content="Гайд по NPC Мамон в Lineage 2: обмен, крафт, улучшение оружия через Mammon.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="menu-btn" id="menu-btn">☰</button>
+  <a href="index.html" class="topbar-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    L2INT.RU
+  </a>
+  <nav class="topbar-nav">
+    <a href="index.html">Главная</a>
+    <a href="quests.html">Квесты</a>
+    <a href="guides.html">Гайды</a>
+    <a href="classes.html">Классы</a>
+    <a href="skills.html">Умения</a>
+    <a href="items.html">Предметы</a>
+  </nav>
+  <div class="topbar-right">
+    <button class="theme-btn" id="theme-btn" title="Сменить тему">☀️</button>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+      <a href="index.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Главная</a>
+      <a href="quests.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Квесты</a>
+      <a href="guides.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/></svg>Гайды</a>
+      <a href="classes.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/></svg>Классы</a>
+      <a href="skills.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Умения</a>
+      <a href="items.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/></svg>Предметы</a>
+      <a href="subclass.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Сабкласс</a>
+      <a href="mammon.html" class="sidebar-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Мамон</a>
+    </nav>
+    <div class="sidebar-ad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/></svg>Место для<br>вашей рекламы</div>
+    <div class="sidebar-footer">Lineage 2 Interlude / Gracia<br>© 2024 L2INT.RU</div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <h1>Мамон (Mammon)</h1>
+      <div class="page-header-meta">NPC Mammon — обменник, крафтер и хранитель редких предметов</div>
+    </div>
+
+    <!-- КТО ТАКОЙ МАМОН -->
+    <div class="section-block">
+      <div class="section-title">Кто такой Мамон?</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px">
+        <p style="color:var(--text2);line-height:1.7;margin-bottom:12px">
+          <strong style="color:var(--text)">Mammon</strong> — это особый NPC (торговец Тени), который появляется в <strong style="color:var(--text)">Катакомбах и Некрополях</strong> только в специальные периоды — при активных Siege Wars и Clans in Battle.
+        </p>
+        <p style="color:var(--text2);line-height:1.7;margin-bottom:12px">
+          Существует несколько видов Mammon, каждый с уникальными функциями. Они принимают <strong style="color:var(--gold)">Ancient Adena</strong> — особую валюту, которую можно получить в катакомбах.
+        </p>
+        <div class="stat-row" style="margin-top:14px">
+          <span class="stat-pill">Валюта: <strong>Ancient Adena</strong></span>
+          <span class="stat-pill">Место: <strong>Катакомбы / Некрополи</strong></span>
+          <span class="stat-pill">Появление: <strong>В период Siege</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ВИДЫ МАМОНА -->
+    <div class="section-block">
+      <div class="section-title">Виды Mammon</div>
+      <div class="class-grid">
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">💰</div>
+            <div>
+              <h3>Blacksmith of Mammon</h3>
+              <div class="class-card-type">Кузнец Мамона</div>
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--text2);margin-top:8px">Повышает уровень Soul Crystal. Добавляет Attribute (атрибуты) к оружию и броне. Удаляет Attribute.</p>
+          <div class="stat-row" style="margin-top:10px">
+            <span class="class-stat">Soul Crystal</span>
+            <span class="class-stat">Attribute</span>
+          </div>
+        </div>
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">🛍️</div>
+            <div>
+              <h3>Merchant of Mammon</h3>
+              <div class="class-card-type">Торговец Мамона</div>
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--text2);margin-top:8px">Продаёт редкие предметы за Ancient Adena: пакеты брони, элементы крафта, особые книги умений.</p>
+          <div class="stat-row" style="margin-top:10px">
+            <span class="class-stat">Редкие предметы</span>
+            <span class="class-stat">Ancient Adena</span>
+          </div>
+        </div>
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">🔮</div>
+            <div>
+              <h3>Exchange Merchant of Mammon</h3>
+              <div class="class-card-type">Обменщик Мамона</div>
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--text2);margin-top:8px">Обменивает Ancient Adena на обычную Adena. Курс обмена зависит от уровня клана и расчётного периода.</p>
+          <div class="stat-row" style="margin-top:10px">
+            <span class="class-stat">Обмен валюты</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ГДЕ НАЙТИ МАМОНА -->
+    <div class="section-block">
+      <div class="section-title">Где найти Mammon</div>
+      <div class="wiki-table-wrap">
+        <table class="wiki-table">
+          <thead><tr><th>Место</th><th>Тип Mammon</th><th>Уровень зоны</th><th>Комментарий</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Catacomb of the Branded</strong></td>
+              <td style="color:var(--text2)">Merchant, Blacksmith</td>
+              <td style="color:var(--text2)">40–55</td>
+              <td style="color:var(--text3)">Самая доступная катакомба</td>
+            </tr>
+            <tr>
+              <td><strong>Catacomb of the Apostate</strong></td>
+              <td style="color:var(--text2)">Merchant, Blacksmith</td>
+              <td style="color:var(--text2)">50–65</td>
+              <td style="color:var(--text3)">Средний уровень сложности</td>
+            </tr>
+            <tr>
+              <td><strong>Necropolis of Devotion</strong></td>
+              <td style="color:var(--text2)">Exchange Merchant</td>
+              <td style="color:var(--text2)">52–65</td>
+              <td style="color:var(--text3)">Хорошие монстры для Ancient Adena</td>
+            </tr>
+            <tr>
+              <td><strong>Necropolis of Sacrifice</strong></td>
+              <td style="color:var(--text2)">Merchant, Blacksmith</td>
+              <td style="color:var(--text2)">55–70</td>
+              <td style="color:var(--text3)">Рекомендуется для 60+ уровня</td>
+            </tr>
+            <tr>
+              <td><strong>Patriots Necropolis</strong></td>
+              <td style="color:var(--text2)">Blacksmith</td>
+              <td style="color:var(--text2)">62–76</td>
+              <td style="color:var(--text3)">Для прокачки Soul Crystal</td>
+            </tr>
+            <tr>
+              <td><strong>Imperial Necropolis</strong></td>
+              <td style="color:var(--text2)">Merchant, Blacksmith, Exchange</td>
+              <td style="color:var(--text2)">72–80</td>
+              <td style="color:var(--text3)">Лучшие предметы и Ancient Adena</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ANCIENT ADENA -->
+    <div class="section-block">
+      <div class="section-title">Ancient Adena — как получить и использовать</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px">
+        <ul class="steps">
+          <li class="step">
+            <span class="step-num">1</span>
+            <span class="step-text"><strong>Фармите в катакомбах/некрополях</strong> — монстры в этих зонах выпадают Ancient Adena вместо или вместе с обычной аденой.</span>
+          </li>
+          <li class="step">
+            <span class="step-num">2</span>
+            <span class="step-text"><strong>Зайдите к Exchange Merchant of Mammon</strong> — он обменяет Ancient Adena на обычную. Курс обычно 1:1, но зависит от клановой ситуации.</span>
+          </li>
+          <li class="step">
+            <span class="step-num">3</span>
+            <span class="step-text">Или <strong>потратьте на редкие предметы</strong> у Merchant of Mammon — часто выгоднее, чем покупать за обычную адену.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SOUL CRYSTAL -->
+    <div class="section-block">
+      <div class="section-title">Soul Crystal — прокачка через Blacksmith of Mammon</div>
+      <div class="wiki-table-wrap">
+        <table class="wiki-table">
+          <thead><tr><th>Стадия</th><th>Название</th><th>Цвет</th><th>Что нужно для улучшения</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Стадия 1</strong></td><td style="color:var(--text2)">Soul Crystal (Red)</td><td style="color:var(--text2)">Красный</td><td style="color:var(--text3)">Убить определённых монстров</td></tr>
+            <tr><td><strong>Стадия 4</strong></td><td style="color:var(--text2)">Soul Crystal Stage-4</td><td style="color:var(--text2)">Синий</td><td style="color:var(--text3)">Убить Raid Boss (шанс 30%)</td></tr>
+            <tr><td><strong>Стадия 7</strong></td><td style="color:var(--text2)">Soul Crystal Stage-7</td><td style="color:var(--text2)">Зелёный</td><td style="color:var(--text3)">Raid Boss 50–60 уровня</td></tr>
+            <tr><td><strong>Стадия 10</strong></td><td style="color:var(--text2)">Soul Crystal Stage-10</td><td style="color:var(--text2)">Жёлтый</td><td style="color:var(--text3)">Blacksmith of Mammon + Ancient Adena</td></tr>
+            <tr><td><strong>Стадия 13 ★</strong></td><td style="color:var(--text2)">Soul Crystal Stage-13</td><td style="color:var(--gold)">Золотой</td><td style="color:var(--text3)">Убить Baium, Antharas, Valakas</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- АТРИБУТЫ -->
+    <div class="section-block">
+      <div class="section-title">Система атрибутов (Attribute System)</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px">
+        <p style="color:var(--text2);line-height:1.7;margin-bottom:16px">
+          Через <strong style="color:var(--text)">Blacksmith of Mammon</strong> можно добавить атрибуты к оружию и броне. Атрибуты дают бонус к урону определённого типа (оружие) или защите (броня).
+        </p>
+        <div class="wiki-table-wrap" style="margin-bottom:0">
+          <table class="wiki-table">
+            <thead><tr><th>Атрибут</th><th>Стихия</th><th>Оружие: эффект</th><th>Броня: эффект</th></tr></thead>
+            <tbody>
+              <tr><td><strong style="color:#ef4444">🔥 Fire</strong></td><td style="color:var(--text2)">Огонь</td><td style="color:var(--text2)">+Атака огнём до 150</td><td style="color:var(--text2)">+Защита от огня до 150</td></tr>
+              <tr><td><strong style="color:#60a5fa">💧 Water</strong></td><td style="color:var(--text2)">Вода</td><td style="color:var(--text2)">+Атака водой до 150</td><td style="color:var(--text2)">+Защита от воды до 150</td></tr>
+              <tr><td><strong style="color:#34d399">🌿 Earth</strong></td><td style="color:var(--text2)">Земля</td><td style="color:var(--text2)">+Атака землёй до 150</td><td style="color:var(--text2)">+Защита от земли до 150</td></tr>
+              <tr><td><strong style="color:#a3e635">💨 Wind</strong></td><td style="color:var(--text2)">Ветер</td><td style="color:var(--text2)">+Атака ветром до 150</td><td style="color:var(--text2)">+Защита от ветра до 150</td></tr>
+              <tr><td><strong style="color:#818cf8">⚡ Holy</strong></td><td style="color:var(--text2)">Свет</td><td style="color:var(--text2)">+Атака светом до 150</td><td style="color:var(--text2)">+Защита от света до 150</td></tr>
+              <tr><td><strong style="color:#f472b6">💀 Dark</strong></td><td style="color:var(--text2)">Тьма</td><td style="color:var(--text2)">+Атака тьмой до 150</td><td style="color:var(--text2)">+Защита от тьмы до 150</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px">
+        <p style="font-size:13px;color:var(--text2);line-height:1.6">
+          <strong style="color:var(--gold)">Совет:</strong> Атрибуты на оружие и броню должны быть <strong style="color:var(--text)">противоположными</strong> — например, Fire оружие + Water защита. Это даёт максимальный бонус к урону и защите одновременно.
+        </p>
+        <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:8px">
+          <span class="class-stat">🔥 Fire ↔ 💧 Water</span>
+          <span class="class-stat">🌿 Earth ↔ 💨 Wind</span>
+          <span class="class-stat">⚡ Holy ↔ 💀 Dark</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ТОВАРЫ У MERCHANT OF MAMMON -->
+    <div class="section-block">
+      <div class="section-title">Товары у Merchant of Mammon</div>
+      <div class="wiki-table-wrap">
+        <table class="wiki-table">
+          <thead><tr><th>Предмет</th><th>Цена (Ancient Adena)</th><th>Описание</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Life Stone (Low-grade)</strong></td>
+              <td style="color:var(--gold)">10,000</td>
+              <td style="color:var(--text2)">Создаёт случайное умение на оружии/доспехе (низкое качество)</td>
+            </tr>
+            <tr>
+              <td><strong>Life Stone (Mid-grade)</strong></td>
+              <td style="color:var(--gold)">40,000</td>
+              <td style="color:var(--text2)">Создаёт случайное умение (среднее качество)</td>
+            </tr>
+            <tr>
+              <td><strong>Life Stone (High-grade)</strong></td>
+              <td style="color:var(--gold)">100,000</td>
+              <td style="color:var(--text2)">Создаёт случайное умение (высокое качество)</td>
+            </tr>
+            <tr>
+              <td><strong>Life Stone (Top-grade)</strong></td>
+              <td style="color:var(--gold)">200,000</td>
+              <td style="color:var(--text2)">Создаёт топ-умение (максимальное качество)</td>
+            </tr>
+            <tr>
+              <td><strong>Durable Mold</strong></td>
+              <td style="color:var(--gold)">90,000</td>
+              <td style="color:var(--text2)">Нужен для крафта S-грейда оружия</td>
+            </tr>
+            <tr>
+              <td><strong>Crafting Mold</strong></td>
+              <td style="color:var(--gold)">75,000</td>
+              <td style="color:var(--text2)">Нужен для крафта S-грейда доспехов</td>
+            </tr>
+            <tr>
+              <td><strong>Sealed Armor Package</strong></td>
+              <td style="color:var(--gold)">300,000</td>
+              <td style="color:var(--text2)">Комплект запечатанного доспеха S-грейда</td>
+            </tr>
+            <tr>
+              <td><strong>Book of Giants</strong></td>
+              <td style="color:var(--gold)">50,000</td>
+              <td style="color:var(--text2)">Книга умений. Изучить спец. умения.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+<script src="main.js"></script>
+</body>
+</html>

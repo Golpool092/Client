@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Гайды — L2INT.RU</title>
+<meta name="description" content="Гайды по Lineage 2: прокачка, фарм, PvP, крафт, класс-гайды и многое другое.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="menu-btn" id="menu-btn">☰</button>
+  <a href="index.html" class="topbar-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    L2INT.RU
+  </a>
+  <nav class="topbar-nav">
+    <a href="index.html">Главная</a>
+    <a href="quests.html">Квесты</a>
+    <a href="guides.html" class="active">Гайды</a>
+    <a href="classes.html">Классы</a>
+    <a href="skills.html">Умения</a>
+    <a href="items.html">Предметы</a>
+  </nav>
+  <div class="topbar-right">
+    <button class="theme-btn" id="theme-btn" title="Сменить тему">☀️</button>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+      <a href="index.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Главная</a>
+      <a href="quests.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Квесты</a>
+      <a href="guides.html" class="sidebar-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Гайды</a>
+      <a href="classes.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Классы</a>
+      <a href="skills.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Умения</a>
+      <a href="items.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>Предметы</a>
+      <a href="subclass.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>Сабкласс</a>
+      <a href="mammon.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Мамон</a>
+    </nav>
+    <div class="sidebar-ad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/></svg>Место для<br>вашей рекламы</div>
+    <div class="sidebar-footer">Lineage 2 Interlude / Gracia<br>© 2024 L2INT.RU</div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <div class="page-header-top">
+        <div>
+          <h1>Гайды</h1>
+          <div class="page-header-meta">28 гайдов в базе данных</div>
+        </div>
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" placeholder="Поиск гайдов..." style="background:none;border:none;outline:none;color:var(--text);font-size:13px;padding:8px 0;width:100%;font-family:inherit">
+        </div>
+      </div>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active">Все</button>
+      <button class="filter-btn">Новичкам</button>
+      <button class="filter-btn">Прокачка</button>
+      <button class="filter-btn">Фарм адены</button>
+      <button class="filter-btn">PvP</button>
+      <button class="filter-btn">Крафт</button>
+      <button class="filter-btn">Классы</button>
+      <button class="filter-btn">Олимпиада</button>
+      <button class="filter-btn">Осады</button>
+    </div>
+
+    <!-- НОВИЧКАМ -->
+    <div class="section-block">
+      <div class="section-title">Для новичков</div>
+      <div class="guide-grid">
+        <div class="guide-card" data-modal="modal-g1" onclick="document.getElementById('modal-g1').classList.add('open')">
+          <div class="guide-card-tag">Новичкам</div>
+          <h3>Полный гайд для начинающих</h3>
+          <p>Всё что нужно знать новому игроку: создание персонажа, первые шаги, как зарабатывать адену и не потеряться.</p>
+          <div class="guide-card-meta">📖 15 мин · Автор: Редакция</div>
+        </div>
+        <div class="guide-card" data-modal="modal-g2" onclick="document.getElementById('modal-g2').classList.add('open')">
+          <div class="guide-card-tag">Новичкам</div>
+          <h3>Выбор класса для новичка</h3>
+          <p>Какой класс выбрать, если вы только начинаете играть. Сравнение сложности, роли в группе и соло-потенциала.</p>
+          <div class="guide-card-meta">📖 10 мин · Автор: Redlance</div>
+        </div>
+        <div class="guide-card" onclick="">
+          <div class="guide-card-tag">Новичкам</div>
+          <h3>Основные механики игры</h3>
+          <p>Система опыта, SP, карма, PK, смерть, штрафы. Всё что нужно знать о базовых игровых механиках L2.</p>
+          <div class="guide-card-meta">📖 12 мин · Автор: Admin</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ПРОКАЧКА -->
+    <div class="section-block">
+      <div class="section-title">Прокачка (Leveling)</div>
+      <div class="guide-grid">
+        <div class="guide-card" data-modal="modal-g3" onclick="document.getElementById('modal-g3').classList.add('open')">
+          <div class="guide-card-tag">Прокачка</div>
+          <h3>Где качаться с 1 до 85 — полная карта</h3>
+          <p>Оптимальные места для прокачки на каждом диапазоне уровней. С картами и советами по составу группы.</p>
+          <div class="guide-card-meta">📖 20 мин · Актуально для Gracia+</div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-tag">Прокачка</div>
+          <h3>Соло или группа — что быстрее?</h3>
+          <p>Сравнение скорости прокачки соло vs. группа для разных классов и уровней. Реальные цифры и тесты.</p>
+          <div class="guide-card-meta">📖 8 мин · Автор: Deckard</div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-tag">Прокачка</div>
+          <h3>Прокачка через катакомбы (40–70)</h3>
+          <p>Эффективная прокачка в катакомбах и некрополях с 40 до 70 уровня. Состав группы и настройка.</p>
+          <div class="guide-card-meta">📖 11 мин · Автор: Krom</div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-tag">Прокачка</div>
+          <h3>Hellbound — прокачка 78–85</h3>
+          <p>Hellbound Island как лучшее место для прокачки в конце игры. Маршруты, группы, советы.</p>
+          <div class="guide-card-meta">📖 14 мин · Автор: Inferno</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ФАРМ -->
+    <div class="section-block">
+      <div class="section-title">Фарм адены</div>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-tag">Фарм</div>
+          <h3>Лучшие места для фарма адены</h3>
+          <p>Топ-10 локаций для фарма адены. Дроп-листы, рекомендуемые уровни, советы по эффективности.</p>
+          <div class="guide-card-meta">📖 12 мин · Регулярно обновляется</div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-tag">Фарм</div>
+          <h3>Фарм через катакомбы: Ancient Adena</h3>
+          <p>Как фармить Ancient Adena и обменивать её на обычную. Полная инструкция и расчёт прибыли.</p>
+          <div class="guide-card-meta">📖 9 мин · Автор: Gold_Farmer</div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-tag">Фарм</div>
+          <h3>Рейды как источник дохода</h3>
+          <p>Какие рейд-боссы дают лучший дроп, как организовать рейд-группу и распределить лут.</p>
+          <div class="guide-card-meta">📖 16 мин · Автор: RaidKing</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PVP -->
+    <div class="section-block">
+      <div class="section-title">PvP и Олимпиада</div>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-tag">PvP</div>
+          <h3>Основы PvP в Lineage 2</h3>
+          <p>Механики PvP, система кармы, как правильно воевать 1 на 1 и в группе. Советы для новичков в PvP.</p>
+          <div class="guide-card-meta">📖 18 мин · Автор: BloodBath</div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-tag">Олимпиада</div>
+          <h3>Гайд по Олимпиаде</h3>
+          <p>Как участвовать в Олимпиаде, стать Героем, какие классы лучше и как строить тактику в бою.</p>
+          <div class="guide-card-meta">📖 22 мин · Автор: Champion</div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-tag">Осады</div>
+          <h3>Гайд по осадам замков</h3>
+          <p>Как правильно брать и защищать замки. Расположение точек, тактика атаки и обороны.</p>
+          <div class="guide-card-meta">📖 25 мин · Автор: ClanLeader</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- КРАФТ -->
+    <div class="section-block">
+      <div class="section-title">Крафт и экономика</div>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-tag">Крафт</div>
+          <h3>Система крафта в Lineage 2</h3>
+          <p>Как работает крафт, какие ресурсы нужны, где их добывать, и насколько крафт выгоден для заработка.</p>
+          <div class="guide-card-meta">📖 13 мин · Автор: Dwarven_Smith</div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-tag">Крафт</div>
+          <h3>Лучшее снаряжение для крафта</h3>
+          <p>Что крафтить выгоднее всего. Анализ рынка, стоимость ресурсов и итоговая прибыль.</p>
+          <div class="guide-card-meta">📖 10 мин · Автор: Market_Pro</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- КЛАСС ГАЙДЫ -->
+    <div class="section-block">
+      <div class="section-title">Гайды по классам</div>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <div class="guide-card-tag">Классы</div>
+          <h3>Гайд по Gladiator / Duelist</h3>
+          <p>Билды, умения, снаряжение и тактики для Gladiator. Фарм, PvP и олимпиадные билды.</p>
+          <div class="guide-card-meta">📖 19 мин · Автор: SwordMaster</div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-tag">Классы</div>
+          <h3>Гайд по Bishop / Cardinal</h3>
+          <p>Полный гайд по хилеру: скиллы, снаряжение, роль в группе, советы для соло и PvP.</p>
+          <div class="guide-card-meta">📖 17 мин · Автор: HolyLight</div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-tag">Классы</div>
+          <h3>Гайд по Hawkeye / Sagittarius</h3>
+          <p>Лучник в Lineage 2: умения, снаряжение, место в группе, PvP и PvE тактики.</p>
+          <div class="guide-card-meta">📖 15 мин · Автор: ArrowRain</div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-tag">Классы</div>
+          <h3>Гайд по Spellhowler / Storm Screamer</h3>
+          <p>Нюк-маг: максимальный урон в PvE и PvP, выбор умений, снаряжение, тактики.</p>
+          <div class="guide-card-meta">📖 16 мин · Автор: MageFire</div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-tag">Классы</div>
+          <h3>Гайд по Warsmith / Maestro</h3>
+          <p>Гном-крафтер: как совмещать крафт, фарм и боевые умения. Заработок через крафт.</p>
+          <div class="guide-card-meta">📖 14 мин · Автор: Tinker</div>
+        </div>
+        <div class="guide-card">
+          <div class="guide-card-tag">Классы</div>
+          <h3>Гайд по Shillien Knight / Hell Knight</h3>
+          <p>Дарк-тянк: скиллы, снаряжение, тактики для PvP, роль в клановых войнах.</p>
+          <div class="guide-card-meta">📖 18 мин · Автор: DarkGuard</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODALS -->
+<div class="modal-bg" id="modal-g1" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-g1').classList.remove('open')">×</button>
+    <h2>Полный гайд для начинающих</h2>
+    <div class="modal-meta">Новичкам • Время чтения: 15 мин</div>
+    <div class="modal-section"><h3>Создание персонажа</h3><p>Выберите расу и класс исходя из вашего стиля игры. Люди — универсальный выбор. Эльфы — лучше для магов. Тёмные эльфы — хороши для дамагеров. Орки — для тех кто любит ближний бой. Гномы — если хотите крафтить.</p></div>
+    <div class="modal-section"><h3>Первые шаги</h3><ul class="steps">
+      <li class="step"><span class="step-num">1</span><span class="step-text">Выполняйте <strong>синие квесты</strong> от NPC в стартовом городе — они дают хороший опыт и снаряжение.</span></li>
+      <li class="step"><span class="step-num">2</span><span class="step-text">Копите <strong>SP</strong> — это очки умений, нужны для изучения новых скиллов.</span></li>
+      <li class="step"><span class="step-num">3</span><span class="step-text">На <strong>20 уровне</strong> пройдите квест на первую профессию.</span></li>
+      <li class="step"><span class="step-num">4</span><span class="step-text">Вступите в <strong>клан</strong> — в группе качаться намного быстрее.</span></li>
+    </ul></div>
+    <div class="modal-section"><h3>Как зарабатывать адену</h3><p>Продавайте дроп с монстров, участвуйте в рейдах, крафтьте и продавайте предметы. На начальных уровнях лучший способ — квесты с наградой в аденах.</p></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-g2" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-g2').classList.remove('open')">×</button>
+    <h2>Выбор класса для новичка</h2>
+    <div class="modal-meta">Новичкам • Время чтения: 10 мин</div>
+    <div class="modal-section"><h3>Лучшие классы для новичков</h3>
+      <div class="stat-row">
+        <span class="stat-pill"><strong>Paladin</strong> — прощает ошибки</span>
+        <span class="stat-pill"><strong>Hawkeye</strong> — понятный геймплей</span>
+        <span class="stat-pill"><strong>Bishop</strong> — всегда нужен в группе</span>
+      </div>
+    </div>
+    <div class="modal-section"><h3>Сложные классы</h3><p>Избегайте Dark Avenger, Spellsinger и Necromancer в начале — они требуют хорошего понимания игровых механик.</p></div>
+    <div class="modal-section"><h3>Рекомендация</h3><p>Начните с <strong>Human Fighter → Warrior → Gladiator</strong> — это простой и эффективный путь с хорошим PvE и PvP потенциалом.</p></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-g3" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-g3').classList.remove('open')">×</button>
+    <h2>Где качаться с 1 до 85</h2>
+    <div class="modal-meta">Прокачка • Время чтения: 20 мин</div>
+    <div class="modal-section"><h3>1–20 уровень</h3><p>Стартовые квесты в родном городе, окрестности города: рощи, поля. Используйте синие квесты — они дают x2-x3 опыта.</p></div>
+    <div class="modal-section"><h3>20–40 уровень</h3><p>Школа Тёмных Искусств (Dark Elven Village), Abandoned Camp, Cruma Marshlands. Квест на первую профессию дает огромный буст опыта.</p></div>
+    <div class="modal-section"><h3>40–52 уровень</h3><p>Catacomb of the Branded, Execution Grounds. Отличное место для группы из 5–7 человек.</p></div>
+    <div class="modal-section"><h3>52–61 уровень</h3><p>Catacomb of the Apostate, Necropolis of Devotion. Хороший опыт и Ancient Adena.</p></div>
+    <div class="modal-section"><h3>61–70 уровень</h3><p>Imperial Tomb, Primeval Isle. Требуется хорошая группа и снаряжение A-грейда.</p></div>
+    <div class="modal-section"><h3>70–78 уровень</h3><p>Hellbound Island (зона Нижнего Hellbound), Seed of Infinity. Отличный опыт для группы.</p></div>
+    <div class="modal-section"><h3>78–85 уровень</h3><p>Seed of Annihilation, Seed of Destruction — лучшие места для прокачки топ-уровня.</p></div>
+  </div>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>

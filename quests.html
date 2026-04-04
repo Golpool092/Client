@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Квесты — L2INT.RU</title>
+<meta name="description" content="База данных квестов Lineage 2. Квесты на профессию, субкласс, дворянство и другие.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="menu-btn" id="menu-btn">☰</button>
+  <a href="index.html" class="topbar-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    L2INT.RU
+  </a>
+  <nav class="topbar-nav">
+    <a href="index.html">Главная</a>
+    <a href="quests.html" class="active">Квесты</a>
+    <a href="guides.html">Гайды</a>
+    <a href="classes.html">Классы</a>
+    <a href="skills.html">Умения</a>
+    <a href="items.html">Предметы</a>
+  </nav>
+  <div class="topbar-right">
+    <button class="theme-btn" id="theme-btn" title="Сменить тему">☀️</button>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+      <a href="index.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Главная</a>
+      <a href="quests.html" class="sidebar-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Квесты</a>
+      <a href="guides.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Гайды</a>
+      <a href="classes.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Классы</a>
+      <a href="skills.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Умения</a>
+      <a href="items.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Предметы</a>
+      <a href="subclass.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>Сабкласс</a>
+      <a href="mammon.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Мамон</a>
+    </nav>
+    <div class="sidebar-ad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 15v-4M12 15V9M17 15v-2"/></svg>Место для<br>вашей рекламы<br><small>Нажмите для связи</small></div>
+    <div class="sidebar-ad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 15v-4M12 15V9M17 15v-2"/></svg>Место для<br>вашей рекламы<br><small>Нажмите для связи</small></div>
+    <div class="sidebar-footer">Lineage 2 Interlude / Gracia<br>© 2024 L2INT.RU</div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <div class="page-header-top">
+        <div>
+          <h1>Квесты</h1>
+          <div class="page-header-meta">34 квеста в базе данных</div>
+        </div>
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" class="search-input" data-table="quests-table" placeholder="Поиск квестов...">
+        </div>
+      </div>
+    </div>
+
+    <div class="filters" data-target="quests-table">
+      <button class="filter-btn active" data-filter="all">Все</button>
+      <button class="filter-btn" data-filter="profession">Квесты на профессию</button>
+      <button class="filter-btn" data-filter="subclass">Квесты на субкласс</button>
+      <button class="filter-btn" data-filter="weapon">Квест на улучшение оружия (SA)</button>
+      <button class="filter-btn" data-filter="noblesse">Квест на дворянство (Noblesse)</button>
+      <button class="filter-btn" data-filter="pailaka">Квесты Пайлака</button>
+      <button class="filter-btn" data-filter="pk">Квест на отмытие РК</button>
+      <button class="filter-btn" data-filter="pet">Квест на питомцев</button>
+      <button class="filter-btn" data-filter="transform">Квест на трансформацию</button>
+      <button class="filter-btn" data-filter="cubic">Квест на кубик</button>
+      <button class="filter-btn" data-filter="freya">Квесты на Фрею</button>
+      <button class="filter-btn" data-filter="lord">Путь лорда (территориальные войны)</button>
+    </div>
+
+    <div id="quests-table">
+
+      <!-- КВЕСТЫ НА ПРОФЕССИЮ -->
+      <div class="section-block">
+        <div class="section-title">Квесты на профессию</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Название</th><th>Уровень</th><th>Тип</th><th>Локация</th><th></th></tr></thead>
+            <tbody>
+              <tr data-filter="profession" data-modal="modal-q1">
+                <td><strong>Квест на первую профессию (I)</strong><br><small style="color:var(--text3)">1st Class Transfer Quests</small></td>
+                <td>20+</td>
+                <td><span class="badge badge-pink">Разовый</span></td>
+                <td style="color:var(--text2)">Стартовые города (в зависимо…</td>
+                <td class="row-arrow">›</td>
+              </tr>
+              <tr data-filter="profession" data-modal="modal-q2">
+                <td><strong>Квест на вторую профессию (II)</strong><br><small style="color:var(--text3)">2nd Class Transfer Quests</small></td>
+                <td>40+</td>
+                <td><span class="badge badge-pink">Разовый</span></td>
+                <td style="color:var(--text2)">Giran, Dark Elven Village, Goddard</td>
+                <td class="row-arrow">›</td>
+              </tr>
+              <tr data-filter="profession" data-modal="modal-q3">
+                <td><strong>Квест на третью профессию (III)</strong><br><small style="color:var(--text3)">3rd Class Transfer Quests</small></td>
+                <td>76+</td>
+                <td><span class="badge badge-pink">Разовый</span></td>
+                <td style="color:var(--text2)">Goddard, Hellbound, Imperial To…</td>
+                <td class="row-arrow">›</td>
+              </tr>
+              <tr data-filter="profession" data-modal="modal-q4">
+                <td><strong>Квест на четвёртую профессию (IV) — Awakening</strong><br><small style="color:var(--text3)">4th Class Transfer / Awakening</small></td>
+                <td>85+</td>
+                <td><span class="badge badge-pink">Разовый</span></td>
+                <td style="color:var(--text2)">Различные локации</td>
+                <td class="row-arrow">›</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- КВЕСТЫ НА СУБКЛАСС -->
+      <div class="section-block">
+        <div class="section-title">Квесты на субкласс</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Название</th><th>Уровень</th><th>Тип</th><th>Локация</th><th></th></tr></thead>
+            <tbody>
+              <tr data-filter="subclass" data-modal="modal-q5">
+                <td><strong>Квест на Субкласс</strong><br><small style="color:var(--text3)">Sub-class Quest — Mimir's Elixir</small></td>
+                <td>75+</td>
+                <td><span class="badge badge-pink">Разовый</span></td>
+                <td style="color:var(--text2)">Goddard, Antharas Lair</td>
+                <td class="row-arrow">›</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- КВЕСТ НА ДВОРЯНСТВО -->
+      <div class="section-block">
+        <div class="section-title">Квест на дворянство (Noblesse)</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Название</th><th>Уровень</th><th>Тип</th><th>Локация</th><th></th></tr></thead>
+            <tbody>
+              <tr data-filter="noblesse" data-modal="modal-q6">
+                <td><strong>Квест на Дворянство (Noblesse)</strong><br><small style="color:var(--text3)">Baium's Blood / Noblesse Quest</small></td>
+                <td>75+</td>
+                <td><span class="badge badge-pink">Разовый</span></td>
+                <td style="color:var(--text2)">Goddard, Various</td>
+                <td class="row-arrow">›</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- КВЕСТ НА УЛУЧШЕНИЕ ОРУЖИЯ -->
+      <div class="section-block">
+        <div class="section-title">Квест на улучшение оружия (Soul Crystal / SA)</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Название</th><th>Уровень</th><th>Тип</th><th>Локация</th><th></th></tr></thead>
+            <tbody>
+              <tr data-filter="weapon" data-modal="modal-q7">
+                <td><strong>Найти Soul Crystal (стадия 1–3)</strong><br><small style="color:var(--text3)">Soul Crystal Hunting</small></td>
+                <td>40+</td>
+                <td><span class="badge badge-blue">Повторяемый</span></td>
+                <td style="color:var(--text2)">Различные локации</td>
+                <td class="row-arrow">›</td>
+              </tr>
+              <tr data-filter="weapon" data-modal="modal-q8">
+                <td><strong>Прокачка Soul Crystal (стадия 4–13)</strong><br><small style="color:var(--text3)">Soul Crystal Leveling</small></td>
+                <td>40+</td>
+                <td><span class="badge badge-blue">Повторяемый</span></td>
+                <td style="color:var(--text2)">Raid Bosses</td>
+                <td class="row-arrow">›</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- КВЕСТЫ ПАЙЛАКА -->
+      <div class="section-block">
+        <div class="section-title">Квесты Пайлака</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Название</th><th>Уровень</th><th>Тип</th><th>Локация</th><th></th></tr></thead>
+            <tbody>
+              <tr data-filter="pailaka" data-modal="modal-q9">
+                <td><strong>Pailaka — Song of Ice and Fire</strong><br><small style="color:var(--text3)">Pailaka Instance 1</small></td>
+                <td>36–42</td>
+                <td><span class="badge badge-green">Инстанс</span></td>
+                <td style="color:var(--text2)">Pailaka Dungeon</td>
+                <td class="row-arrow">›</td>
+              </tr>
+              <tr data-filter="pailaka" data-modal="modal-q10">
+                <td><strong>Pailaka — Injured Dragon</strong><br><small style="color:var(--text3)">Pailaka Instance 2</small></td>
+                <td>61–67</td>
+                <td><span class="badge badge-green">Инстанс</span></td>
+                <td style="color:var(--text2)">Pailaka Dungeon</td>
+                <td class="row-arrow">›</td>
+              </tr>
+              <tr data-filter="pailaka" data-modal="modal-q11">
+                <td><strong>Pailaka — Devil's Legacy</strong><br><small style="color:var(--text3)">Pailaka Instance 3</small></td>
+                <td>73–77</td>
+                <td><span class="badge badge-green">Инстанс</span></td>
+                <td style="color:var(--text2)">Pailaka Dungeon</td>
+                <td class="row-arrow">›</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- КВЕСТ НА ОТМЫТИЕ РК -->
+      <div class="section-block">
+        <div class="section-title">Квест на отмытие РК</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Название</th><th>Уровень</th><th>Тип</th><th>Локация</th><th></th></tr></thead>
+            <tbody>
+              <tr data-filter="pk" data-modal="modal-q12">
+                <td><strong>Очищение PK (Karma Purification)</strong><br><small style="color:var(--text3)">Reduce PK Count</small></td>
+                <td>Любой</td>
+                <td><span class="badge badge-blue">Повторяемый</span></td>
+                <td style="color:var(--text2)">Dion, Giran, Oren</td>
+                <td class="row-arrow">›</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- КВЕСТЫ НА ПИТОМЦЕВ -->
+      <div class="section-block">
+        <div class="section-title">Квесты на питомцев</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Название</th><th>Уровень</th><th>Тип</th><th>Локация</th><th></th></tr></thead>
+            <tbody>
+              <tr data-filter="pet" data-modal="modal-q13">
+                <td><strong>Получение Wolf (Обычного волка)</strong><br><small style="color:var(--text3)">Wolf Quest</small></td>
+                <td>15+</td>
+                <td><span class="badge badge-pink">Разовый</span></td>
+                <td style="color:var(--text2)">Dion</td>
+                <td class="row-arrow">›</td>
+              </tr>
+              <tr data-filter="pet" data-modal="modal-q14">
+                <td><strong>Получение Great Wolf (Большого волка)</strong><br><small style="color:var(--text3)">Great Wolf Quest</small></td>
+                <td>55+</td>
+                <td><span class="badge badge-pink">Разовый</span></td>
+                <td style="color:var(--text2)">Dion</td>
+                <td class="row-arrow">›</td>
+              </tr>
+              <tr data-filter="pet" data-modal="modal-q15">
+                <td><strong>Получение Fenrir (Фенрир)</strong><br><small style="color:var(--text3)">Fenrir Quest</small></td>
+                <td>70+</td>
+                <td><span class="badge badge-pink">Разовый</span></td>
+                <td style="color:var(--text2)">Dion</td>
+                <td class="row-arrow">›</td>
+              </tr>
+              <tr data-filter="pet" data-modal="modal-q16">
+                <td><strong>Получение Strider (Страйдера)</strong><br><small style="color:var(--text3)">Strider Quest</small></td>
+                <td>55+</td>
+                <td><span class="badge badge-pink">Разовый</span></td>
+                <td style="color:var(--text2)">Различные локации</td>
+                <td class="row-arrow">›</td>
+              </tr>
+              <tr data-filter="pet" data-modal="modal-q17">
+                <td><strong>Получение Baby Pets (Детёныши)</strong><br><small style="color:var(--text3)">Baby Pet Quest</small></td>
+                <td>30+</td>
+                <td><span class="badge badge-pink">Разовый</span></td>
+                <td style="color:var(--text2)">Elf Village</td>
+                <td class="row-arrow">›</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- КВЕСТ НА ТРАНСФОРМАЦИЮ -->
+      <div class="section-block">
+        <div class="section-title">Квесты на трансформацию</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Название</th><th>Уровень</th><th>Тип</th><th>Локация</th><th></th></tr></thead>
+            <tbody>
+              <tr data-filter="transform" data-modal="modal-q18">
+                <td><strong>Трансформация в Зикель (Zikiel)</strong><br><small style="color:var(--text3)">Transform Quest 1</small></td>
+                <td>60+</td>
+                <td><span class="badge badge-pink">Разовый</span></td>
+                <td style="color:var(--text2)">Goddard</td>
+                <td class="row-arrow">›</td>
+              </tr>
+              <tr data-filter="transform" data-modal="modal-q19">
+                <td><strong>Трансформация в Anakim</strong><br><small style="color:var(--text3)">Transform Quest 2</small></td>
+                <td>70+</td>
+                <td><span class="badge badge-pink">Разовый</span></td>
+                <td style="color:var(--text2)">Rune</td>
+                <td class="row-arrow">›</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- КВЕСТЫ ФРЕЯ -->
+      <div class="section-block">
+        <div class="section-title">Квесты на Фрею</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Название</th><th>Уровень</th><th>Тип</th><th>Локация</th><th></th></tr></thead>
+            <tbody>
+              <tr data-filter="freya" data-modal="modal-q20">
+                <td><strong>Освобождение Фреи (нормальный)</strong><br><small style="color:var(--text3)">Freya Normal Mode</small></td>
+                <td>82+</td>
+                <td><span class="badge badge-green">Инстанс</span></td>
+                <td style="color:var(--text2)">Jinia's Notice Board</td>
+                <td class="row-arrow">›</td>
+              </tr>
+              <tr data-filter="freya" data-modal="modal-q21">
+                <td><strong>Освобождение Фреи (сложный)</strong><br><small style="color:var(--text3)">Freya Hard Mode</small></td>
+                <td>82+</td>
+                <td><span class="badge badge-red">Сложный</span></td>
+                <td style="color:var(--text2)">Jinia's Notice Board</td>
+                <td class="row-arrow">›</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ПУТЬ ЛОРДА -->
+      <div class="section-block">
+        <div class="section-title">Путь лорда (территориальные войны)</div>
+        <div class="wiki-table-wrap">
+          <table class="wiki-table">
+            <thead><tr><th>Название</th><th>Уровень</th><th>Тип</th><th>Локация</th><th></th></tr></thead>
+            <tbody>
+              <tr data-filter="lord" data-modal="modal-q22">
+                <td><strong>Инициация воина — Путь Лорда</strong><br><small style="color:var(--text3)">Path of a Lord — Warrior</small></td>
+                <td>40+</td>
+                <td><span class="badge badge-blue">Повторяемый</span></td>
+                <td style="color:var(--text2)">Территориальные замки</td>
+                <td class="row-arrow">›</td>
+              </tr>
+              <tr data-filter="lord" data-modal="modal-q23">
+                <td><strong>Собрать медали жителей — Путь Лорда</strong><br><small style="color:var(--text3)">Path of a Lord — Medals</small></td>
+                <td>40+</td>
+                <td><span class="badge badge-blue">Повторяемый</span></td>
+                <td style="color:var(--text2)">Территориальные замки</td>
+                <td class="row-arrow">›</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /quests-table -->
+  </main>
+</div>
+
+<!-- MODALS -->
+<div class="modal-bg" id="modal-q1" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-q1').classList.remove('open')">×</button>
+    <h2>Квест на первую профессию (I)</h2>
+    <div class="modal-meta">1st Class Transfer Quests • Уровень 20+ • Разовый</div>
+    <div class="modal-section"><h3>Описание</h3><p>Квест на смену первой профессии. Каждая раса имеет свой уникальный квест. После выполнения открывается доступ к первым профессиям: Fighter становится Warrior, Mage становится Wizard и т.д.</p></div>
+    <div class="modal-section"><h3>Локация</h3><p>Стартовые города в зависимости от расы: Talking Island Village (Люди), Elven Village (Эльфы), Dark Elven Village (Тёмные эльфы), Orc Village (Орки), Dwarven Village (Гномы).</p></div>
+    <div class="modal-section"><h3>Награда</h3><p>Смена профессии, новые умения первой профессии, +1 к характеристикам.</p></div>
+    <div class="modal-section"><h3>Шаги</h3><ul class="steps">
+      <li class="step"><span class="step-num">1</span><span class="step-text">Достичь <strong>20 уровня</strong> и поговорить с мастером профессии в стартовом городе.</span></li>
+      <li class="step"><span class="step-num">2</span><span class="step-text">Выполнить требования квеста (убить определённых монстров или собрать предметы).</span></li>
+      <li class="step"><span class="step-num">3</span><span class="step-text">Вернуться к мастеру и получить первую профессию.</span></li>
+    </ul></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-q2" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-q2').classList.remove('open')">×</button>
+    <h2>Квест на вторую профессию (II)</h2>
+    <div class="modal-meta">2nd Class Transfer Quests • Уровень 40+ • Разовый</div>
+    <div class="modal-section"><h3>Описание</h3><p>Квест на смену второй профессии. Это важный этап в развитии персонажа — открывается доступ к мощным умениям второй профессии. Квест сложнее первого и требует посещения нескольких локаций.</p></div>
+    <div class="modal-section"><h3>Локация</h3><p>Giran, Dark Elven Village, Goddard — в зависимости от расы и класса.</p></div>
+    <div class="modal-section"><h3>Шаги</h3><ul class="steps">
+      <li class="step"><span class="step-num">1</span><span class="step-text">Достичь <strong>40 уровня</strong> и обратиться к магистру профессии в Giran.</span></li>
+      <li class="step"><span class="step-num">2</span><span class="step-text">Выполнить цепочку заданий: убить рейдового босса или собрать специальные предметы.</span></li>
+      <li class="step"><span class="step-num">3</span><span class="step-text">Заплатить 650,000 аден (для некоторых классов).</span></li>
+      <li class="step"><span class="step-num">4</span><span class="step-text">Получить вторую профессию и новые умения.</span></li>
+    </ul></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-q3" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-q3').classList.remove('open')">×</button>
+    <h2>Квест на третью профессию (III)</h2>
+    <div class="modal-meta">3rd Class Transfer Quests • Уровень 76+ • Разовый</div>
+    <div class="modal-section"><h3>Описание</h3><p>Самый сложный и масштабный квест на смену профессии. Требует прохождения инстансов, убийства мощных рейдовых боссов и выполнения длинной цепочки заданий. Открывает третью, самую мощную форму класса.</p></div>
+    <div class="modal-section"><h3>Локация</h3><p>Goddard, Hellbound, Imperial Tomb — несколько локаций.</p></div>
+    <div class="modal-section"><h3>Награда</h3><p>Третья профессия, доступ к самым мощным умениям, +5 к характеристикам.</p></div>
+    <div class="modal-section"><h3>Шаги</h3><ul class="steps">
+      <li class="step"><span class="step-num">1</span><span class="step-text">Достичь <strong>76 уровня</strong>.</span></li>
+      <li class="step"><span class="step-num">2</span><span class="step-text">Посетить Goddard и начать цепочку квестов.</span></li>
+      <li class="step"><span class="step-num">3</span><span class="step-text">Пройти <strong>Imperial Tomb</strong> и убить боссов Baylor, Anakim/Lilith.</span></li>
+      <li class="step"><span class="step-num">4</span><span class="step-text">Собрать необходимые предметы из Hellbound.</span></li>
+      <li class="step"><span class="step-num">5</span><span class="step-text">Вернуться к магистру и получить третью профессию.</span></li>
+    </ul></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-q4" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-q4').classList.remove('open')">×</button>
+    <h2>Квест на четвёртую профессию (IV) — Awakening</h2>
+    <div class="modal-meta">4th Class Transfer / Awakening • Уровень 85+ • Разовый</div>
+    <div class="modal-section"><h3>Описание</h3><p>Пробуждение — переход к четвёртой профессии, доступный с Goddess of Destruction. Открывает совершенно новые умения и механики. После пробуждения персонаж получает мощный буст характеристик.</p></div>
+    <div class="modal-section"><h3>Шаги</h3><ul class="steps">
+      <li class="step"><span class="step-num">1</span><span class="step-text">Достичь <strong>85 уровня</strong>.</span></li>
+      <li class="step"><span class="step-num">2</span><span class="step-text">Получить задание от NPC «Коллекционер воспоминаний».</span></li>
+      <li class="step"><span class="step-num">3</span><span class="step-text">Пройти инстанс пробуждения.</span></li>
+      <li class="step"><span class="step-num">4</span><span class="step-text">Получить четвёртую профессию и умения.</span></li>
+    </ul></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-q5" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-q5').classList.remove('open')">×</button>
+    <h2>Квест на Субкласс</h2>
+    <div class="modal-meta">Mimir's Elixir • Уровень 75+ • Разовый</div>
+    <div class="modal-section"><h3>Описание</h3><p>Квест позволяет добавить субкласс к вашему персонажу. Субкласс — это дополнительный класс, который можно прокачивать параллельно с основным. После достижения 80 уровня субкласса можно получить умение «Duel Might» или «Duel Sword».</p></div>
+    <div class="modal-section"><h3>Предусловие</h3><p>Дворянство (Noblesse) получено. Основной класс — третья профессия. Клан уровня 5+.</p></div>
+    <div class="modal-section"><h3>Шаги</h3><ul class="steps">
+      <li class="step"><span class="step-num">1</span><span class="step-text">Поговорить с <strong>Maestro Reorin</strong> в Goddard.</span></li>
+      <li class="step"><span class="step-num">2</span><span class="step-text">Убить <strong>Chimera</strong> в Antharas Lair.</span></li>
+      <li class="step"><span class="step-num">3</span><span class="step-text">Получить 3 артефакта от Raid Bosses: Barakiel, Golkonda, Hallate.</span></li>
+      <li class="step"><span class="step-num">4</span><span class="step-text">Вернуться к Reorin и получить право на субкласс.</span></li>
+    </ul></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-q6" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-q6').classList.remove('open')">×</button>
+    <h2>Квест на Дворянство (Noblesse)</h2>
+    <div class="modal-meta">Baium's Blood • Уровень 75+ • Разовый</div>
+    <div class="modal-section"><h3>Описание</h3><p>Получение статуса Дворянина открывает доступ к уникальным умениям: Noblesse Blessing, Strider, участие в Olympiad. Дворяне имеют особые привилегии при смерти и возрождении.</p></div>
+    <div class="modal-section"><h3>Шаги</h3><ul class="steps">
+      <li class="step"><span class="step-num">1</span><span class="step-text">Поговорить с <strong>Orven</strong> в Goddard.</span></li>
+      <li class="step"><span class="step-num">2</span><span class="step-text">Найти <strong>Caradine</strong> в Ivory Tower.</span></li>
+      <li class="step"><span class="step-num">3</span><span class="step-text">Убить <strong>Baium</strong> в Tower of Insolence и получить кровь.</span></li>
+      <li class="step"><span class="step-num">4</span><span class="step-text">Вернуться к Orven — стать Дворянином.</span></li>
+    </ul></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-q9" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-q9').classList.remove('open')">×</button>
+    <h2>Pailaka — Song of Ice and Fire</h2>
+    <div class="modal-meta">Pailaka Instance 1 • Уровень 36–42 • Инстанс</div>
+    <div class="modal-section"><h3>Описание</h3><p>Первый инстанс Pailaka — подземелье для одиночного прохождения. Вы сражаетесь с волнами врагов и получаете уникальные награды. Рекомендуется для прокачки в диапазоне 36–42 уровней.</p></div>
+    <div class="modal-section"><h3>Награда</h3><p>Pailaka Jewel (аксессуар), опыт, аденит.</p></div>
+    <div class="modal-section"><h3>Шаги</h3><ul class="steps">
+      <li class="step"><span class="step-num">1</span><span class="step-text">Зайти в инстанс через NPC у входа.</span></li>
+      <li class="step"><span class="step-num">2</span><span class="step-text">Пройти несколько уровней подземелья.</span></li>
+      <li class="step"><span class="step-num">3</span><span class="step-text">Убить финального босса и получить награду.</span></li>
+    </ul></div>
+  </div>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>

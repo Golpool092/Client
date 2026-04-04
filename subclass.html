@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Сабкласс — L2INT.RU</title>
+<meta name="description" content="Гайд по субклассу в Lineage 2: как получить, прокачать и использовать субкласс.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="menu-btn" id="menu-btn">☰</button>
+  <a href="index.html" class="topbar-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    L2INT.RU
+  </a>
+  <nav class="topbar-nav">
+    <a href="index.html">Главная</a>
+    <a href="quests.html">Квесты</a>
+    <a href="guides.html">Гайды</a>
+    <a href="classes.html">Классы</a>
+    <a href="skills.html">Умения</a>
+    <a href="items.html">Предметы</a>
+  </nav>
+  <div class="topbar-right">
+    <button class="theme-btn" id="theme-btn" title="Сменить тему">☀️</button>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+      <a href="index.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Главная</a>
+      <a href="quests.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Квесты</a>
+      <a href="guides.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/></svg>Гайды</a>
+      <a href="classes.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/></svg>Классы</a>
+      <a href="skills.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Умения</a>
+      <a href="items.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/></svg>Предметы</a>
+      <a href="subclass.html" class="sidebar-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>Сабкласс</a>
+      <a href="mammon.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Мамон</a>
+    </nav>
+    <div class="sidebar-ad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/></svg>Место для<br>вашей рекламы</div>
+    <div class="sidebar-footer">Lineage 2 Interlude / Gracia<br>© 2024 L2INT.RU</div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <h1>Субкласс (Sub-class)</h1>
+      <div class="page-header-meta">Полный гайд по системе субкласса в Lineage 2</div>
+    </div>
+
+    <!-- ЧТО ТАКОЕ СУБКЛАСС -->
+    <div class="section-block">
+      <div class="section-title">Что такое субкласс?</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px">
+        <p style="color:var(--text2);line-height:1.7;margin-bottom:12px">
+          <strong style="color:var(--text)">Субкласс</strong> — это дополнительный класс персонажа, который можно прокачивать параллельно с основным. Система субкласса позволяет одному персонажу освоить умения нескольких классов.
+        </p>
+        <p style="color:var(--text2);line-height:1.7;margin-bottom:12px">
+          После получения субкласса вы можете переключаться между основным и дополнительным классами в любой момент нахождения в городе. Каждый субкласс прокачивается независимо.
+        </p>
+        <div class="stat-row" style="margin-top:14px">
+          <span class="stat-pill">Макс. количество субклассов: <strong>3</strong></span>
+          <span class="stat-pill">Макс. уровень субкласса: <strong>80</strong></span>
+          <span class="stat-pill">Требуется: <strong>75+ уровень</strong></span>
+          <span class="stat-pill">Требуется: <strong>Noblesse</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- КАК ПОЛУЧИТЬ -->
+    <div class="section-block">
+      <div class="section-title">Как получить субкласс</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px">
+        <ul class="steps">
+          <li class="step">
+            <span class="step-num">1</span>
+            <span class="step-text"><strong>Предусловия:</strong> основной класс — 3-я профессия (76+ уровень), статус Дворянина (Noblesse), клан уровня 5+.</span>
+          </li>
+          <li class="step">
+            <span class="step-num">2</span>
+            <span class="step-text">Поговорите с <strong>NPC Maestro Reorin</strong> в городе Goddard. Он даст вам квест на субкласс.</span>
+          </li>
+          <li class="step">
+            <span class="step-num">3</span>
+            <span class="step-text">Убейте <strong>Chimera</strong> в Antharas Lair и соберите 3 священных артефакта от Raid Bosses: Barakiel (The Abyss), Golkonda (Hellbound), Hallate (Necropolis).</span>
+          </li>
+          <li class="step">
+            <span class="step-num">4</span>
+            <span class="step-text">Вернитесь к Maestro Reorin — получите право добавить субкласс. Зайдите к <strong>Grand Master</strong> своей расы и выберите нужный класс.</span>
+          </li>
+          <li class="step">
+            <span class="step-num">5</span>
+            <span class="step-text">Субкласс добавлен! Он начинает с <strong>40 уровня</strong>. Переключайтесь через меню статуса персонажа.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ОГРАНИЧЕНИЯ ВЫБОРА -->
+    <div class="section-block">
+      <div class="section-title">Ограничения при выборе субкласса</div>
+      <div class="wiki-table-wrap">
+        <table class="wiki-table">
+          <thead><tr><th>Ваш основной класс</th><th>Недоступные субклассы</th><th>Причина</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Любой воин</td>
+              <td style="color:var(--text2)">Тот же самый класс</td>
+              <td style="color:var(--text3)">Нельзя дублировать основной</td>
+            </tr>
+            <tr>
+              <td>Тёмный эльф</td>
+              <td style="color:var(--text2)">Светлый эльф (классы)</td>
+              <td style="color:var(--text3)">Расовые ограничения</td>
+            </tr>
+            <tr>
+              <td>Светлый эльф</td>
+              <td style="color:var(--text2)">Тёмный эльф (классы)</td>
+              <td style="color:var(--text3)">Расовые ограничения</td>
+            </tr>
+            <tr>
+              <td>Любой</td>
+              <td style="color:var(--text2)">Overlord, Warsmith, Scavenger</td>
+              <td style="color:var(--text3)">Специальные классы — нельзя в субкласс</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- НАГРАДЫ ЗА СУБКЛАСС -->
+    <div class="section-block">
+      <div class="section-title">Награды за прокачку субкласса</div>
+      <div class="wiki-table-wrap">
+        <table class="wiki-table">
+          <thead><tr><th>Уровень субкласса</th><th>Награда</th><th>Описание</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>65</strong></td>
+              <td><span class="badge badge-yellow">+4 Str / Con / Dex / Int / Wit / Men</span></td>
+              <td style="color:var(--text2)">Бонус к характеристикам</td>
+            </tr>
+            <tr>
+              <td><strong>75</strong></td>
+              <td><span class="badge badge-blue">Доступен новый субкласс</span></td>
+              <td style="color:var(--text2)">Можно добавить второй субкласс</td>
+            </tr>
+            <tr>
+              <td><strong>80</strong></td>
+              <td><span class="badge badge-pink">Умение Duel Might / Duel Sword</span></td>
+              <td style="color:var(--text2)">Мощное умение при использовании субкласса</td>
+            </tr>
+            <tr>
+              <td><strong>80 (3 субкласса)</strong></td>
+              <td><span class="badge badge-purple">Noblesse Blessing (улучшенное)</span></td>
+              <td style="color:var(--text2)">Улучшенная версия умения Noblesse</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ПОПУЛЯРНЫЕ КОМБИНАЦИИ -->
+    <div class="section-block">
+      <div class="section-title">Популярные комбинации субклассов</div>
+      <div class="class-grid">
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">⚔️</div>
+            <div>
+              <h3>Gladiator + Warlord</h3>
+              <div class="class-card-type">AoE дамагер</div>
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--text2);margin-top:8px">Сочетание одиночного и AoE урона. Отличная комбинация для катакомб и рейдов.</p>
+        </div>
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">🔮</div>
+            <div>
+              <h3>Bishop + Elder</h3>
+              <div class="class-card-type">Двойной хилер</div>
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--text2);margin-top:8px">Хилер с максимальными возможностями восстановления. Незаменим в сложных данжах.</p>
+        </div>
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">🏹</div>
+            <div>
+              <h3>Sagittarius + Ghost Sentinel</h3>
+              <div class="class-card-type">Мега-лучник</div>
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--text2);margin-top:8px">Максимальный урон из лука. Объединяет лучшие умения двух лучников S-грейда.</p>
+        </div>
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">⚡</div>
+            <div>
+              <h3>Storm Screamer + Mystic Muse</h3>
+              <div class="class-card-type">AoE нюкер</div>
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--text2);margin-top:8px">Сочетание двух мощных магов-нюкеров. Доступны все стихии для максимального PvP урона.</p>
+        </div>
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">🛡️</div>
+            <div>
+              <h3>Phoenix Knight + Hell Knight</h3>
+              <div class="class-card-type">Универсальный танк</div>
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--text2);margin-top:8px">Световой и тёмный танк. Отличная выживаемость в PvP и эффективный держатель агрессии в PvE.</p>
+        </div>
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">🎵</div>
+            <div>
+              <h3>Sword Muse + Spectral Dancer</h3>
+              <div class="class-card-type">Универсальный буффер</div>
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--text2);margin-top:8px">Все баффы песен и плясок в одном персонаже. Самый ценный участник любой группы.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="section-block">
+      <div class="section-title">Часто задаваемые вопросы (FAQ)</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border)">
+          <div style="font-weight:600;margin-bottom:6px;color:var(--text)">Сохраняются ли умения при смене субкласса?</div>
+          <div style="color:var(--text2);font-size:13.5px">Нет. При переключении на другой класс доступны только умения активного класса. Умения основного и субкласса не смешиваются.</div>
+        </div>
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border)">
+          <div style="font-weight:600;margin-bottom:6px;color:var(--text)">Какой уровень нужен для добавления второго субкласса?</div>
+          <div style="color:var(--text2);font-size:13.5px">Первый субкласс должен достичь 75 уровня. Только тогда откроется возможность добавить второй субкласс (повторив квест).</div>
+        </div>
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border)">
+          <div style="font-weight:600;margin-bottom:6px;color:var(--text)">Влияет ли субкласс на уровень основного персонажа?</div>
+          <div style="color:var(--text2);font-size:13.5px">Нет. Субклассы прокачиваются независимо. Опыт, полученный на субклассе, идёт только ему.</div>
+        </div>
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border)">
+          <div style="font-weight:600;margin-bottom:6px;color:var(--text)">Можно ли поменять субкласс после выбора?</div>
+          <div style="color:var(--text2);font-size:13.5px">Да, но за плату 2,000,000 Adena через NPC в Goddard. Уровень субкласса при смене сбрасывается до 40.</div>
+        </div>
+        <div style="padding:16px 20px">
+          <div style="font-weight:600;margin-bottom:6px;color:var(--text)">Что дает прокачка всех трёх субклассов до 80?</div>
+          <div style="color:var(--text2);font-size:13.5px">Улучшенная версия Noblesse Blessing и доступ к мощным умениям трёх дополнительных классов. Также +12 к основным характеристикам (по 4 от каждого).</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+<script src="main.js"></script>
+</body>
+</html>

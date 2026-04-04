@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Классы — L2INT.RU</title>
+<meta name="description" content="Все классы Lineage 2: воины, маги, хилеры, лучники, танки. Описание умений и характеристик.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="menu-btn" id="menu-btn">☰</button>
+  <a href="index.html" class="topbar-logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    L2INT.RU
+  </a>
+  <nav class="topbar-nav">
+    <a href="index.html">Главная</a>
+    <a href="quests.html">Квесты</a>
+    <a href="guides.html">Гайды</a>
+    <a href="classes.html" class="active">Классы</a>
+    <a href="skills.html">Умения</a>
+    <a href="items.html">Предметы</a>
+  </nav>
+  <div class="topbar-right">
+    <button class="theme-btn" id="theme-btn" title="Сменить тему">☀️</button>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+      <a href="index.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Главная</a>
+      <a href="quests.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Квесты</a>
+      <a href="guides.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Гайды</a>
+      <a href="classes.html" class="sidebar-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Классы</a>
+      <a href="skills.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Умения</a>
+      <a href="items.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/></svg>Предметы</a>
+      <a href="subclass.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Сабкласс</a>
+      <a href="mammon.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Мамон</a>
+    </nav>
+    <div class="sidebar-ad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/></svg>Место для<br>вашей рекламы</div>
+    <div class="sidebar-footer">Lineage 2 Interlude / Gracia<br>© 2024 L2INT.RU</div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <div class="page-header-top">
+        <div>
+          <h1>Классы</h1>
+          <div class="page-header-meta">36 классов в базе данных</div>
+        </div>
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" placeholder="Поиск классов...">
+        </div>
+      </div>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active">Все</button>
+      <button class="filter-btn">Воины</button>
+      <button class="filter-btn">Рыцари / Танки</button>
+      <button class="filter-btn">Лучники / Разведчики</button>
+      <button class="filter-btn">Маги</button>
+      <button class="filter-btn">Хилеры</button>
+      <button class="filter-btn">Саммонеры</button>
+      <button class="filter-btn">Люди</button>
+      <button class="filter-btn">Эльфы</button>
+      <button class="filter-btn">Тёмные эльфы</button>
+      <button class="filter-btn">Орки</button>
+      <button class="filter-btn">Гномы</button>
+    </div>
+
+    <!-- ВОИНЫ / ДАМАГЕРЫ -->
+    <div class="section-block">
+      <div class="section-title">Воины и дамагеры</div>
+      <div class="class-grid">
+
+        <div class="class-card" data-modal="modal-c1" onclick="document.getElementById('modal-c1').classList.add('open')">
+          <div class="class-card-header">
+            <div class="class-icon">⚔️</div>
+            <div>
+              <h3>Gladiator / Duelist</h3>
+              <div class="class-card-type">Человек · Воин · Ближний бой</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Урон: ★★★★★</span>
+            <span class="class-stat">PvP: ★★★★☆</span>
+            <span class="class-stat">Сложность: Средняя</span>
+          </div>
+        </div>
+
+        <div class="class-card" data-modal="modal-c2" onclick="document.getElementById('modal-c2').classList.add('open')">
+          <div class="class-card-header">
+            <div class="class-icon">🪓</div>
+            <div>
+              <h3>Warlord / Dreadnought</h3>
+              <div class="class-card-type">Человек · Воин · AoE</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">AoE: ★★★★★</span>
+            <span class="class-stat">PvP: ★★★☆☆</span>
+            <span class="class-stat">Сложность: Низкая</span>
+          </div>
+        </div>
+
+        <div class="class-card" data-modal="modal-c3" onclick="document.getElementById('modal-c3').classList.add('open')">
+          <div class="class-card-header">
+            <div class="class-icon">🏹</div>
+            <div>
+              <h3>Hawkeye / Sagittarius</h3>
+              <div class="class-card-type">Человек · Лучник · Дальний бой</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Урон: ★★★★☆</span>
+            <span class="class-stat">Дальность: ★★★★★</span>
+            <span class="class-stat">Сложность: Низкая</span>
+          </div>
+        </div>
+
+        <div class="class-card" data-modal="modal-c4" onclick="document.getElementById('modal-c4').classList.add('open')">
+          <div class="class-card-header">
+            <div class="class-icon">🗡️</div>
+            <div>
+              <h3>Treasure Hunter / Fortune Seeker</h3>
+              <div class="class-card-type">Человек · Разведчик · Ближний бой</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Урон: ★★★★☆</span>
+            <span class="class-stat">Крит: ★★★★★</span>
+            <span class="class-stat">Сложность: Высокая</span>
+          </div>
+        </div>
+
+        <div class="class-card" data-modal="modal-c5" onclick="document.getElementById('modal-c5').classList.add('open')">
+          <div class="class-card-header">
+            <div class="class-icon">🌿</div>
+            <div>
+              <h3>Silver Ranger / Moon Knight</h3>
+              <div class="class-card-type">Эльф · Лучник · Дальний бой</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Скорость: ★★★★★</span>
+            <span class="class-stat">Урон: ★★★★☆</span>
+            <span class="class-stat">Сложность: Низкая</span>
+          </div>
+        </div>
+
+        <div class="class-card" data-modal="modal-c6" onclick="document.getElementById('modal-c6').classList.add('open')">
+          <div class="class-card-header">
+            <div class="class-icon">🖤</div>
+            <div>
+              <h3>Abyss Walker / Ghost Hunter</h3>
+              <div class="class-card-type">Тёмный эльф · Разведчик</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Крит: ★★★★★</span>
+            <span class="class-stat">Скорость: ★★★★★</span>
+            <span class="class-stat">Сложность: Высокая</span>
+          </div>
+        </div>
+
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">🏹</div>
+            <div>
+              <h3>Phantom Ranger / Ghost Sentinel</h3>
+              <div class="class-card-type">Тёмный эльф · Лучник</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Урон: ★★★★★</span>
+            <span class="class-stat">Крит: ★★★★☆</span>
+            <span class="class-stat">Сложность: Средняя</span>
+          </div>
+        </div>
+
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">🔥</div>
+            <div>
+              <h3>Destroyer / Titan</h3>
+              <div class="class-card-type">Орк · Воин · AoE</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Сила: ★★★★★</span>
+            <span class="class-stat">AoE: ★★★★★</span>
+            <span class="class-stat">Сложность: Низкая</span>
+          </div>
+        </div>
+
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">💥</div>
+            <div>
+              <h3>Tyrant / Grand Khavatari</h3>
+              <div class="class-card-type">Орк · Боец · Кулаки</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Скорость: ★★★★★</span>
+            <span class="class-stat">Баффы: ★★★★☆</span>
+            <span class="class-stat">Сложность: Средняя</span>
+          </div>
+        </div>
+
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">🔨</div>
+            <div>
+              <h3>Scavenger / Bounty Hunter</h3>
+              <div class="class-card-type">Гном · Воин · Сбор ресурсов</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Фарм: ★★★★★</span>
+            <span class="class-stat">Урон: ★★★☆☆</span>
+            <span class="class-stat">Сложность: Низкая</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- РЫЦАРИ / ТАНКИ -->
+    <div class="section-block">
+      <div class="section-title">Рыцари и Танки</div>
+      <div class="class-grid">
+
+        <div class="class-card" data-modal="modal-c7" onclick="document.getElementById('modal-c7').classList.add('open')">
+          <div class="class-card-header">
+            <div class="class-icon">🛡️</div>
+            <div>
+              <h3>Paladin / Phoenix Knight</h3>
+              <div class="class-card-type">Человек · Рыцарь · Танк / Хил</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Выживаемость: ★★★★★</span>
+            <span class="class-stat">Поддержка: ★★★★☆</span>
+            <span class="class-stat">Сложность: Низкая</span>
+          </div>
+        </div>
+
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">🌑</div>
+            <div>
+              <h3>Dark Avenger / Hell Knight</h3>
+              <div class="class-card-type">Человек · Рыцарь · Темный танк</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">PvP: ★★★★★</span>
+            <span class="class-stat">Выживаемость: ★★★★☆</span>
+            <span class="class-stat">Сложность: Высокая</span>
+          </div>
+        </div>
+
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">🌟</div>
+            <div>
+              <h3>Temple Knight / Eva's Templar</h3>
+              <div class="class-card-type">Эльф · Рыцарь · Танк</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Выживаемость: ★★★★★</span>
+            <span class="class-stat">Поддержка: ★★★★☆</span>
+            <span class="class-stat">Сложность: Средняя</span>
+          </div>
+        </div>
+
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">💀</div>
+            <div>
+              <h3>Shillien Knight / Shillien Templar</h3>
+              <div class="class-card-type">Тёмный эльф · Рыцарь · Танк</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">PvP: ★★★★★</span>
+            <span class="class-stat">Выживаемость: ★★★★☆</span>
+            <span class="class-stat">Сложность: Средняя</span>
+          </div>
+        </div>
+
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">⛰️</div>
+            <div>
+              <h3>Overlord / Dominator</h3>
+              <div class="class-card-type">Орк · Шаман · Клановый танк</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Клан: ★★★★★</span>
+            <span class="class-stat">Баффы: ★★★★★</span>
+            <span class="class-stat">Сложность: Высокая</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- МАГИ -->
+    <div class="section-block">
+      <div class="section-title">Маги и колдуны</div>
+      <div class="class-grid">
+
+        <div class="class-card" data-modal="modal-c8" onclick="document.getElementById('modal-c8').classList.add('open')">
+          <div class="class-card-header">
+            <div class="class-icon">🔮</div>
+            <div>
+              <h3>Spellhowler / Storm Screamer</h3>
+              <div class="class-card-type">Человек · Маг · Нюк</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Магурон: ★★★★★</span>
+            <span class="class-stat">PvP: ★★★★☆</span>
+            <span class="class-stat">Сложность: Средняя</span>
+          </div>
+        </div>
+
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">🌊</div>
+            <div>
+              <h3>Spellsinger / Mystic Muse</h3>
+              <div class="class-card-type">Эльф · Маг · Нюк AoE</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Магурон: ★★★★☆</span>
+            <span class="class-stat">AoE: ★★★★★</span>
+            <span class="class-stat">Сложность: Средняя</span>
+          </div>
+        </div>
+
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">☠️</div>
+            <div>
+              <h3>Shillien Elder / Shillien Saint</h3>
+              <div class="class-card-type">Тёмный эльф · Маг · Хил / Дебафф</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Хил: ★★★★☆</span>
+            <span class="class-stat">Дебаффы: ★★★★★</span>
+            <span class="class-stat">Сложность: Высокая</span>
+          </div>
+        </div>
+
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">💀</div>
+            <div>
+              <h3>Necromancer / Soul Taker</h3>
+              <div class="class-card-type">Тёмный эльф · Маг · Некромант</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Призыв: ★★★★★</span>
+            <span class="class-stat">Дебаффы: ★★★★★</span>
+            <span class="class-stat">Сложность: Высокая</span>
+          </div>
+        </div>
+
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">⚡</div>
+            <div>
+              <h3>Warlock / Arcana Lord</h3>
+              <div class="class-card-type">Человек · Маг · Саммонер</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Призыв: ★★★★★</span>
+            <span class="class-stat">Поддержка: ★★★★☆</span>
+            <span class="class-stat">Сложность: Средняя</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ХИЛЕРЫ И БАФФЫ -->
+    <div class="section-block">
+      <div class="section-title">Хилеры и саппорты</div>
+      <div class="class-grid">
+
+        <div class="class-card" data-modal="modal-c9" onclick="document.getElementById('modal-c9').classList.add('open')">
+          <div class="class-card-header">
+            <div class="class-icon">✨</div>
+            <div>
+              <h3>Bishop / Cardinal</h3>
+              <div class="class-card-type">Человек · Жрец · Хилер</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Хил: ★★★★★</span>
+            <span class="class-stat">Буффы: ★★★★★</span>
+            <span class="class-stat">Сложность: Низкая</span>
+          </div>
+        </div>
+
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">🌟</div>
+            <div>
+              <h3>Elven Elder / Eva's Saint</h3>
+              <div class="class-card-type">Эльф · Жрец · Хилер</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Хил: ★★★★☆</span>
+            <span class="class-stat">Поддержка: ★★★★★</span>
+            <span class="class-stat">Сложность: Низкая</span>
+          </div>
+        </div>
+
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">🎵</div>
+            <div>
+              <h3>Bard (Prophet) / Hierophant</h3>
+              <div class="class-card-type">Человек · Жрец · Баффер</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Буффы: ★★★★★</span>
+            <span class="class-stat">Группа: ★★★★★</span>
+            <span class="class-stat">Сложность: Низкая</span>
+          </div>
+        </div>
+
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">🎶</div>
+            <div>
+              <h3>Sword Singer / Sword Muse</h3>
+              <div class="class-card-type">Эльф · Воин · Поющий буффер</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Буффы: ★★★★★</span>
+            <span class="class-stat">Урон: ★★★☆☆</span>
+            <span class="class-stat">Сложность: Средняя</span>
+          </div>
+        </div>
+
+        <div class="class-card">
+          <div class="class-card-header">
+            <div class="class-icon">🥁</div>
+            <div>
+              <h3>Plains Walker / Wind Rider</h3>
+              <div class="class-card-type">Эльф · Разведчик · Танцор</div>
+            </div>
+          </div>
+          <div class="class-stats">
+            <span class="class-stat">Буффы: ★★★★★</span>
+            <span class="class-stat">Скорость: ★★★★★</span>
+            <span class="class-stat">Сложность: Средняя</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODALS -->
+<div class="modal-bg" id="modal-c1" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-c1').classList.remove('open')">×</button>
+    <h2>⚔️ Gladiator / Duelist</h2>
+    <div class="modal-meta">Человек · Воин · Ближний бой</div>
+    <div class="modal-section"><h3>Описание</h3><p>Gladiator — мастер ближнего боя с огромным уроном и множеством combo-атак. Использует двуручные мечи, дублированные клинки или парное оружие. После 3-й профессии становится Duelist с улучшенными комбо-цепочками.</p></div>
+    <div class="modal-section"><h3>Сильные стороны</h3>
+      <div class="stat-row">
+        <span class="stat-pill">Высокий физ. урон</span>
+        <span class="stat-pill">Множество атак</span>
+        <span class="stat-pill">Хорошее PvP</span>
+        <span class="stat-pill">AoE цепочки</span>
+      </div>
+    </div>
+    <div class="modal-section"><h3>Слабые стороны</h3><p>Низкая выживаемость без хилера. Требует хорошего снаряжения для эффективной игры.</p></div>
+    <div class="modal-section"><h3>Рекомендуемое снаряжение</h3><p>Оружие: Tallum Blade или Two-handed Sword S-грейда. Броня: S-грейд тяжёлая. Украшения: для STR и P.Atk.</p></div>
+    <div class="modal-section"><h3>Ключевые умения</h3>
+      <div class="stat-row">
+        <span class="stat-pill">Dual Blow</span>
+        <span class="stat-pill">Triple Slash</span>
+        <span class="stat-pill">Sonic Storm</span>
+        <span class="stat-pill">Burning Strike</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-c2" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-c2').classList.remove('open')">×</button>
+    <h2>🪓 Warlord / Dreadnought</h2>
+    <div class="modal-meta">Человек · Воин · AoE специалист</div>
+    <div class="modal-section"><h3>Описание</h3><p>Warlord — лучший AoE дамагер в игре. Специализируется на уничтожении больших групп врагов. Использует пики и копья. Идеален для прокачки в катакомбах.</p></div>
+    <div class="modal-section"><h3>Ключевые умения</h3>
+      <div class="stat-row">
+        <span class="stat-pill">Whirlwind</span>
+        <span class="stat-pill">Armor Crush</span>
+        <span class="stat-pill">Polearm Mastery</span>
+        <span class="stat-pill">Rushing Spear</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-c7" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-c7').classList.remove('open')">×</button>
+    <h2>🛡️ Paladin / Phoenix Knight</h2>
+    <div class="modal-meta">Человек · Рыцарь · Танк / Хилер</div>
+    <div class="modal-section"><h3>Описание</h3><p>Paladin — лучший выбор для новичков среди танков. Обладает умениями исцеления, баффами и хорошей защитой. Идеально подходит для роли группового защитника.</p></div>
+    <div class="modal-section"><h3>Роль в группе</h3><p>Основной или вспомогательный танк. Может брать агрессию монстров, защищать союзников и лечить в критических ситуациях.</p></div>
+    <div class="modal-section"><h3>Ключевые умения</h3>
+      <div class="stat-row">
+        <span class="stat-pill">Divine Protection</span>
+        <span class="stat-pill">Holy Armor</span>
+        <span class="stat-pill">Shield Slam</span>
+        <span class="stat-pill">Angelic Icon</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-c8" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-c8').classList.remove('open')">×</button>
+    <h2>🔮 Spellhowler / Storm Screamer</h2>
+    <div class="modal-meta">Человек · Маг · Нюк</div>
+    <div class="modal-section"><h3>Описание</h3><p>Spellhowler — маг с максимальным магическим уроном в игре. Специализируется на уничтожении одиночных целей мощными заклинаниями. В PvP один выстрел способен убить большинство классов.</p></div>
+    <div class="modal-section"><h3>Ключевые умения</h3>
+      <div class="stat-row">
+        <span class="stat-pill">Blizzard</span>
+        <span class="stat-pill">Hurricane</span>
+        <span class="stat-pill">Storm Bolt</span>
+        <span class="stat-pill">Thunder Storm</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-c9" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-c9').classList.remove('open')">×</button>
+    <h2>✨ Bishop / Cardinal</h2>
+    <div class="modal-meta">Человек · Жрец · Хилер</div>
+    <div class="modal-section"><h3>Описание</h3><p>Bishop — лучший хилер в Lineage 2. Обладает мощными заклинаниями исцеления, снятия отрицательных эффектов и поддержки. Без Bishop невозможно пройти большинство сложных данжей и рейдов.</p></div>
+    <div class="modal-section"><h3>Роль в группе</h3><p>Основной хилер. Поддерживает группу живой в самых сложных ситуациях. Также может накладывать баффы, усиливающие всю группу.</p></div>
+    <div class="modal-section"><h3>Ключевые умения</h3>
+      <div class="stat-row">
+        <span class="stat-pill">Greater Heal</span>
+        <span class="stat-pill">Salvation</span>
+        <span class="stat-pill">Celestial Shield</span>
+        <span class="stat-pill">Arcane Power</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
