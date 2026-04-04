@@ -1,128 +1,127 @@
 import React, { useState } from "react";
-import { useI18n } from "../hooks/useI18n";
-import { items } from "../data/item-data";
-import { Package, Filter } from "lucide-react";
-import AdDisplay from "../components/AdDisplay";
+import { ITEM_CATEGORIES, Item } from "../lib/item-data";
+import { Package, Search } from "lucide-react";
 
-const gradeColors: Record<string, string> = {
-  none: "text-gray-400 bg-gray-400/10 border-gray-400/20",
-  D: "text-gray-300 bg-gray-300/10 border-gray-300/20",
-  C: "text-blue-400 bg-blue-400/10 border-blue-400/20",
-  B: "text-green-400 bg-green-400/10 border-green-400/20",
-  A: "text-yellow-400 bg-yellow-400/10 border-yellow-400/20",
-  S: "text-red-400 bg-red-400/10 border-red-400/20",
-};
+function GradeBadge({ grade }: { grade: Item["grade"] }) {
+  const colors: Record<string, string> = {
+    "S84": "bg-red-500/20 text-red-400",
+    "S80": "bg-red-400/20 text-red-400",
+    "S": "bg-red-400/15 text-red-400",
+    "A": "bg-orange-400/15 text-orange-400",
+    "B": "bg-yellow-400/15 text-yellow-400",
+    "C": "bg-blue-400/15 text-blue-400",
+    "D": "bg-gray-400/15 text-gray-400",
+    "No Grade": "bg-gray-400/10 text-gray-500",
+    "Special": "bg-purple-400/15 text-purple-400",
+  };
+  return <span className={`text-xs px-2 py-0.5 rounded font-bold ${colors[grade] || "bg-gray-400/10 text-gray-500"}`}>{grade}</span>;
+}
 
-const typeLabels: Record<string, [string, string]> = {
-  weapon: ["Оружие", "Weapon"],
-  armor: ["Доспехи", "Armor"],
-  accessory: ["Аксессуар", "Accessory"],
-  consumable: ["Расходник", "Consumable"],
-  material: ["Материал", "Material"],
-  scroll: ["Свиток", "Scroll"],
-};
+function TypeBadge({ type }: { type: Item["type"] }) {
+  const labels: Record<string, string> = { weapon: "Оружие", armor: "Броня", jewelry: "Украшение", etc: "Разное", consumable: "Расходник" };
+  return <span className="text-xs text-gray-600">{labels[type] || type}</span>;
+}
 
 export default function ItemsPage() {
-  const { t, lang } = useI18n();
   const [search, setSearch] = useState("");
-  const [typeFilter, setTypeFilter] = useState("all");
+  const [selectedCat, setSelectedCat] = useState("all");
   const [gradeFilter, setGradeFilter] = useState("all");
 
-  const filtered = items.filter(item => {
-    const name = lang === "ru" ? item.nameRu : item.name;
-    const matchSearch = !search || name.toLowerCase().includes(search.toLowerCase());
-    const matchType = typeFilter === "all" || item.type === typeFilter;
-    const matchGrade = gradeFilter === "all" || item.grade === gradeFilter;
-    return matchSearch && matchType && matchGrade;
-  });
+  const grades = ["S", "A", "B", "C", "D", "No Grade", "Special"];
+
+  const filtered = ITEM_CATEGORIES.map(cat => ({
+    ...cat,
+    items: cat.items.filter(item =>
+      (gradeFilter === "all" || item.grade === gradeFilter) &&
+      (search === "" || item.name.toLowerCase().includes(search.toLowerCase()) || item.description.toLowerCase().includes(search.toLowerCase()))
+    )
+  })).filter(cat => (selectedCat === "all" || cat.id === selectedCat) && cat.items.length > 0);
+
+  const total = ITEM_CATEGORIES.reduce((a, c) => a + c.items.length, 0);
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <Package className="text-amber-400" size={22} />
-        <h1 className="text-2xl font-bold text-white font-cinzel">{t("Предметы", "Items")}</h1>
-        <span className="text-xs text-gray-600 bg-[#1a1b26] px-2 py-0.5 rounded">{filtered.length}</span>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-white font-cinzel">Предметы</h1>
+          <p className="text-gray-500 text-sm mt-1">{total} предметов в базе данных</p>
+        </div>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+          <input
+            type="text"
+            placeholder="Поиск предметов..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="pl-9 pr-4 py-2 bg-[#0e0f1a] border border-[#2a2d3e] rounded-lg text-sm text-gray-300 placeholder-gray-600 focus:outline-none focus:border-amber-400/50 w-64"
+          />
+        </div>
       </div>
 
-      <div className="flex flex-wrap gap-3 border border-[#2a2d3e] bg-[#0e0f1a] rounded-xl p-4">
-        <div className="flex items-center gap-2 text-gray-500 shrink-0">
-          <Filter size={14} />
-        </div>
-        <input
-          type="text"
-          placeholder={t("Поиск по названию...", "Search by name...")}
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="flex-1 min-w-[200px] bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-1.5 text-sm text-gray-300 placeholder-gray-600 focus:outline-none focus:border-amber-400/50"
-        />
-        <select
-          value={typeFilter}
-          onChange={e => setTypeFilter(e.target.value)}
-          className="bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-1.5 text-sm text-gray-300 focus:outline-none focus:border-amber-400/50"
-        >
-          <option value="all">{t("Все типы", "All types")}</option>
-          {Object.entries(typeLabels).map(([k, [ru, en]]) => (
-            <option key={k} value={k}>{t(ru, en)}</option>
-          ))}
-        </select>
-        <select
-          value={gradeFilter}
-          onChange={e => setGradeFilter(e.target.value)}
-          className="bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-1.5 text-sm text-gray-300 focus:outline-none focus:border-amber-400/50"
-        >
-          <option value="all">{t("Любой грейд", "Any grade")}</option>
-          {["none", "D", "C", "B", "A", "S"].map(g => (
-            <option key={g} value={g}>{g === "none" ? t("Без грейда", "No grade") : `Grade ${g}`}</option>
-          ))}
-        </select>
+      <div className="flex flex-wrap gap-2">
+        <button onClick={() => setSelectedCat("all")} className={`px-3 py-1 rounded text-xs font-medium transition-colors ${selectedCat === "all" ? "bg-amber-400 text-black" : "bg-[#1a1b26] text-gray-400 border border-[#2a2d3e] hover:text-gray-200"}`}>Все</button>
+        {ITEM_CATEGORIES.map(cat => (
+          <button key={cat.id} onClick={() => setSelectedCat(cat.id)} className={`px-3 py-1 rounded text-xs font-medium transition-colors ${selectedCat === cat.id ? "bg-amber-400 text-black" : "bg-[#1a1b26] text-gray-400 border border-[#2a2d3e] hover:text-gray-200"}`}>{cat.name}</button>
+        ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-3">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {filtered.map(item => (
-              <div key={item.id} className="border border-[#2a2d3e] bg-[#0e0f1a] rounded-xl p-5">
-                <div className="flex items-start justify-between mb-2">
-                  <div>
-                    <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <span className={`text-xs px-2 py-0.5 rounded-full border font-bold ${gradeColors[item.grade]}`}>
-                        {item.grade === "none" ? t("Без грейда", "No grade") : `Grade ${item.grade}`}
-                      </span>
-                      <span className="text-xs text-gray-600">{t(typeLabels[item.type][0], typeLabels[item.type][1])}</span>
-                    </div>
-                    <h3 className="font-semibold text-gray-200">{lang === "ru" ? item.nameRu : item.name}</h3>
-                    <p className="text-xs text-gray-600 mt-0.5">Lv.{item.level}+ · {item.weight} {t("ед. веса", "weight")}</p>
-                  </div>
-                  <Package size={16} className="text-amber-400/50 shrink-0 mt-1" />
-                </div>
-                <p className="text-xs text-gray-500 leading-relaxed mb-3 line-clamp-2">
-                  {lang === "ru" ? item.descriptionRu : item.description}
-                </p>
-                <div className="grid grid-cols-2 gap-1.5">
-                  {Object.entries(item.stats).slice(0, 4).map(([k, v]) => (
-                    <div key={k} className="flex justify-between items-center bg-[#1a1b26] rounded px-2 py-1">
-                      <span className="text-xs text-gray-600">{k}</span>
-                      <span className="text-xs text-amber-400 font-medium">{v}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-3 pt-3 border-t border-[#2a2d3e] flex items-center justify-between">
-                  <span className="text-xs text-gray-500">{t("Цена", "Price")}:</span>
-                  <span className="text-sm font-bold text-amber-400">{item.price.toLocaleString()} ₳</span>
-                </div>
-              </div>
-            ))}
-            {filtered.length === 0 && (
-              <div className="col-span-2 text-center py-16 text-gray-600">
-                {t("Ничего не найдено", "Nothing found")}
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="lg:col-span-1">
-          <AdDisplay position="sidebar-top" page="items" />
-        </div>
+      <div className="flex flex-wrap gap-2">
+        <button onClick={() => setGradeFilter("all")} className={`px-3 py-1 rounded text-xs font-bold transition-colors ${gradeFilter === "all" ? "bg-amber-400 text-black" : "bg-[#1a1b26] text-gray-400 border border-[#2a2d3e]"}`}>Все грейды</button>
+        {grades.map(g => (
+          <button key={g} onClick={() => setGradeFilter(g)} className={`px-3 py-1 rounded text-xs font-bold transition-colors ${gradeFilter === g ? "bg-amber-400 text-black" : "bg-[#1a1b26] text-gray-400 border border-[#2a2d3e]"}`}>{g}</button>
+        ))}
       </div>
+
+      {filtered.length === 0 ? (
+        <div className="text-center py-16 text-gray-600">
+          <Package size={40} className="mx-auto mb-3 opacity-30" />
+          <p>Предметы не найдены</p>
+        </div>
+      ) : (
+        <div className="space-y-8">
+          {filtered.map(cat => (
+            <div key={cat.id}>
+              <h2 className="text-xs uppercase tracking-widest text-amber-400/70 font-medium mb-4">{cat.name}</h2>
+              <div className="overflow-hidden rounded-xl border border-[#2a2d3e]">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-[#0c0d18] border-b border-[#2a2d3e]">
+                      <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Название</th>
+                      <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Грейд</th>
+                      <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium hidden md:table-cell">Тип</th>
+                      <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium hidden lg:table-cell">Характеристики</th>
+                      <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium hidden xl:table-cell">Классы</th>
+                      <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium hidden lg:table-cell">Цена</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cat.items.map((item, i) => (
+                      <tr key={item.id} className={`border-b border-[#1a1b26] hover:bg-[#12131e] transition-colors ${i % 2 === 0 ? "bg-[#0e0f1a]" : "bg-[#0c0d18]"}`}>
+                        <td className="px-4 py-3">
+                          <p className="text-gray-300 font-medium text-sm">{item.name}</p>
+                          <p className="text-xs text-gray-600">{item.description.slice(0, 60)}...</p>
+                        </td>
+                        <td className="px-4 py-3"><GradeBadge grade={item.grade} /></td>
+                        <td className="px-4 py-3 hidden md:table-cell">
+                          <TypeBadge type={item.type} />
+                          {item.subtype && <p className="text-xs text-gray-600 mt-0.5">{item.subtype}</p>}
+                        </td>
+                        <td className="px-4 py-3 hidden lg:table-cell text-xs text-gray-500">
+                          {item.pAtk && <span>P.Atk: <span className="text-red-400">{item.pAtk}</span> </span>}
+                          {item.mAtk && <span>M.Atk: <span className="text-blue-400">{item.mAtk}</span> </span>}
+                          {item.pDef && <span>P.Def: <span className="text-green-400">{item.pDef}</span></span>}
+                        </td>
+                        <td className="px-4 py-3 hidden xl:table-cell text-xs text-gray-600 max-w-[150px] truncate">{item.classes}</td>
+                        <td className="px-4 py-3 hidden lg:table-cell text-xs text-amber-400/70">{item.price || "—"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

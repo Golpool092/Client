@@ -1,129 +1,122 @@
 import React from "react";
 import { Link, useParams } from "wouter";
-import { useI18n } from "../hooks/useI18n";
-import { findQuestById } from "../data/quest-data";
-import { BookOpen, MapPin, User, ChevronLeft, Gift, CheckCircle2, Star } from "lucide-react";
-
-const typeColors: Record<string, string> = {
-  main: "text-amber-400 bg-amber-400/10 border-amber-400/30",
-  side: "text-blue-400 bg-blue-400/10 border-blue-400/30",
-  daily: "text-green-400 bg-green-400/10 border-green-400/30",
-  epic: "text-purple-400 bg-purple-400/10 border-purple-400/30",
-};
-
-const typeLabels: Record<string, [string, string]> = {
-  main: ["Основное задание", "Main Quest"],
-  side: ["Дополнительное задание", "Side Quest"],
-  daily: ["Ежедневное задание", "Daily Quest"],
-  epic: ["Эпическое задание", "Epic Quest"],
-};
+import { QUEST_CATEGORIES } from "../lib/quest-data";
+import { ChevronLeft, MapPin, Users, Gift, BookOpen, CheckCircle, AlertCircle, Info } from "lucide-react";
 
 export default function QuestDetailPage() {
-  const params = useParams<{ id: string }>();
-  const { t, lang } = useI18n();
-  const quest = findQuestById(params.id);
+  const { id } = useParams<{ id: string }>();
+
+  const quest = QUEST_CATEGORIES.flatMap(c => c.quests).find(q => q.id === id);
+  const category = QUEST_CATEGORIES.find(c => c.quests.some(q => q.id === id));
 
   if (!quest) {
     return (
       <div className="text-center py-24">
-        <p className="text-gray-500">{t("Задание не найдено", "Quest not found")}</p>
-        <Link href="/quests" className="mt-4 inline-flex items-center gap-2 text-amber-400 hover:underline">
-          <ChevronLeft size={14} /> {t("Назад к заданиям", "Back to quests")}
+        <p className="text-4xl font-bold text-amber-400 font-cinzel mb-3">404</p>
+        <p className="text-gray-400 mb-4">Квест не найден</p>
+        <Link href="/quests" className="text-amber-400 hover:text-amber-300 text-sm flex items-center gap-1 justify-center">
+          <ChevronLeft size={16} /> Обратно к квестам
         </Link>
       </div>
     );
   }
 
-  const name = lang === "ru" ? quest.nameRu : quest.name;
-  const location = lang === "ru" ? quest.locationRu : quest.location;
-  const description = lang === "ru" ? quest.descriptionRu : quest.description;
-  const rewards = lang === "ru" ? quest.rewardsRu : quest.rewards;
-  const steps = lang === "ru" ? quest.stepsRu : quest.steps;
-
   return (
-    <div className="max-w-3xl space-y-6">
-      <Link href="/quests" className="inline-flex items-center gap-2 text-gray-500 hover:text-amber-400 text-sm transition-colors">
-        <ChevronLeft size={14} /> {t("Назад к заданиям", "Back to quests")}
-      </Link>
-
-      <div className="border border-[#2a2d3e] bg-[#0e0f1a] rounded-xl p-6 space-y-4">
-        <div className="flex items-start gap-4">
-          <div className="p-3 rounded-xl bg-amber-400/10 shrink-0">
-            <BookOpen className="text-amber-400" size={24} />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2 flex-wrap mb-1">
-              <span className={`text-xs px-2 py-0.5 rounded-full border ${typeColors[quest.type]}`}>
-                {t(typeLabels[quest.type][0], typeLabels[quest.type][1])}
-              </span>
-              {quest.recommended && (
-                <span className="flex items-center gap-1 text-xs text-amber-400/70">
-                  <Star size={11} fill="currentColor" /> {t("Рекомендуется", "Recommended")}
-                </span>
-              )}
-            </div>
-            <h1 className="text-2xl font-bold text-white font-cinzel">{name}</h1>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
-          <div className="bg-[#1a1b26] rounded-lg p-3">
-            <p className="text-xs text-gray-600 mb-1">{t("Уровень", "Level")}</p>
-            <p className="text-sm font-semibold text-gray-200">
-              {quest.minLevel}{quest.maxLevel ? `–${quest.maxLevel}` : "+"}
-            </p>
-          </div>
-          <div className="bg-[#1a1b26] rounded-lg p-3 flex items-start gap-2">
-            <MapPin size={14} className="text-amber-400 shrink-0 mt-0.5" />
-            <div>
-              <p className="text-xs text-gray-600 mb-1">{t("Локация", "Location")}</p>
-              <p className="text-sm font-semibold text-gray-200">{location}</p>
-            </div>
-          </div>
-          <div className="bg-[#1a1b26] rounded-lg p-3 flex items-start gap-2">
-            <User size={14} className="text-amber-400 shrink-0 mt-0.5" />
-            <div>
-              <p className="text-xs text-gray-600 mb-1">NPC</p>
-              <p className="text-sm font-semibold text-gray-200">{quest.npc}</p>
-            </div>
-          </div>
-        </div>
-
-        <p className="text-gray-400 leading-relaxed text-sm border-t border-[#2a2d3e] pt-4">{description}</p>
+    <div className="space-y-6 max-w-3xl">
+      <div className="flex items-center gap-2 text-sm text-gray-500">
+        <Link href="/quests" className="hover:text-amber-400 transition-colors">Квесты</Link>
+        <span>/</span>
+        {category && <span className="hover:text-amber-400 transition-colors cursor-pointer">{category.title}</span>}
+        <span>/</span>
+        <span className="text-gray-300 truncate">{quest.title}</span>
       </div>
 
-      {/* Steps */}
-      <div className="border border-[#2a2d3e] bg-[#0e0f1a] rounded-xl p-6">
-        <h2 className="font-bold text-gray-200 mb-4 font-cinzel text-sm uppercase tracking-wide flex items-center gap-2">
-          <CheckCircle2 size={16} className="text-amber-400" />
-          {t("Шаги выполнения", "Quest Steps")}
-        </h2>
-        <ol className="space-y-3">
-          {steps.map((step, i) => (
-            <li key={i} className="flex gap-3">
-              <span className="shrink-0 w-6 h-6 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-400 text-xs flex items-center justify-center font-bold">
-                {i + 1}
-              </span>
-              <p className="text-sm text-gray-400 leading-relaxed pt-0.5">{step}</p>
-            </li>
-          ))}
-        </ol>
-      </div>
-
-      {/* Rewards */}
-      <div className="border border-[#2a2d3e] bg-[#0e0f1a] rounded-xl p-6">
-        <h2 className="font-bold text-gray-200 mb-4 font-cinzel text-sm uppercase tracking-wide flex items-center gap-2">
-          <Gift size={16} className="text-amber-400" />
-          {t("Награды", "Rewards")}
-        </h2>
-        <div className="flex flex-wrap gap-2">
-          {rewards.map((r, i) => (
-            <span key={i} className="text-sm text-amber-400 bg-amber-400/10 border border-amber-400/30 px-3 py-1.5 rounded-lg">
-              {r}
+      <div className="border border-[#2a2d3e] bg-[#0e0f1a] rounded-xl overflow-hidden">
+        <div className="bg-gradient-to-r from-[#1a1420] to-[#0e0f1a] p-6 border-b border-[#2a2d3e]">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h1 className="text-xl font-bold text-white font-cinzel">{quest.title}</h1>
+              {quest.titleEn && <p className="text-sm text-gray-500 mt-1 italic">{quest.titleEn}</p>}
+            </div>
+            <span className={`shrink-0 text-xs px-3 py-1.5 rounded-full font-medium ${
+              quest.repeat === "once" ? "bg-blue-400/10 text-blue-400 border border-blue-400/20" :
+              quest.repeat === "repeatable" ? "bg-green-400/10 text-green-400 border border-green-400/20" :
+              "bg-amber-400/10 text-amber-400 border border-amber-400/20"
+            }`}>
+              {quest.repeat === "once" ? "Разовый" : quest.repeat === "repeatable" ? "Повторяемый" : "Ежедневный"}
             </span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-[#2a2d3e] border-b border-[#2a2d3e]">
+          {[
+            { icon: BookOpen, label: "Уровень", value: quest.level },
+            { icon: Users, label: "Стартовый NPC", value: quest.startNpc.split("(")[0].trim() },
+            { icon: MapPin, label: "Локация", value: quest.location.split(",")[0].trim() },
+            { icon: Gift, label: "Хроника", value: quest.chronicle || "—" },
+          ].map(({ icon: Icon, label, value }) => (
+            <div key={label} className="p-4">
+              <div className="flex items-center gap-2 mb-1">
+                <Icon size={14} className="text-amber-400/60" />
+                <span className="text-xs text-gray-600 uppercase tracking-wide">{label}</span>
+              </div>
+              <p className="text-sm text-gray-300 font-medium">{value}</p>
+            </div>
           ))}
         </div>
+
+        <div className="p-6 space-y-6">
+          {quest.requirements && (
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-blue-400/5 border border-blue-400/15">
+              <Info size={16} className="text-blue-400 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-xs text-blue-400 font-medium mb-1">Требования</p>
+                <p className="text-sm text-gray-400">{quest.requirements}</p>
+              </div>
+            </div>
+          )}
+
+          <div>
+            <h2 className="text-sm uppercase tracking-wide text-amber-400/70 font-medium mb-3">Описание</h2>
+            <p className="text-gray-400 text-sm leading-relaxed">{quest.description}</p>
+          </div>
+
+          <div>
+            <h2 className="text-sm uppercase tracking-wide text-amber-400/70 font-medium mb-3">Прохождение</h2>
+            <ol className="space-y-3">
+              {quest.steps.map((step, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <div className="shrink-0 w-6 h-6 rounded-full bg-amber-400/10 border border-amber-400/20 flex items-center justify-center text-xs text-amber-400 font-bold mt-0.5">
+                    {i + 1}
+                  </div>
+                  <p className="text-sm text-gray-400 leading-relaxed pt-0.5">{step}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div className="flex items-start gap-3 p-4 rounded-lg bg-amber-400/5 border border-amber-400/20">
+            <Gift size={16} className="text-amber-400 shrink-0 mt-0.5" />
+            <div>
+              <p className="text-xs text-amber-400 font-medium mb-1 uppercase tracking-wide">Награда</p>
+              <p className="text-sm text-gray-300">{quest.reward}</p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3 p-3 rounded-lg bg-[#13141e] border border-[#2a2d3e]">
+            <MapPin size={14} className="text-gray-500 shrink-0 mt-0.5" />
+            <div>
+              <p className="text-xs text-gray-600 mb-1">Стартовый NPC</p>
+              <p className="text-sm text-gray-400">{quest.startNpc}</p>
+              <p className="text-xs text-gray-600 mt-1">{quest.location}</p>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <Link href="/quests" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-amber-400 transition-colors">
+        <ChevronLeft size={16} /> Назад к квестам
+      </Link>
     </div>
   );
 }

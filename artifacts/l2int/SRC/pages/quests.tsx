@@ -1,135 +1,120 @@
 import React, { useState } from "react";
 import { Link } from "wouter";
-import { useI18n } from "../hooks/useI18n";
-import { quests } from "../data/quest-data";
-import { BookOpen, ChevronRight, Star, Filter } from "lucide-react";
-import AdDisplay from "../components/AdDisplay";
-
-const typeColors: Record<string, string> = {
-  main: "text-amber-400 bg-amber-400/10 border-amber-400/30",
-  side: "text-blue-400 bg-blue-400/10 border-blue-400/30",
-  daily: "text-green-400 bg-green-400/10 border-green-400/30",
-  epic: "text-purple-400 bg-purple-400/10 border-purple-400/30",
-};
-
-const typeLabels: Record<string, [string, string]> = {
-  main: ["Основное", "Main"],
-  side: ["Доп.", "Side"],
-  daily: ["Ежедневное", "Daily"],
-  epic: ["Эпическое", "Epic"],
-};
+import { QUEST_CATEGORIES } from "../lib/quest-data";
+import { BookOpen, ChevronRight, Search, RefreshCcw, CheckCircle } from "lucide-react";
 
 export default function QuestsPage() {
-  const { t, lang } = useI18n();
   const [search, setSearch] = useState("");
-  const [typeFilter, setTypeFilter] = useState("all");
-  const [levelFilter, setLevelFilter] = useState("all");
+  const [selectedCat, setSelectedCat] = useState<string>("all");
 
-  const filtered = quests.filter(q => {
-    const name = lang === "ru" ? q.nameRu : q.name;
-    const loc = lang === "ru" ? q.locationRu : q.location;
-    const matchSearch = !search || name.toLowerCase().includes(search.toLowerCase()) || loc.toLowerCase().includes(search.toLowerCase());
-    const matchType = typeFilter === "all" || q.type === typeFilter;
-    const matchLevel = levelFilter === "all" ||
-      (levelFilter === "1-20" && q.minLevel <= 20) ||
-      (levelFilter === "21-40" && q.minLevel >= 21 && q.minLevel <= 40) ||
-      (levelFilter === "41-60" && q.minLevel >= 41 && q.minLevel <= 60) ||
-      (levelFilter === "61+" && q.minLevel >= 61);
-    return matchSearch && matchType && matchLevel;
-  });
+  const filtered = QUEST_CATEGORIES.map(cat => ({
+    ...cat,
+    quests: cat.quests.filter(q =>
+      search === "" ||
+      q.title.toLowerCase().includes(search.toLowerCase()) ||
+      q.startNpc.toLowerCase().includes(search.toLowerCase()) ||
+      q.location.toLowerCase().includes(search.toLowerCase())
+    )
+  })).filter(cat =>
+    (selectedCat === "all" || cat.id === selectedCat) && cat.quests.length > 0
+  );
+
+  const total = QUEST_CATEGORIES.reduce((acc, cat) => acc + cat.quests.length, 0);
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <BookOpen className="text-amber-400" size={22} />
-        <h1 className="text-2xl font-bold text-white font-cinzel">{t("Задания", "Quests")}</h1>
-        <span className="text-xs text-gray-600 bg-[#1a1b26] px-2 py-0.5 rounded">{filtered.length}</span>
-      </div>
-
-      {/* Filters */}
-      <div className="flex flex-wrap gap-3 border border-[#2a2d3e] bg-[#0e0f1a] rounded-xl p-4">
-        <div className="flex items-center gap-2 text-gray-500 shrink-0">
-          <Filter size={14} />
-          <span className="text-xs">{t("Фильтры", "Filters")}</span>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-white font-cinzel">Квесты</h1>
+          <p className="text-gray-500 text-sm mt-1">{total} квестов в базе данных</p>
         </div>
-        <input
-          type="text"
-          placeholder={t("Поиск по названию...", "Search by name...")}
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="flex-1 min-w-[200px] bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-1.5 text-sm text-gray-300 placeholder-gray-600 focus:outline-none focus:border-amber-400/50"
-        />
-        <select
-          value={typeFilter}
-          onChange={e => setTypeFilter(e.target.value)}
-          className="bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-1.5 text-sm text-gray-300 focus:outline-none focus:border-amber-400/50"
-        >
-          <option value="all">{t("Все типы", "All types")}</option>
-          <option value="main">{t("Основные", "Main")}</option>
-          <option value="side">{t("Дополнительные", "Side")}</option>
-          <option value="daily">{t("Ежедневные", "Daily")}</option>
-          <option value="epic">{t("Эпические", "Epic")}</option>
-        </select>
-        <select
-          value={levelFilter}
-          onChange={e => setLevelFilter(e.target.value)}
-          className="bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-1.5 text-sm text-gray-300 focus:outline-none focus:border-amber-400/50"
-        >
-          <option value="all">{t("Любой уровень", "Any level")}</option>
-          <option value="1-20">1–20</option>
-          <option value="21-40">21–40</option>
-          <option value="41-60">41–60</option>
-          <option value="61+">61+</option>
-        </select>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+          <input
+            type="text"
+            placeholder="Поиск квестов..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="pl-9 pr-4 py-2 bg-[#0e0f1a] border border-[#2a2d3e] rounded-lg text-sm text-gray-300 placeholder-gray-600 focus:outline-none focus:border-amber-400/50 w-64"
+          />
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-3">
-          <div className="space-y-3">
-            {filtered.map(quest => (
-              <Link key={quest.id} href={`/quests/${quest.id}`} className="block group">
-                <div className="border border-[#2a2d3e] hover:border-amber-400/40 bg-[#0e0f1a] rounded-xl p-4 transition-all hover:bg-[#14151f]">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap mb-1">
-                        <span className={`text-xs px-2 py-0.5 rounded-full border ${typeColors[quest.type]}`}>
-                          {t(typeLabels[quest.type][0], typeLabels[quest.type][1])}
-                        </span>
-                        <span className="text-xs text-gray-600">Lv.{quest.minLevel}{quest.maxLevel ? `–${quest.maxLevel}` : "+"}</span>
-                        {quest.recommended && (
-                          <span className="flex items-center gap-0.5 text-xs text-amber-400/70">
-                            <Star size={10} fill="currentColor" /> {t("Рекомендуется", "Recommended")}
+      <div className="flex flex-wrap gap-2">
+        <button
+          onClick={() => setSelectedCat("all")}
+          className={`px-3 py-1 rounded text-xs font-medium transition-colors ${selectedCat === "all" ? "bg-amber-400 text-black" : "bg-[#1a1b26] text-gray-400 hover:text-gray-200 border border-[#2a2d3e]"}`}
+        >
+          Все
+        </button>
+        {QUEST_CATEGORIES.map(cat => (
+          <button
+            key={cat.id}
+            onClick={() => setSelectedCat(cat.id)}
+            className={`px-3 py-1 rounded text-xs font-medium transition-colors ${selectedCat === cat.id ? "bg-amber-400 text-black" : "bg-[#1a1b26] text-gray-400 hover:text-gray-200 border border-[#2a2d3e]"}`}
+          >
+            {cat.title}
+          </button>
+        ))}
+      </div>
+
+      {filtered.length === 0 ? (
+        <div className="text-center py-16 text-gray-600">
+          <BookOpen size={40} className="mx-auto mb-3 opacity-30" />
+          <p>Квесты не найдены</p>
+        </div>
+      ) : (
+        <div className="space-y-8">
+          {filtered.map(cat => (
+            <div key={cat.id}>
+              <h2 className="text-xs uppercase tracking-widest text-amber-400/70 font-medium mb-4 px-1">{cat.title}</h2>
+              <div className="overflow-hidden rounded-xl border border-[#2a2d3e]">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="bg-[#0c0d18] border-b border-[#2a2d3e]">
+                      <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Название</th>
+                      <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium hidden sm:table-cell">Уровень</th>
+                      <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium hidden md:table-cell">Тип</th>
+                      <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium hidden lg:table-cell">Локация</th>
+                      <th className="text-right px-4 py-3 text-xs text-gray-500 font-medium"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cat.quests.map((quest, i) => (
+                      <tr key={quest.id} className={`border-b border-[#1a1b26] hover:bg-[#12131e] transition-colors ${i % 2 === 0 ? "bg-[#0e0f1a]" : "bg-[#0c0d18]"}`}>
+                        <td className="px-4 py-3">
+                          <Link href={`/quests/${quest.id}`} className="text-gray-300 hover:text-amber-400 transition-colors font-medium">
+                            {quest.title}
+                          </Link>
+                          {quest.titleEn && (
+                            <p className="text-xs text-gray-600 mt-0.5">{quest.titleEn}</p>
+                          )}
+                        </td>
+                        <td className="px-4 py-3 text-gray-500 text-xs hidden sm:table-cell">{quest.level}</td>
+                        <td className="px-4 py-3 hidden md:table-cell">
+                          <span className={`text-xs px-2 py-0.5 rounded-full ${
+                            quest.repeat === "once" ? "bg-blue-400/10 text-blue-400" :
+                            quest.repeat === "repeatable" ? "bg-green-400/10 text-green-400" :
+                            "bg-amber-400/10 text-amber-400"
+                          }`}>
+                            {quest.repeat === "once" ? "Разовый" : quest.repeat === "repeatable" ? "Повторяемый" : "Ежедневный"}
                           </span>
-                        )}
-                      </div>
-                      <h3 className="font-semibold text-gray-200 group-hover:text-white transition-colors">
-                        {lang === "ru" ? quest.nameRu : quest.name}
-                      </h3>
-                      <p className="text-sm text-gray-500 mt-1 line-clamp-1">
-                        {lang === "ru" ? quest.locationRu : quest.location} · {quest.npc}
-                      </p>
-                    </div>
-                    <ChevronRight size={16} className="text-gray-600 group-hover:text-amber-400 shrink-0 mt-1 transition-colors" />
-                  </div>
-                  <div className="mt-3 flex flex-wrap gap-1">
-                    {(lang === "ru" ? quest.rewardsRu : quest.rewards).map((r, i) => (
-                      <span key={i} className="text-xs text-amber-400/80 bg-amber-400/5 border border-amber-400/15 px-2 py-0.5 rounded">{r}</span>
+                        </td>
+                        <td className="px-4 py-3 text-gray-500 text-xs hidden lg:table-cell max-w-[180px] truncate">{quest.location}</td>
+                        <td className="px-4 py-3 text-right">
+                          <Link href={`/quests/${quest.id}`} className="text-gray-600 hover:text-amber-400 transition-colors">
+                            <ChevronRight size={16} />
+                          </Link>
+                        </td>
+                      </tr>
                     ))}
-                  </div>
-                </div>
-              </Link>
-            ))}
-            {filtered.length === 0 && (
-              <div className="text-center py-16 text-gray-600">
-                {t("Ничего не найдено", "Nothing found")}
+                  </tbody>
+                </table>
               </div>
-            )}
-          </div>
+            </div>
+          ))}
         </div>
-        <div className="lg:col-span-1">
-          <AdDisplay position="sidebar-top" page="quests" />
-        </div>
-      </div>
+      )}
     </div>
   );
 }

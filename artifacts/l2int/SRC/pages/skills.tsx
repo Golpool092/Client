@@ -1,157 +1,111 @@
 import React, { useState } from "react";
-import { useI18n } from "../hooks/useI18n";
-import { skills } from "../data/skill-data";
-import { Sword, Filter, Zap, Clock, BarChart2 } from "lucide-react";
-import AdDisplay from "../components/AdDisplay";
+import { SKILL_CATEGORIES, Skill } from "../lib/skill-data";
+import { Sword, Search, Zap, Eye, ToggleLeft } from "lucide-react";
 
-const elementColors: Record<string, string> = {
-  fire: "text-red-400 bg-red-400/10 border-red-400/30",
-  water: "text-blue-400 bg-blue-400/10 border-blue-400/30",
-  wind: "text-cyan-400 bg-cyan-400/10 border-cyan-400/30",
-  earth: "text-yellow-600 bg-yellow-600/10 border-yellow-600/30",
-  dark: "text-purple-400 bg-purple-400/10 border-purple-400/30",
-  holy: "text-yellow-300 bg-yellow-300/10 border-yellow-300/30",
-  none: "text-gray-400 bg-gray-400/10 border-gray-400/30",
-};
-
-const typeLabels: Record<string, [string, string]> = {
-  active: ["Активное", "Active"],
-  passive: ["Пассивное", "Passive"],
-  toggle: ["Переключение", "Toggle"],
-  aura: ["Аура", "Aura"],
-};
-
-const elementLabels: Record<string, [string, string]> = {
-  fire: ["Огонь", "Fire"],
-  water: ["Вода", "Water"],
-  wind: ["Ветер", "Wind"],
-  earth: ["Земля", "Earth"],
-  dark: ["Тьма", "Dark"],
-  holy: ["Свет", "Holy"],
-  none: ["Нейтральный", "None"],
-};
+function SkillTypeBadge({ type }: { type: Skill["type"] }) {
+  const config = {
+    active: { label: "Активный", className: "bg-blue-400/10 text-blue-400" },
+    passive: { label: "Пассивный", className: "bg-green-400/10 text-green-400" },
+    toggle: { label: "Переключаемый", className: "bg-purple-400/10 text-purple-400" },
+  };
+  const { label, className } = config[type];
+  return <span className={`text-xs px-2 py-0.5 rounded-full ${className}`}>{label}</span>;
+}
 
 export default function SkillsPage() {
-  const { t, lang } = useI18n();
   const [search, setSearch] = useState("");
-  const [typeFilter, setTypeFilter] = useState("all");
-  const [elementFilter, setElementFilter] = useState("all");
+  const [selectedCat, setSelectedCat] = useState<string>("all");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
 
-  const filtered = skills.filter(s => {
-    const name = lang === "ru" ? s.nameRu : s.name;
-    const className = lang === "ru" ? s.classNameRu : s.className;
-    const matchSearch = !search || name.toLowerCase().includes(search.toLowerCase()) || className.toLowerCase().includes(search.toLowerCase());
-    const matchType = typeFilter === "all" || s.type === typeFilter;
-    const matchEl = elementFilter === "all" || s.element === elementFilter;
-    return matchSearch && matchType && matchEl;
-  });
+  const filtered = SKILL_CATEGORIES.map(cat => ({
+    ...cat,
+    skills: cat.skills.filter(s =>
+      (typeFilter === "all" || s.type === typeFilter) &&
+      (search === "" || s.name.toLowerCase().includes(search.toLowerCase()) || s.classes.some(c => c.toLowerCase().includes(search.toLowerCase())))
+    )
+  })).filter(cat => (selectedCat === "all" || cat.id === selectedCat) && cat.skills.length > 0);
+
+  const total = SKILL_CATEGORIES.reduce((a, c) => a + c.skills.length, 0);
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <Sword className="text-amber-400" size={22} />
-        <h1 className="text-2xl font-bold text-white font-cinzel">{t("Умения", "Skills")}</h1>
-        <span className="text-xs text-gray-600 bg-[#1a1b26] px-2 py-0.5 rounded">{filtered.length}</span>
-      </div>
-
-      <div className="flex flex-wrap gap-3 border border-[#2a2d3e] bg-[#0e0f1a] rounded-xl p-4">
-        <div className="flex items-center gap-2 text-gray-500 shrink-0">
-          <Filter size={14} />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-white font-cinzel">Умения</h1>
+          <p className="text-gray-500 text-sm mt-1">{total} умений в базе данных</p>
         </div>
-        <input
-          type="text"
-          placeholder={t("Поиск по умению или классу...", "Search by skill or class...")}
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="flex-1 min-w-[200px] bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-1.5 text-sm text-gray-300 placeholder-gray-600 focus:outline-none focus:border-amber-400/50"
-        />
-        <select
-          value={typeFilter}
-          onChange={e => setTypeFilter(e.target.value)}
-          className="bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-1.5 text-sm text-gray-300 focus:outline-none focus:border-amber-400/50"
-        >
-          <option value="all">{t("Все типы", "All types")}</option>
-          {Object.entries(typeLabels).map(([k, [ru, en]]) => (
-            <option key={k} value={k}>{t(ru, en)}</option>
-          ))}
-        </select>
-        <select
-          value={elementFilter}
-          onChange={e => setElementFilter(e.target.value)}
-          className="bg-[#1a1b26] border border-[#2a2d3e] rounded-lg px-3 py-1.5 text-sm text-gray-300 focus:outline-none focus:border-amber-400/50"
-        >
-          <option value="all">{t("Все элементы", "All elements")}</option>
-          {Object.entries(elementLabels).map(([k, [ru, en]]) => (
-            <option key={k} value={k}>{t(ru, en)}</option>
-          ))}
-        </select>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+          <input
+            type="text"
+            placeholder="Поиск умений или класса..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="pl-9 pr-4 py-2 bg-[#0e0f1a] border border-[#2a2d3e] rounded-lg text-sm text-gray-300 placeholder-gray-600 focus:outline-none focus:border-amber-400/50 w-64"
+          />
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-3 space-y-3">
-          {filtered.map(skill => (
-            <div key={skill.id} className="border border-[#2a2d3e] bg-[#0e0f1a] rounded-xl p-5">
-              <div className="flex items-start justify-between gap-4 mb-3">
-                <div>
-                  <div className="flex items-center gap-2 flex-wrap mb-1">
-                    <span className={`text-xs px-2 py-0.5 rounded-full border ${elementColors[skill.element || "none"]}`}>
-                      {t(elementLabels[skill.element || "none"][0], elementLabels[skill.element || "none"][1])}
-                    </span>
-                    <span className="text-xs text-gray-600">{t(typeLabels[skill.type][0], typeLabels[skill.type][1])}</span>
-                    <span className="text-xs text-gray-600">{t("Макс. уровень", "Max Lv")}: {skill.maxLevel}</span>
+      <div className="flex flex-wrap gap-2">
+        <button onClick={() => setSelectedCat("all")} className={`px-3 py-1 rounded text-xs font-medium transition-colors ${selectedCat === "all" ? "bg-amber-400 text-black" : "bg-[#1a1b26] text-gray-400 border border-[#2a2d3e] hover:text-gray-200"}`}>Все категории</button>
+        {SKILL_CATEGORIES.map(cat => (
+          <button key={cat.id} onClick={() => setSelectedCat(cat.id)} className={`px-3 py-1 rounded text-xs font-medium transition-colors ${selectedCat === cat.id ? "bg-amber-400 text-black" : "bg-[#1a1b26] text-gray-400 border border-[#2a2d3e] hover:text-gray-200"}`}>{cat.name}</button>
+        ))}
+      </div>
+
+      <div className="flex gap-2">
+        {[
+          { id: "all", label: "Все типы" },
+          { id: "active", label: "Активные" },
+          { id: "passive", label: "Пассивные" },
+          { id: "toggle", label: "Переключаемые" },
+        ].map(({ id, label }) => (
+          <button key={id} onClick={() => setTypeFilter(id)} className={`px-3 py-1 rounded text-xs font-medium transition-colors ${typeFilter === id ? "bg-blue-400/20 text-blue-400 border border-blue-400/30" : "bg-[#1a1b26] text-gray-500 border border-[#2a2d3e] hover:text-gray-300"}`}>{label}</button>
+        ))}
+      </div>
+
+      {filtered.length === 0 ? (
+        <div className="text-center py-16 text-gray-600">
+          <Sword size={40} className="mx-auto mb-3 opacity-30" />
+          <p>Умения не найдены</p>
+        </div>
+      ) : (
+        <div className="space-y-8">
+          {filtered.map(cat => (
+            <div key={cat.id}>
+              <h2 className="text-xs uppercase tracking-widest text-amber-400/70 font-medium mb-4">{cat.name}</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {cat.skills.map(skill => (
+                  <div key={skill.id} className="border border-[#2a2d3e] bg-[#0e0f1a] hover:bg-[#13141e] rounded-xl p-4 transition-colors">
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <div>
+                        <p className="font-medium text-gray-200 text-sm">{skill.name}</p>
+                        <p className="text-xs text-gray-600">{skill.nameEn}</p>
+                      </div>
+                      <SkillTypeBadge type={skill.type} />
+                    </div>
+                    <p className="text-xs text-gray-500 leading-relaxed mb-3">{skill.description}</p>
+                    <div className="flex flex-wrap gap-3 text-xs">
+                      {skill.type !== "passive" && (
+                        <>
+                          <span className="text-gray-600">MP: <span className="text-blue-400">{skill.mp}</span></span>
+                          <span className="text-gray-600">Откат: <span className="text-amber-400">{skill.reuse}</span></span>
+                        </>
+                      )}
+                      <span className="text-gray-600">Lv. <span className="text-gray-400">{skill.level}+</span></span>
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-1">
+                      {skill.classes.map((cls, i) => (
+                        <span key={i} className="text-xs bg-[#1a1b26] text-gray-500 px-2 py-0.5 rounded">{cls}</span>
+                      ))}
+                    </div>
                   </div>
-                  <h3 className="font-semibold text-gray-200 font-cinzel">{lang === "ru" ? skill.nameRu : skill.name}</h3>
-                  <p className="text-xs text-amber-400/70 mt-0.5">{lang === "ru" ? skill.classNameRu : skill.className}</p>
-                </div>
-                <div className="shrink-0">
-                  <div className="p-2 bg-amber-400/10 rounded-lg">
-                    <Zap size={18} className="text-amber-400" />
-                  </div>
-                </div>
-              </div>
-              <p className="text-sm text-gray-400 leading-relaxed mb-3">
-                {lang === "ru" ? skill.descriptionRu : skill.description}
-              </p>
-              <div className="flex flex-wrap gap-4 border-t border-[#2a2d3e] pt-3">
-                {skill.mpCost > 0 && (
-                  <div className="flex items-center gap-1.5">
-                    <BarChart2 size={13} className="text-blue-400" />
-                    <span className="text-xs text-gray-500">{t("Мана", "MP")}: <span className="text-blue-400 font-medium">{skill.mpCost}</span></span>
-                  </div>
-                )}
-                {skill.castTime > 0 && (
-                  <div className="flex items-center gap-1.5">
-                    <Clock size={13} className="text-gray-500" />
-                    <span className="text-xs text-gray-500">{t("Время каста", "Cast")}: <span className="text-gray-300 font-medium">{skill.castTime}s</span></span>
-                  </div>
-                )}
-                {skill.cooldown > 0 && (
-                  <div className="flex items-center gap-1.5">
-                    <Clock size={13} className="text-orange-400" />
-                    <span className="text-xs text-gray-500">{t("Откат", "CD")}: <span className="text-orange-400 font-medium">{skill.cooldown}s</span></span>
-                  </div>
-                )}
-                {skill.range > 0 && (
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs text-gray-500">{t("Дальность", "Range")}: <span className="text-gray-300 font-medium">{skill.range}</span></span>
-                  </div>
-                )}
-              </div>
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {(lang === "ru" ? skill.effectsRu : skill.effects).map((e, i) => (
-                  <span key={i} className="text-xs text-green-400 bg-green-400/5 border border-green-400/20 px-2 py-0.5 rounded">{e}</span>
                 ))}
               </div>
             </div>
           ))}
-          {filtered.length === 0 && (
-            <div className="text-center py-16 text-gray-600">{t("Ничего не найдено", "Nothing found")}</div>
-          )}
         </div>
-        <div className="lg:col-span-1">
-          <AdDisplay position="sidebar-top" page="skills" />
-        </div>
-      </div>
+      )}
     </div>
   );
 }
