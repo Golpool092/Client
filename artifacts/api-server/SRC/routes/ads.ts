@@ -1,8 +1,30 @@
 import { Router } from "express";
 import { db, adsTable } from "@workspace/db";
-import { eq, and, or, arrayContains } from "drizzle-orm";
+import { eq } from "drizzle-orm";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
 
 const router = Router();
+
+const uploadDir = path.resolve(process.cwd(), "uploads");
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+
+const storage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, uploadDir),
+  filename: (_req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    cb(null, `ad-${Date.now()}${ext}`);
+  },
+});
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype.startsWith("image/")) cb(null, true);
+    else cb(new Error("Only images allowed"));
+  },
+});
 
 function isAdmin(req: any): boolean {
   return req.session?.authenticated === true;
@@ -13,32 +35,68 @@ function formatAd(ad: any) {
     ...ad,
     pages: ad.pages ?? [],
     displayMode: ad.displayMode ?? "all-pages",
+    deviceTarget: ad.deviceTarget ?? "all",
     expiresAt: ad.expiresAt ? ad.expiresAt.toISOString() : null,
     createdAt: ad.createdAt.toISOString(),
     updatedAt: ad.updatedAt.toISOString(),
   };
 }
 
+router.post("/upload-image", (req: any, res: any) => {
+  if (!isAdmin(req)) {
+    res.status(401).json({ error: "Not authenticated" });
+    return;
+  }
+  upload.single("image")(req, res, (err: any) => {
+    if (err) {
+      res.status(400).json({ error: err.message || "Upload failed" });
+      return;
+    }
+    if (!req.file) {
+      res.status(400).json({ error: "No file uploaded" });
+      return;
+    }
+    const imageUrl = `/api/ads/uploads/${req.file.filename}`;
+    res.json({ imageUrl });
+  });
+});
+
+router.get("/uploads/:filename", (req: any, res: any) => {
+  const filePath = path.join(uploadDir, req.params.filename);
+  if (!fs.existsSync(filePath)) {
+    res.status(404).json({ error: "File not found" });
+    return;
+  }
+  res.sendFile(filePath);
+});
+
 router.get("/", async (req, res) => {
   try {
-    const { page, position } = req.query as { page?: string; position?: string };
-    
+    const { page, position, device } = req.query as { page?: string; position?: string; device?: string };
+
     let allAds = await db.select().from(adsTable).where(eq(adsTable.active, true));
-    
+
     const now = new Date();
     allAds = allAds.filter(ad => !ad.expiresAt || ad.expiresAt > now);
-    
+
     if (page) {
       allAds = allAds.filter(ad => {
         if (ad.displayMode === "all-pages") return true;
         return ad.pages && ad.pages.includes(page);
       });
     }
-    
+
     if (position) {
       allAds = allAds.filter(ad => ad.position === position);
     }
-    
+
+    if (device) {
+      allAds = allAds.filter(ad => {
+        const target = (ad as any).deviceTarget ?? "all";
+        return target === "all" || target === device;
+      });
+    }
+
     res.json(allAds.map(formatAd));
   } catch (err) {
     res.status(500).json({ error: "Internal server error" });
@@ -107,7 +165,7 @@ router.put("/:id", async (req, res) => {
     const id = parseInt(req.params.id, 10);
     const body = req.body as any;
     const update: any = { updatedAt: new Date() };
-    
+
     if (body.title !== undefined) update.title = body.title;
     if (body.description !== undefined) update.description = body.description;
     if (body.imageUrl !== undefined) update.imageUrl = body.imageUrl;
