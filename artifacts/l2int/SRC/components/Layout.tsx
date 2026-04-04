@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import {
   Sword, Shield, BookOpen, Package, Home, Menu, X, BookMarked, Users, Map
 } from "lucide-react";
+import AdDisplay from "./AdDisplay";
 
 const navItems = [
   { path: "/", icon: Home, label: "Главная" },
@@ -15,9 +16,16 @@ const navItems = [
   { path: "/mamon", icon: Map, label: "Мамон" },
 ];
 
+function getPageName(location: string): string {
+  if (location === "/" || location === "") return "home";
+  const seg = location.split("/").filter(Boolean)[0];
+  return seg || "home";
+}
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const page = getPageName(location);
 
   return (
     <div className="min-h-screen bg-[#0a0b12] text-gray-200 flex flex-col">
@@ -38,7 +46,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </Link>
           </div>
           <div className="hidden md:flex items-center gap-1">
-            {navItems.slice(1, 5).map(({ path, label }) => {
+            {navItems.slice(0, 5).map(({ path, label }) => {
               const active = location === path || (path !== "/" && location.startsWith(path));
               return (
                 <Link
@@ -55,11 +63,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               );
             })}
           </div>
+          <div className="hidden md:block">
+            <AdDisplay position="header" page={page} />
+          </div>
         </div>
       </header>
 
+      <div className="md:hidden">
+        <AdDisplay position="mobile-top" page={page} showPlaceholder className="px-3 pt-2" />
+      </div>
+
       <div className="flex flex-1 max-w-7xl mx-auto w-full">
-        <aside className="hidden md:flex flex-col w-52 border-r border-[#2a2d3e] bg-[#0c0d18] py-6 px-3 sticky top-[57px] h-[calc(100vh-57px)] shrink-0 overflow-y-auto">
+        <aside className="hidden md:flex flex-col w-56 border-r border-[#2a2d3e] bg-[#0c0d18] py-6 px-3 sticky top-[57px] h-[calc(100vh-57px)] shrink-0 overflow-y-auto">
           <nav className="flex flex-col gap-1">
             {navItems.map(({ path, icon: Icon, label }) => {
               const active = location === path || (path !== "/" && location.startsWith(path));
@@ -79,7 +94,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               );
             })}
           </nav>
+
+          <div className="mt-4 space-y-3">
+            <AdDisplay position="sidebar-top" page={page} showPlaceholder />
+            <AdDisplay position="sidebar-middle" page={page} />
+          </div>
+
           <div className="mt-auto pt-4 border-t border-[#2a2d3e]">
+            <AdDisplay position="sidebar-bottom" page={page} showPlaceholder className="mb-3" />
             <p className="text-xs text-gray-600 px-3">Lineage 2 Interlude / Gracia</p>
             <p className="text-xs text-gray-700 px-3 mt-1">© 2024 L2INT.RU</p>
           </div>
@@ -89,7 +111,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="fixed inset-0 z-40 md:hidden" onClick={() => setMobileOpen(false)}>
             <div className="absolute inset-0 bg-black/60" />
             <aside
-              className="absolute left-0 top-[57px] bottom-0 w-56 bg-[#0c0d18] border-r border-[#2a2d3e] py-6 px-3 overflow-y-auto"
+              className="absolute left-0 top-[57px] bottom-0 w-56 bg-[#0c0d18] border-r border-[#2a2d3e] py-6 px-3 overflow-y-auto flex flex-col"
               onClick={e => e.stopPropagation()}
             >
               <nav className="flex flex-col gap-1">
@@ -112,17 +134,38 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   );
                 })}
               </nav>
+              <div className="mt-4">
+                <AdDisplay position="sidebar-top" page={page} showPlaceholder />
+              </div>
             </aside>
           </div>
         )}
 
-        <main className="flex-1 min-w-0 p-4 md:p-6 overflow-auto">
-          {children}
+        <main className="flex-1 min-w-0 overflow-auto">
+          <div className="hidden md:block">
+            <AdDisplay position="content-top" page={page} className="mx-4 md:mx-6 mt-4" />
+          </div>
+          <div className="p-4 md:p-6">
+            {children}
+          </div>
+          <div className="hidden md:block">
+            <AdDisplay position="content-bottom" page={page} showPlaceholder className="mx-4 md:mx-6 mb-4" />
+          </div>
+          <div className="md:hidden">
+            <AdDisplay position="mobile-bottom" page={page} showPlaceholder className="mx-3 mb-3" />
+          </div>
         </main>
       </div>
 
-      <footer className="border-t border-[#2a2d3e] bg-[#0e0f1a] py-4 text-center text-sm text-gray-600">
-        L2INT.RU — Информационный сайт Lineage 2 © 2024
+      <div className="md:hidden sticky bottom-0 z-40">
+        <AdDisplay position="mobile-sticky" page={page} />
+      </div>
+
+      <footer className="border-t border-[#2a2d3e] bg-[#0e0f1a] py-4">
+        <AdDisplay position="footer" page={page} className="max-w-7xl mx-auto px-4 mb-3" />
+        <p className="text-center text-sm text-gray-600">
+          L2INT.RU — Информационный сайт Lineage 2 © 2024
+        </p>
       </footer>
     </div>
   );
